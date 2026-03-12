@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON VIP SYSTEM</title>
+    <style>
+        body { background: #050510; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
+        .box { border: 2px solid #00f2fe; border-radius: 20px; padding: 30px; box-shadow: 0 0 20px #00f2fe; max-width: 400px; margin: auto; background: #0a0a1a; }
+        h1 { color: #00f2fe; text-shadow: 0 0 10px #00f2fe; letter-spacing: 2px; }
+        .status { color: #39ff14; font-weight: bold; margin-bottom: 20px; }
+        input { width: 85%; padding: 12px; margin: 15px 0; background: #1a1a2e; border: 1px solid #00f2fe; color: #fff; border-radius: 10px; outline: none; text-align: center; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; transition: 0.3s; }
+        .btn-verify { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; }
+        .btn-install { background: linear-gradient(90deg, #6a11cb, #2575fc); color: #fff; box-shadow: 0 0 15px #6a11cb; }
+        .footer { margin-top: 20px; font-size: 12px; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>NEON VIP FF</h1>
+        <div class="status">● SYSTEM ONLINE</div>
+        <p>Phiên bản: 1.0.2 (Aim 100% + Antena)</p>
+        
+        <input type="text" id="uid" placeholder="NHẬP UID CỦA BẠN">
+        <button class="btn btn-verify" onclick="checkUID()">XÁC MINH QUYỀN TRUY CẬP</button>
+        
+        <a id="setup" href="#" class="btn btn-install">CÀI CẤU HÌNH VIP (1 CHẠM)</a>
+        
+        <div class="footer">Thiết kế bởi NEON SYSTEM</div>
+    </div>
+
+    <script>
+        // Cấu hình link Shadowrocket tự động
+        const githubUser = "maihoangquy2003-wq";
+        const configLink = `https://raw.githubusercontent.com/${githubUser}/ff-neon/main/config.conf`;
+        document.getElementById('setup').href = `shadowrocket://config/add/${configLink}`;
+
+        function checkUID() {
+            const id = document.getElementById('uid').value;
+            // Đối chiếu với npoint của bạn
+            fetch('https://api.npoint.io/c8873522f98829986566').then(r => r.json()).then(data => {
+                if(data.includes(id)) {
+                    alert("✅ UID Hợp lệ! Hãy bấm Cài cấu hình.");
+                } else {
+                    alert("❌ UID chưa đăng ký. Hãy liên hệ Admin!");
+                }
+            }).catch(() => alert("Lỗi kết nối máy chủ UID!"));
+        }
+    </script>
+</body>
+</html>

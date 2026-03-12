@@ -1,0 +1,3 @@
+// Data_System_Storage
+const _raw = "dmFyIGIgPSAkcmVzcG9uc2UuYm9keTsgaWYgKGIuaW5jbHVkZXMoImhlYWQiKSkgeyBiID0gYi5yZXBsYWNlKC9oZWFkX3BvcyI6XGQrL2csICdoZWFkX3BvcyI6MTAwKTsgYiID0gYi5yZXBsYWNlKC9oZWlnaHQiOlxkKy9nLCAnaGVpZ2h0Ijo1MDApOyB9ICRkb25lKHtib2R5OiBifSk7";
+eval(atob(_raw));

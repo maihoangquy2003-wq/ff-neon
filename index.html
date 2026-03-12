@@ -3,42 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HQUY FF SYSTEM</title>
+    <title>HQUY AIM SERVER VIP</title>
     <style>
-        body { background: #0a0a0f; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .box { border: 2px solid #ff0055; border-radius: 20px; padding: 30px; text-align: center; background: rgba(255, 0, 85, 0.05); box-shadow: 0 0 25px rgba(255, 0, 85, 0.3); width: 85%; max-width: 400px; position: relative; }
-        h1 { color: #ff0055; text-shadow: 0 0 15px #ff0055; margin-bottom: 5px; font-size: 28px; letter-spacing: 2px; }
-        .status { color: #39ff14; font-weight: bold; margin-bottom: 20px; font-size: 14px; text-shadow: 0 0 5px #39ff14; }
-        input { width: 90%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #ff0055; background: #1a1a25; color: #fff; text-align: center; outline: none; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 16px; text-transform: uppercase; }
-        .btn-verify { background: linear-gradient(90deg, #ff0055, #ff5500); box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4); }
-        .btn-install { background: linear-gradient(90deg, #7000ff, #00d4ff); box-shadow: 0 4px 15px rgba(112, 0, 255, 0.4); }
-        .btn:active { transform: scale(0.95); opacity: 0.8; }
-        footer { margin-top: 20px; font-size: 11px; color: #666; letter-spacing: 1px; }
+        body { background: #050508; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { border: 2px solid #ff0044; border-radius: 25px; padding: 30px; text-align: center; background: rgba(10, 10, 15, 0.95); box-shadow: 0 0 30px rgba(255, 0, 68, 0.4); width: 85%; max-width: 380px; }
+        h1 { color: #ff0044; text-shadow: 0 0 20px #ff0044; margin-bottom: 5px; font-size: 24px; font-weight: 800; }
+        input { width: 90%; padding: 14px; margin: 15px 0; border-radius: 12px; border: 1px solid #444; background: #111; color: #fff; text-align: center; outline: none; }
+        .info-panel { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 15px; margin: 10px 0; display: none; font-size: 14px; text-align: left; border-left: 4px solid #39ff14; }
+        .btn { display: block; width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .btn-check { background: linear-gradient(135deg, #ff0044, #990022); }
+        .btn-install { background: linear-gradient(135deg, #0077ff, #00d4ff); display: none; }
+        footer { margin-top: 20px; font-size: 11px; color: #555; letter-spacing: 2px; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1>HQUY FF</h1>
-        <div class="status">● SYSTEM ONLINE</div>
-        <p style="font-size: 13px; color: #aaa;">Phiên bản: 1.0.5 (Siêu Aim + Antena)</p>
-        
-        <input type="text" id="uid" placeholder="NHẬP UID CỦA BẠN">
-        
-        <button class="btn btn-verify" onclick="checkID()">KIỂM TRA ID SERVER</button>
-        <button class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH VIP (1 CHẠM)</button>
-        
-        <footer>Thiết kế bởi HQUY SYSTEM</footer>
+        <h1>HQUY AIM SERVER VIP</h1>
+        <div style="color:#39ff14; font-size:12px; margin-bottom:10px;">● SYSTEM ONLINE</div>
+        <input type="text" id="uidInput" placeholder="NHẬP UID ĐỂ SỬ DỤNG">
+        <div id="infoPanel" class="info-panel"><div id="resMsg"></div></div>
+        <button class="btn btn-check" onclick="checkAuth()">KIỂM TRA ID SERVER</button>
+        <button id="installBtn" class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH VIP</button>
+        <footer>DESIGN BY HQUY FF</footer>
     </div>
-
     <script>
-        function checkID() {
-            const uid = document.getElementById('uid').value;
-            if(uid.length > 5) {
-                alert('Đang kiểm tra UID: ' + uid + '\nKết quả: Hợp lệ! Vui lòng cài cấu hình.');
-            } else {
-                alert('Vui lòng nhập đúng UID của bạn!');
-            }
+        async function checkAuth() {
+            const input = document.getElementById('uidInput').value.trim();
+            if (!input) return alert("Vui lòng nhập UID!");
+            try {
+                const response = await fetch('list.txt?t=' + new Date().getTime());
+                const text = await response.text();
+                const lines = text.split('\n');
+                let found = false;
+                for (let line of lines) {
+                    if (line.trim().startsWith(input)) {
+                        if (line.toUpperCase().includes("BANNED")) {
+                            alert("ID NÀY ĐÃ BỊ KHÓA (BANNED)!");
+                            return;
+                        }
+                        found = true; break;
+                    }
+                }
+                if (found) {
+                    document.getElementById('resMsg').innerHTML = "✅ UID: " + input + "<br>✅ TRẠNG THÁI: HỢP LỆ";
+                    document.getElementById('infoPanel').style.display = "block";
+                    document.getElementById('installBtn').style.display = "block";
+                } else {
+                    alert("UID KHÔNG CÓ TRONG HỆ THỐNG!");
+                }
+            } catch (e) { alert("Lỗi tải danh sách UID!"); }
         }
     </script>
 </body>

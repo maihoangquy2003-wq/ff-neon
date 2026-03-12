@@ -5,35 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HQUY AIM SERVER VIP</title>
     <style>
-        body { background: #050508; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { border: 2px solid #ff0044; border-radius: 25px; padding: 30px; text-align: center; background: rgba(10, 10, 15, 0.95); box-shadow: 0 0 30px rgba(255, 0, 68, 0.4); width: 85%; max-width: 380px; }
-        h1 { color: #ff0044; text-shadow: 0 0 20px #ff0044; margin-bottom: 5px; font-size: 24px; font-weight: 800; }
-        input { width: 90%; padding: 14px; margin: 15px 0; border-radius: 12px; border: 1px solid #444; background: #111; color: #fff; text-align: center; outline: none; }
+        body { background: #050510; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { border: 2px solid #00f2fe; border-radius: 20px; padding: 30px; text-align: center; background: rgba(0, 242, 254, 0.03); box-shadow: 0 0 25px rgba(0, 242, 254, 0.4); width: 85%; max-width: 380px; }
+        h1 { color: #00f2fe; text-shadow: 0 0 15px #00f2fe; margin-bottom: 5px; font-size: 26px; font-weight: 800; }
+        .status { color: #39ff14; font-weight: bold; margin-bottom: 20px; font-size: 14px; text-shadow: 0 0 8px #39ff14; }
+        input { width: 90%; padding: 14px; margin: 15px 0; border-radius: 12px; border: 1px solid #444; background: #111; color: #fff; text-align: center; outline: none; font-size: 15px; }
         .info-panel { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 15px; margin: 10px 0; display: none; font-size: 14px; text-align: left; border-left: 4px solid #39ff14; }
-        .btn { display: block; width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-        .btn-check { background: linear-gradient(135deg, #ff0044, #990022); }
-        .btn-install { background: linear-gradient(135deg, #0077ff, #00d4ff); display: none; }
-        footer { margin-top: 20px; font-size: 11px; color: #555; letter-spacing: 2px; }
+        .btn { display: block; width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 16px; }
+        .btn-check { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; text-shadow: none; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
+        .btn-install { background: linear-gradient(90deg, #7000ff, #00d4ff); display: none; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.4); }
+        footer { margin-top: 20px; font-size: 11px; color: #666; letter-spacing: 2px; }
     </style>
 </head>
 <body>
     <div class="box">
         <h1>HQUY AIM SERVER VIP</h1>
-        <div style="color:#39ff14; font-size:12px; margin-bottom:10px;">● SYSTEM ONLINE</div>
+        <div class="status">● SYSTEM ONLINE</div>
+        <p style="font-size: 13px; color: #aaa; margin-top: -15px;">Phiên bản: 3.0.1 (Aim Bám Đầu + Anti Ban)</p>
+        
         <input type="text" id="uidInput" placeholder="NHẬP UID ĐỂ SỬ DỤNG">
-        <div id="infoPanel" class="info-panel"><div id="resMsg"></div></div>
+        
+        <div id="infoPanel" class="info-panel">
+            <div id="resMsg">Đang kiểm tra...</div>
+        </div>
+
         <button class="btn btn-check" onclick="checkAuth()">KIỂM TRA ID SERVER</button>
-        <button id="installBtn" class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH VIP</button>
-        <footer>DESIGN BY HQUY FF</footer>
+        <button id="installBtn" class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH VIP (1 CHẠM)</button>
+        
+        <footer>Thiết kế bởi HQUY SYSTEM</footer>
     </div>
+
     <script>
         async function checkAuth() {
             const input = document.getElementById('uidInput').value.trim();
+            const panel = document.getElementById('infoPanel');
+            const resMsg = document.getElementById('resMsg');
+            const installBtn = document.getElementById('installBtn');
+
             if (!input) return alert("Vui lòng nhập UID!");
+
             try {
+                // Đọc danh sách UID từ file list.txt (tạo riêng để quản lý khách)
                 const response = await fetch('list.txt?t=' + new Date().getTime());
                 const text = await response.text();
                 const lines = text.split('\n');
+
                 let found = false;
                 for (let line of lines) {
                     if (line.trim().startsWith(input)) {
@@ -41,17 +57,23 @@
                             alert("ID NÀY ĐÃ BỊ KHÓA (BANNED)!");
                             return;
                         }
-                        found = true; break;
+                        found = true;
+                        break;
                     }
                 }
+
                 if (found) {
-                    document.getElementById('resMsg').innerHTML = "✅ UID: " + input + "<br>✅ TRẠNG THÁI: HỢP LỆ";
-                    document.getElementById('infoPanel').style.display = "block";
-                    document.getElementById('installBtn').style.display = "block";
+                    resMsg.innerHTML = "✅ UID: " + input + "<br>✅ TRẠNG THÁI: HỢP LỆ (VĨNH VIỄN)";
+                    panel.style.display = "block";
+                    installBtn.style.display = "block";
                 } else {
                     alert("UID KHÔNG CÓ TRONG HỆ THỐNG!");
+                    panel.style.display = "none";
+                    installBtn.style.display = "none";
                 }
-            } catch (e) { alert("Lỗi tải danh sách UID!"); }
+            } catch (e) {
+                alert("Lỗi tải danh sách UID! (Bạn đã tạo file list.txt chưa?)");
+            }
         }
     </script>
 </body>

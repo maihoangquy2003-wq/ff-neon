@@ -12,7 +12,8 @@
         input { width: 90%; padding: 14px; margin: 15px 0; border-radius: 12px; border: 1px solid #444; background: #111; color: #fff; text-align: center; outline: none; font-size: 15px; }
         .info-panel { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 15px; margin: 10px 0; display: none; font-size: 14px; text-align: left; border-left: 4px solid #39ff14; }
         .btn { display: block; width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 16px; }
-        .btn-check { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; text-shadow: none; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
+        .btn-check { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
+        /* Nút Shadowrocket ẩn mặc định, chỉ hiện khi nhập đúng UID */
         .btn-install { background: linear-gradient(90deg, #7000ff, #00d4ff); display: none; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.4); }
         footer { margin-top: 20px; font-size: 11px; color: #666; letter-spacing: 2px; }
     </style>
@@ -26,11 +27,11 @@
         <input type="text" id="uidInput" placeholder="NHẬP UID ĐỂ SỬ DỤNG">
         
         <div id="infoPanel" class="info-panel">
-            <div id="resMsg">Đang kiểm tra...</div>
+            <div id="resMsg"></div>
         </div>
 
         <button class="btn btn-check" onclick="checkAuth()">KIỂM TRA ID SERVER</button>
-        <button id="installBtn" class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH VIP (1 CHẠM)</button>
+        <button id="installBtn" class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH SHADOW (1 CHẠM)</button>
         
         <footer>Thiết kế bởi HQUY SYSTEM</footer>
     </div>
@@ -45,7 +46,6 @@
             if (!input) return alert("Vui lòng nhập UID!");
 
             try {
-                // Đọc danh sách UID từ file list.txt (tạo riêng để quản lý khách)
                 const response = await fetch('list.txt?t=' + new Date().getTime());
                 const text = await response.text();
                 const lines = text.split('\n');
@@ -54,7 +54,7 @@
                 for (let line of lines) {
                     if (line.trim().startsWith(input)) {
                         if (line.toUpperCase().includes("BANNED")) {
-                            alert("ID NÀY ĐÃ BỊ KHÓA (BANNED)!");
+                            alert("ID NÀY ĐÃ BỊ KHÓA!");
                             return;
                         }
                         found = true;
@@ -63,16 +63,16 @@
                 }
 
                 if (found) {
-                    resMsg.innerHTML = "✅ UID: " + input + "<br>✅ TRẠNG THÁI: HỢP LỆ (VĨNH VIỄN)";
+                    resMsg.innerHTML = "✅ UID: " + input + "<br>✅ TRẠNG THÁI: HỢP LỆ";
                     panel.style.display = "block";
-                    installBtn.style.display = "block";
+                    installBtn.style.display = "block"; // Làm hiện nút Shadowrocket
                 } else {
                     alert("UID KHÔNG CÓ TRONG HỆ THỐNG!");
                     panel.style.display = "none";
                     installBtn.style.display = "none";
                 }
             } catch (e) {
-                alert("Lỗi tải danh sách UID! (Bạn đã tạo file list.txt chưa?)");
+                alert("Lỗi kết nối máy chủ hoặc chưa có file list.txt!");
             }
         }
     </script>

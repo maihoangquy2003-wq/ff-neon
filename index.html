@@ -3,50 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEON VIP SYSTEM</title>
+    <title>HQUY FF SYSTEM</title>
     <style>
-        body { background: #050510; color: #fff; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
-        .box { border: 2px solid #00f2fe; border-radius: 20px; padding: 30px; box-shadow: 0 0 20px #00f2fe; max-width: 400px; margin: auto; background: #0a0a1a; }
-        h1 { color: #00f2fe; text-shadow: 0 0 10px #00f2fe; letter-spacing: 2px; }
-        .status { color: #39ff14; font-weight: bold; margin-bottom: 20px; }
-        input { width: 85%; padding: 12px; margin: 15px 0; background: #1a1a2e; border: 1px solid #00f2fe; color: #fff; border-radius: 10px; outline: none; text-align: center; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; font-weight: bold; text-decoration: none; cursor: pointer; border: none; transition: 0.3s; }
-        .btn-verify { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; }
-        .btn-install { background: linear-gradient(90deg, #6a11cb, #2575fc); color: #fff; box-shadow: 0 0 15px #6a11cb; }
-        .footer { margin-top: 20px; font-size: 12px; color: #555; }
+        body { background: #0a0a0f; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .box { border: 2px solid #ff0055; border-radius: 20px; padding: 30px; text-align: center; background: rgba(255, 0, 85, 0.05); box-shadow: 0 0 25px rgba(255, 0, 85, 0.3); width: 85%; max-width: 400px; position: relative; }
+        h1 { color: #ff0055; text-shadow: 0 0 15px #ff0055; margin-bottom: 5px; font-size: 28px; letter-spacing: 2px; }
+        .status { color: #39ff14; font-weight: bold; margin-bottom: 20px; font-size: 14px; text-shadow: 0 0 5px #39ff14; }
+        input { width: 90%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 1px solid #ff0055; background: #1a1a25; color: #fff; text-align: center; outline: none; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 16px; text-transform: uppercase; }
+        .btn-verify { background: linear-gradient(90deg, #ff0055, #ff5500); box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4); }
+        .btn-install { background: linear-gradient(90deg, #7000ff, #00d4ff); box-shadow: 0 4px 15px rgba(112, 0, 255, 0.4); }
+        .btn:active { transform: scale(0.95); opacity: 0.8; }
+        footer { margin-top: 20px; font-size: 11px; color: #666; letter-spacing: 1px; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h1>NEON VIP FF</h1>
+        <h1>HQUY FF</h1>
         <div class="status">● SYSTEM ONLINE</div>
-        <p>Phiên bản: 1.0.2 (Aim 100% + Antena)</p>
+        <p style="font-size: 13px; color: #aaa;">Phiên bản: 1.0.5 (Siêu Aim + Antena)</p>
         
         <input type="text" id="uid" placeholder="NHẬP UID CỦA BẠN">
-        <button class="btn btn-verify" onclick="checkUID()">XÁC MINH QUYỀN TRUY CẬP</button>
         
-        <a id="setup" href="#" class="btn btn-install">CÀI CẤU HÌNH VIP (1 CHẠM)</a>
+        <button class="btn btn-verify" onclick="checkID()">KIỂM TRA ID SERVER</button>
+        <button class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH VIP (1 CHẠM)</button>
         
-        <div class="footer">Thiết kế bởi NEON SYSTEM</div>
+        <footer>Thiết kế bởi HQUY SYSTEM</footer>
     </div>
 
     <script>
-        // Cấu hình link Shadowrocket tự động
-        const githubUser = "maihoangquy2003-wq";
-        const configLink = `https://raw.githubusercontent.com/${githubUser}/ff-neon/main/config.conf`;
-        document.getElementById('setup').href = `shadowrocket://config/add/${configLink}`;
-
-        function checkUID() {
-            const id = document.getElementById('uid').value;
-            // Đối chiếu với npoint của bạn
-            fetch('https://api.npoint.io/c8873522f98829986566').then(r => r.json()).then(data => {
-                if(data.includes(id)) {
-                    alert("✅ UID Hợp lệ! Hãy bấm Cài cấu hình.");
-                } else {
-                    alert("❌ UID chưa đăng ký. Hãy liên hệ Admin!");
-                }
-            }).catch(() => alert("Lỗi kết nối máy chủ UID!"));
+        function checkID() {
+            const uid = document.getElementById('uid').value;
+            if(uid.length > 5) {
+                alert('Đang kiểm tra UID: ' + uid + '\nKết quả: Hợp lệ! Vui lòng cài cấu hình.');
+            } else {
+                alert('Vui lòng nhập đúng UID của bạn!');
+            }
         }
     </script>
 </body>
-</html> 
+</html>

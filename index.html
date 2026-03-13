@@ -3,190 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HQUY SYSTEM - AIM SERVER VIP</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>HQUY SYSTEM | LUXURY SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gold: #ffcc00;
-            --cyan: #00f2ff;
-            --bg: #05070a;
+            --gold: linear-gradient(135deg, #ff9a00, #ffcc00, #ffec81);
+            --gold-shadow: rgba(255, 154, 0, 0.4);
+            --border-glow: #00f2ff;
         }
         body {
-            background: var(--bg);
-            background-image: radial-gradient(circle at 50% 50%, #101520 0%, #05070a 100%);
-            color: white;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #020406;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
             overflow: hidden;
         }
-        /* Khung Panel Chính */
-        .panel {
-            width: 90%;
-            max-width: 420px;
-            background: rgba(15, 20, 30, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            border-radius: 25px;
-            padding: 40px 25px;
+
+        /* Hiệu ứng nền khói huyền ảo */
+        .bg-glow {
+            position: absolute; width: 300px; height: 300px;
+            background: var(--border-glow); filter: blur(150px);
+            opacity: 0.15; z-index: -1; animation: move 10s infinite alternate;
+        }
+        @keyframes move { from { transform: translate(-50%, -50%); } to { transform: translate(50%, 50%); } }
+
+        /* Khung Panel Đẳng Cấp */
+        .card {
+            width: 90%; max-width: 450px;
+            background: rgba(10, 15, 25, 0.9);
+            border-radius: 30px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
             text-align: center;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 255, 0.1);
+            backdrop-filter: blur(20px);
             position: relative;
-            animation: breathe 4s infinite ease-in-out;
+            overflow: hidden;
         }
-        @keyframes breathe {
-            0%, 100% { border-color: rgba(0, 242, 255, 0.3); box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); }
-            50% { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0, 242, 255, 0.3); }
+
+        /* Viền chạy sáng xung quanh khung */
+        .card::before {
+            content: ""; position: absolute; inset: 0;
+            border-radius: 30px; padding: 2px;
+            background: linear-gradient(45deg, transparent, rgba(0, 242, 255, 0.5), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
         }
+
         h1 {
-            font-size: 28px;
-            letter-spacing: 2px;
-            margin: 0;
-            background: linear-gradient(to bottom, #fff, var(--cyan));
-            -webkit-background-clip: text;
+            font-size: 32px; font-weight: 900; margin: 0;
+            background: var(--gold); -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(0, 242, 255, 0.5));
+            filter: drop-shadow(0 0 15px rgba(255, 204, 0, 0.5));
+            letter-spacing: 2px;
         }
-        .version { font-size: 12px; color: #555; margin-bottom: 20px; }
-        .status-bar { color: #39ff14; font-size: 13px; font-weight: bold; margin-bottom: 25px; text-transform: uppercase; }
 
-        /* Input thiết kế lại */
-        .input-group { position: relative; margin-bottom: 20px; }
+        .subtitle { color: #888; font-size: 12px; margin-top: 5px; letter-spacing: 3px; }
+
+        .status-container {
+            display: flex; justify-content: center; align-items: center;
+            margin: 25px 0; gap: 10px;
+        }
+        .dot { width: 8px; height: 8px; background: #39ff14; border-radius: 50%; box-shadow: 0 0 10px #39ff14; }
+        .status-text { color: #39ff14; font-size: 14px; font-weight: bold; }
+
+        /* Ô nhập UID đẳng cấp */
+        .input-box {
+            position: relative; margin-top: 30px;
+        }
         input {
-            width: 100%;
-            padding: 18px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid #222;
-            border-radius: 12px;
-            color: var(--cyan);
-            font-size: 16px;
-            text-align: center;
-            transition: 0.3s;
-            outline: none;
+            width: 100%; padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #fff; font-size: 18px; text-align: center;
+            transition: 0.4s; outline: none; box-sizing: border-box;
         }
-        input:focus { border-color: var(--cyan); background: rgba(0, 242, 255, 0.05); }
+        input:focus { border-color: var(--gold); background: rgba(255, 154, 0, 0.05); box-shadow: 0 0 20px rgba(255, 154, 0, 0.2); }
 
-        /* Nút bấm */
-        button {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 800;
-            cursor: pointer;
+        /* Nút kích hoạt */
+        .btn-main {
+            width: 100%; padding: 20px; margin-top: 20px;
+            border: none; border-radius: 15px;
+            background: var(--gold);
+            color: #000; font-weight: 900; font-size: 16px;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 20px var(--gold-shadow);
             text-transform: uppercase;
-            transition: 0.3s;
-            margin-top: 10px;
         }
-        .btn-check {
-            background: linear-gradient(45deg, #0082ff, #00f2ff);
-            color: white;
-            box-shadow: 0 5px 15px rgba(0, 130, 255, 0.3);
-        }
-        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 242, 255, 0.5); }
+        .btn-main:hover { transform: scale(1.02); filter: brightness(1.1); }
 
-        .btn-download {
-            background: linear-gradient(45deg, #1d976c, #93f9b9);
-            color: #000;
-            display: none;
-            margin-top: 20px;
-        }
+        /* Nút Tải Shadowrocket */
+        #download_section { display: none; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Khung thông tin */
-        #info_box {
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 12px;
+        .btn-vip {
+            width: 100%; padding: 20px; margin-top: 25px;
+            border: 2px solid var(--border-glow); border-radius: 15px;
+            background: transparent; color: var(--border-glow);
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-vip:hover { background: var(--border-glow); color: #000; box-shadow: 0 0 30px var(--border-glow); }
+
+        /* Hộp thông tin UID */
+        .info-card {
             background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--cyan);
-            display: none;
-            text-align: left;
-            font-size: 14px;
-            line-height: 1.8;
+            border-radius: 15px; padding: 20px; margin-top: 25px;
+            text-align: left; border: 1px solid rgba(0, 242, 255, 0.2);
         }
+        .info-item { font-size: 14px; margin: 8px 0; color: #ccc; display: flex; justify-content: space-between; }
+        .info-item b { color: var(--border-glow); }
 
-        /* Zalo link */
-        .zalo-contact {
-            margin-top: 25px;
-            display: block;
-            color: #aaa;
-            text-decoration: none;
-            font-size: 13px;
-            transition: 0.3s;
-        }
-        .zalo-contact:hover { color: var(--cyan); }
-        .zalo-contact i { color: #0068ff; margin-right: 5px; }
+        /* Liên hệ Zalo */
+        .footer { margin-top: 35px; color: #555; font-size: 13px; }
+        .footer a { color: #0068ff; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="panel">
-    <h1>HQUY SYSTEM</h1>
-    <div class="version">PREMIUM AIM SERVER V3.0.2</div>
-    <div class="status-bar"><i class="fas fa-signal"></i> System Online</div>
-    
-    <div class="input-group">
-        <input type="text" id="uid_input" placeholder="NHẬP UID CỦA BẠN...">
+    <div class="bg-glow"></div>
+
+    <div class="card">
+        <h1>HQUY SYSTEM</h1>
+        <div class="subtitle">PREMIUM EXCLUSIVE SERVER</div>
+
+        <div class="status-container">
+            <div class="dot"></div>
+            <div class="status-text">MÁY CHỦ SẴN SÀNG</div>
+        </div>
+
+        <div class="input-box">
+            <input type="text" id="uid_input" placeholder="NHẬP MÃ UID VIP CỦA BẠN">
+        </div>
+
+        <button class="btn-main" onclick="processUID()">KÍCH HOẠT HỆ THỐNG</button>
+
+        <div id="download_section">
+            <div class="info-card">
+                <div class="info-item">Người dùng: <b id="res_uid">-</b></div>
+                <div class="info-item">Trạng thái: <b style="color: #39ff14;">VIP PREMIUM</b></div>
+                <div class="info-item">Hạn dùng: <b id="res_expiry">-</b></div>
+            </div>
+
+            <a href="shadowrocket://config/add/https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/config.conf" style="text-decoration: none;">
+                <button class="btn-vip"><i class="fas fa-bolt"></i> CÀI CẤU HÌNH VIP (1 CHẠM)</button>
+            </a>
+        </div>
+
+        <div class="footer">
+            <i class="fab fa-whatsapp"></i> Hỗ trợ Zalo: <a href="https://zalo.me/0353594606">0353594606</a>
+        </div>
     </div>
-    
-    <button class="btn-check" onclick="checkUID()">KÍCH HOẠT SERVER</button>
 
-    <div id="info_box"></div>
+    <script>
+        async function processUID() {
+            const id = document.getElementById("uid_input").value;
+            const section = document.getElementById("download_section");
+            if(!id) return alert("Vui lòng nhập UID!");
 
-    <a id="dl_link" href="shadowrocket://config/add/https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/config.conf">
-        <button class="btn-download" id="download_btn">
-            <i class="fas fa-rocket"></i> CÀI CẤU HÌNH (1 CHẠM)
-        </button>
-    </a>
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/member.json?nocache=' + Date.now());
+                const data = await res.json();
+                const user = data.users[id];
 
-    <a href="https://zalo.me/0353594606" class="zalo-contact" target="_blank">
-        <i class="fab fa-whatsapp"></i> Hỗ trợ Zalo: <b>0353594606</b>
-    </a>
-</div>
+                if(!user) return alert("UID KHÔNG CÓ TRÊN HỆ THỐNG!");
+                if(user.status === "banned") return alert("UID NÀY ĐÃ BỊ BAND VĨNH VIỄN!");
 
-<script>
-    async function checkUID() {
-        const id = document.getElementById("uid_input").value;
-        const btn = document.getElementById("download_btn");
-        const box = document.getElementById("info_box");
-
-        if(!id) return alert("Vui lòng nhập UID!");
-
-        try {
-            const res = await fetch('https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/member.json?v=' + Math.random());
-            const data = await res.json();
-            const user = data.users[id];
-
-            if(!user) {
-                alert("UID KHÔNG CÓ TRÊN HỆ THỐNG!");
-                return;
-            }
-
-            if(user.status === "banned") {
-                alert("TÀI KHOẢN ĐÃ BỊ BAND!");
-                return;
-            }
-
-            const isExpired = new Date() > new Date(user.expiry);
-            if(isExpired) {
-                alert("ID ĐÃ HẾT HẠN!");
-                box.style.display = "block";
-                box.innerHTML = "❌ Trạng thái: Hết hạn<br>⏰ Ngày hết: " + user.expiry;
-                btn.style.display = "none";
-            } else {
-                box.style.display = "block";
-                box.innerHTML = "✅ UID: " + id + "<br>✅ Trạng thái: Hợp lệ (VIP)<br>⏳ Hết hạn: " + user.expiry;
-                btn.style.display = "block";
-                alert("KÍCH HOẠT THÀNH CÔNG!");
-            }
-        } catch(e) {
-            alert("LỖI KẾT NỐI SERVER!");
+                const expiry = new Date(user.expiry);
+                if(new Date() > expiry) {
+                    alert("ID CỦA BẠN ĐÃ HẾT HẠN!");
+                } else {
+                    document.getElementById("res_uid").innerText = id;
+                    document.getElementById("res_expiry").innerText = user.expiry;
+                    section.style.display = "block";
+                    alert("XÁC MINH VIP THÀNH CÔNG!");
+                }
+            } catch(e) { alert("LỖI MÁY CHỦ!"); }
         }
-    }
-</script>
-
+    </script>
 </body>
 </html>

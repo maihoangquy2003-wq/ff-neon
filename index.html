@@ -213,3 +213,73 @@
     </script>
 </body>
 </html>
+<script>
+    // MATRIX BACKGROUND - ĐÃ FIX MƯỢT HƠN
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const columns = canvas.width / 20;
+    const drops = new Array(Math.floor(columns)).fill(1);
+    function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00f2ff';
+        ctx.font = '15px monospace';
+        for (let i = 0; i < drops.length; i++) {
+            const text = Math.floor(Math.random() * 2);
+            ctx.fillText(text, i * 20, drops[i] * 20);
+            if (drops[i] * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(draw, 50);
+
+    // LOGIC XỬ LÝ - ĐÃ FIX LỖI KẾT NỐI
+    async function checkUID() {
+        const id = document.getElementById("uid_input").value;
+        const dash = document.getElementById("vip_dashboard");
+        if(!id) return alert("VUI LÒNG NHẬP UID!");
+
+        try {
+            // Tự động lấy URL chuẩn của bạn
+            const currentRepo = "maihoangquy2003-wq/ff-neon";
+            const url = `https://raw.githubusercontent.com/${currentRepo}/main/member.json?t=${new Date().getTime()}`;
+
+            const res = await fetch(url);
+            
+            if (!res.ok) throw new Error("Không tìm thấy file data");
+            
+            const data = await res.json();
+            const user = data.users[id];
+
+            if(!user) {
+                alert("UID KHÔNG TỒN TẠI TRÊN HỆ THỐNG!");
+                return;
+            }
+
+            if(user.status === "banned") {
+                alert("ID CỦA BẠN ĐÃ BỊ KHÓA!");
+                return;
+            }
+
+            const expiryDate = new Date(user.expiry);
+            const today = new Date();
+
+            if(today > expiryDate) {
+                alert("ID ĐÃ HẾT HẠN SỬ DỤNG!");
+            } else {
+                document.getElementById("show_id").innerText = id;
+                document.getElementById("show_expiry").innerText = user.expiry;
+                dash.style.display = "block";
+                // Hiệu ứng cuộn xuống bảng điều khiển
+                dash.scrollIntoView({ behavior: 'smooth' });
+                alert("XÁC MINH VIP THÀNH CÔNG!");
+            }
+        } catch(e) {
+            console.error(e);
+            alert("LỖI KẾT NỐI SERVER! (Kiểm tra lại file member.json trên GitHub)");
+        }
+    }
+</script>
+

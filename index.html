@@ -6,284 +6,81 @@
     <title>HQUY SYSTEM | NEON VIP SERVER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --neon: #00f2ff;
-            --neon-dark: #0082ff;
-            --bg: #02060c;
-        }
-        * { box-sizing: border-box; }
-        body {
-            background: var(--bg);
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        /* Hiệu ứng Matrix chìm phía sau */
+        :root { --neon: #00f2ff; --bg: #02060c; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
         #canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
-
-        .container {
-            width: 95%;
-            max-width: 450px;
-            background: rgba(5, 15, 25, 0.85);
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--neon);
-            border-radius: 20px;
-            padding: 30px 20px;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.3), inset 0 0 20px rgba(0, 242, 255, 0.1);
-            position: relative;
-        }
-
-        /* Header chia mục */
+        .container { width: 95%; max-width: 450px; background: rgba(5, 15, 25, 0.85); backdrop-filter: blur(20px); border: 2px solid var(--neon); border-radius: 20px; padding: 30px 20px; box-shadow: 0 0 30px rgba(0, 242, 255, 0.3); position: relative; }
         .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { 
-            font-size: 30px; margin: 0; color: var(--neon); 
-            text-shadow: 0 0 15px var(--neon); letter-spacing: 2px;
-            font-weight: 900;
-        }
-        .header p { font-size: 11px; color: #555; letter-spacing: 4px; text-transform: uppercase; }
-
-        /* Mục 1: Thông tin Server */
-        .section-title {
-            font-size: 13px; color: var(--neon); font-weight: bold;
-            display: flex; align-items: center; gap: 8px; margin-bottom: 15px;
-        }
+        .header h1 { font-size: 30px; margin: 0; color: var(--neon); text-shadow: 0 0 15px var(--neon); font-weight: 900; }
+        .section-title { font-size: 13px; color: var(--neon); font-weight: bold; display: flex; align-items: center; gap: 8px; margin: 20px 0 15px; }
         .section-title::after { content: ""; flex: 1; height: 1px; background: rgba(0, 242, 255, 0.2); }
-
-        .server-info {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
-        }
-        .info-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-        }
-        .info-card span { display: block; font-size: 10px; color: #888; }
-        .info-card b { font-size: 13px; color: #39ff14; }
-
-        /* Mục 2: Nhập liệu */
-        .input-area { position: relative; margin-bottom: 15px; }
-        input {
-            width: 100%; padding: 18px; border-radius: 12px;
-            background: #000; border: 1px solid #1a2a3a;
-            color: var(--neon); font-size: 16px; font-weight: bold;
-            text-align: center; outline: none; transition: 0.3s;
-        }
-        input:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
-
-        /* Nút bấm chuyên nghiệp */
-        .btn {
-            width: 100%; padding: 16px; border-radius: 12px; border: none;
-            font-weight: 900; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; font-size: 14px;
-        }
-        .btn-primary {
-            background: linear-gradient(90deg, #0082ff, #00f2ff);
-            color: white; box-shadow: 0 5px 15px rgba(0, 130, 255, 0.4);
-        }
-        .btn-primary:hover { transform: translateY(-3px); filter: brightness(1.2); }
-
-        /* Mục 3: Dashboard VIP (Ẩn) */
-        #vip_dashboard { display: none; margin-top: 25px; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .vip-box {
-            background: rgba(0, 242, 255, 0.05);
-            border: 1px dashed var(--neon); border-radius: 15px; padding: 15px;
-            margin-bottom: 20px;
-        }
-        .vip-line { display: flex; justify-content: space-between; font-size: 13px; margin: 5px 0; }
-        .vip-line b { color: var(--neon); }
-
-        .btn-success {
-            background: transparent; border: 2px solid #39ff14; color: #39ff14;
-        }
-        .btn-success:hover { background: #39ff14; color: #000; box-shadow: 0 0 20px #39ff14; }
-
-        /* Footer */
-        .zalo-box {
-            margin-top: 25px; text-align: center; font-size: 12px; color: #444;
-        }
-        .zalo-box a { color: var(--neon); text-decoration: none; font-weight: bold; }
+        input { width: 100%; padding: 18px; border-radius: 12px; background: #000; border: 1px solid #1a2a3a; color: var(--neon); font-size: 16px; text-align: center; outline: none; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-top: 10px; }
+        .btn-primary { background: linear-gradient(90deg, #0082ff, #00f2ff); color: white; }
+        .btn-success { background: transparent; border: 2px solid #39ff14; color: #39ff14; margin-top: 15px; }
+        #vip_dashboard { display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+        .vip-box { background: rgba(0, 242, 255, 0.05); border: 1px dashed var(--neon); border-radius: 15px; padding: 15px; }
+        .zalo-box { margin-top: 25px; text-align: center; font-size: 12px; color: #444; }
     </style>
 </head>
 <body>
-
     <canvas id="canvas"></canvas>
-
     <div class="container">
-        <div class="header">
-            <h1>HQUY SYSTEM</h1>
-            <p>Ultimate Premium Server</p>
-        </div>
-
-        <div class="section-title"><i class="fas fa-server"></i> THÔNG TIN HỆ THỐNG</div>
-        <div class="server-info">
-            <div class="info-card"><span>TRẠNG THÁI</span><b>ONLINE</b></div>
-            <div class="info-card"><span>PHIÊN BẢN</span><b>V3.0.3 VIP</b></div>
-        </div>
-
-        <div class="section-title"><i class="fas fa-key"></i> KÍCH HOẠT THUÊ BAO</div>
-        <div class="input-area">
-            <input type="text" id="uid_input" placeholder="NHẬP MÃ UID VIP">
-        </div>
-        <button class="btn btn-primary" onclick="checkUID()">
-            <i class="fas fa-fingerprint"></i> XÁC MINH UID SERVER
-        </button>
+        <div class="header"><h1>HQUY SYSTEM</h1><p>ULTIMATE PREMIUM</p></div>
+        
+        <div class="section-title"><i class="fas fa-key"></i> KÍCH HOẠT</div>
+        <input type="text" id="uid_input" placeholder="NHẬP MÃ UID VIP">
+        <button class="btn btn-primary" onclick="checkUID()">XÁC MINH UID SERVER</button>
 
         <div id="vip_dashboard">
-            <div class="section-title"><i class="fas fa-user-crown"></i> BẢNG ĐIỀU KHIỂN VIP</div>
+            <div class="section-title"><i class="fas fa-crown"></i> DASHBOARD VIP</div>
             <div class="vip-box">
-                <div class="vip-line">UID: <b id="show_id">-</b></div>
-                <div class="vip-line">LOẠI: <b>PREMIUM SOCKS5</b></div>
-                <div class="vip-line">HẠN DÙNG: <b id="show_expiry">-</b></div>
+                <div style="display:flex; justify-content:space-between">UID: <b id="show_id"></b></div>
+                <div style="display:flex; justify-content:space-between">HẠN: <b id="show_expiry"></b></div>
             </div>
-            
-            <a href="shadowrocket://config/add/https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/config.conf" style="text-decoration: none;">
-                <button class="btn btn-success"><i class="fas fa-cloud-download-alt"></i> CÀI CẤU HÌNH (AUTO)</button>
+            <a id="download_link" href="#" style="text-decoration: none;">
+                <button class="btn btn-success">CÀI CẤU HÌNH & PROXY (1 CHẠM)</button>
             </a>
         </div>
 
-        <div class="zalo-box">
-            LIÊN HỆ GIA HẠN: <a href="https://zalo.me/0353594606">0353594606 (HQUY)</a>
-        </div>
+        <div class="zalo-box">LIÊN HỆ: <a href="https://zalo.me/0353594606" style="color:var(--neon)">0353594606</a></div>
     </div>
 
     <script>
-        // Hiệu ứng Matrix nền cho đẳng cấp
+        // Matrix Effect
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const columns = canvas.width / 20;
-        const drops = new Array(Math.floor(columns)).fill(1);
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const drops = new Array(Math.floor(canvas.width/20)).fill(1);
         function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00f2ff';
-            ctx.font = '15px monospace';
-            for (let i = 0; i < drops.length; i++) {
-                const text = Math.floor(Math.random() * 2);
-                ctx.fillText(text, i * 20, drops[i] * 20);
-                if (drops[i] * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = '#00f2ff'; ctx.font = '15px monospace';
+            drops.forEach((y, i) => {
+                ctx.fillText(Math.floor(Math.random()*2), i*20, y*20);
+                if(y*20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
-            }
+            });
         }
         setInterval(draw, 50);
 
         // Logic Check UID
         async function checkUID() {
             const id = document.getElementById("uid_input").value;
-            const dash = document.getElementById("vip_dashboard");
             if(!id) return alert("VUI LÒNG NHẬP UID!");
-
             try {
-                // Thêm timestamp để chống cache id cũ
-                const res = await fetch('https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/member.json?t=' + Date.now());
+                const res = await fetch(`https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/member.json?t=${Date.now()}`);
                 const data = await res.json();
                 const user = data.users[id];
-
-                if(!user) {
-                    alert("UID KHÔNG TỒN TẠI TRÊN HỆ THỐNG!");
-                    return;
-                }
-
-                if(user.status === "banned") {
-                    alert("ID CỦA BẠN ĐÃ BỊ KHÓA!");
-                    return;
-                }
-
-                if(new Date() > new Date(user.expiry)) {
-                    alert("ID ĐÃ HẾT HẠN SỬ DỤNG!");
-                } else {
-                    document.getElementById("show_id").innerText = id;
-                    document.getElementById("show_expiry").innerText = user.expiry;
-                    dash.style.display = "block";
-                    alert("KÍCH HOẠT VIP THÀNH CÔNG!");
-                }
-            } catch(e) {
-                alert("LỖI KẾT NỐI SERVER!");
-            }
+                if(!user) return alert("UID KHÔNG TỒN TẠI!");
+                
+                document.getElementById("show_id").innerText = id;
+                document.getElementById("show_expiry").innerText = user.expiry;
+                document.getElementById("download_link").href = "shadowrocket://config/add/https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/config.conf";
+                document.getElementById("vip_dashboard").style.display = "block";
+                alert("XÁC MINH THÀNH CÔNG!");
+            } catch(e) { alert("LỖI KẾT NỐI SERVER!"); }
         }
     </script>
 </body>
 </html>
-<script>
-    // MATRIX BACKGROUND - ĐÃ FIX MƯỢT HƠN
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const columns = canvas.width / 20;
-    const drops = new Array(Math.floor(columns)).fill(1);
-    function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#00f2ff';
-        ctx.font = '15px monospace';
-        for (let i = 0; i < drops.length; i++) {
-            const text = Math.floor(Math.random() * 2);
-            ctx.fillText(text, i * 20, drops[i] * 20);
-            if (drops[i] * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        }
-    }
-    setInterval(draw, 50);
-
-    // LOGIC XỬ LÝ - ĐÃ FIX LỖI KẾT NỐI
-    async function checkUID() {
-        const id = document.getElementById("uid_input").value;
-        const dash = document.getElementById("vip_dashboard");
-        if(!id) return alert("VUI LÒNG NHẬP UID!");
-
-        try {
-            // Tự động lấy URL chuẩn của bạn
-            const currentRepo = "maihoangquy2003-wq/ff-neon";
-            const url = `https://raw.githubusercontent.com/${currentRepo}/main/member.json?t=${new Date().getTime()}`;
-
-            const res = await fetch(url);
-            
-            if (!res.ok) throw new Error("Không tìm thấy file data");
-            
-            const data = await res.json();
-            const user = data.users[id];
-
-            if(!user) {
-                alert("UID KHÔNG TỒN TẠI TRÊN HỆ THỐNG!");
-                return;
-            }
-
-            if(user.status === "banned") {
-                alert("ID CỦA BẠN ĐÃ BỊ KHÓA!");
-                return;
-            }
-
-            const expiryDate = new Date(user.expiry);
-            const today = new Date();
-
-            if(today > expiryDate) {
-                alert("ID ĐÃ HẾT HẠN SỬ DỤNG!");
-            } else {
-                document.getElementById("show_id").innerText = id;
-                document.getElementById("show_expiry").innerText = user.expiry;
-                dash.style.display = "block";
-                // Hiệu ứng cuộn xuống bảng điều khiển
-                dash.scrollIntoView({ behavior: 'smooth' });
-                alert("XÁC MINH VIP THÀNH CÔNG!");
-            }
-        } catch(e) {
-            console.error(e);
-            alert("LỖI KẾT NỐI SERVER! (Kiểm tra lại file member.json trên GitHub)");
-        }
-    }
-</script>
-<a href="shadowrocket://config/add/https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/config.conf">
-    <button class="btn-success">CÀI CẤU HÌNH & PROXY (1 CHẠM)</button>
-</a>
-
-

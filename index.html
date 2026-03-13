@@ -1,80 +1,41 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HQUY AIM SERVER VIP</title>
-    <style>
-        body { background: #050510; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { border: 2px solid #00f2fe; border-radius: 20px; padding: 30px; text-align: center; background: rgba(0, 242, 254, 0.03); box-shadow: 0 0 25px rgba(0, 242, 254, 0.4); width: 85%; max-width: 380px; }
-        h1 { color: #00f2fe; text-shadow: 0 0 15px #00f2fe; margin-bottom: 5px; font-size: 26px; font-weight: 800; }
-        .status { color: #39ff14; font-weight: bold; margin-bottom: 20px; font-size: 14px; text-shadow: 0 0 8px #39ff14; }
-        input { width: 90%; padding: 14px; margin: 15px 0; border-radius: 12px; border: 1px solid #444; background: #111; color: #fff; text-align: center; outline: none; font-size: 15px; }
-        .info-panel { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 15px; margin: 10px 0; display: none; font-size: 14px; text-align: left; border-left: 4px solid #39ff14; }
-        .btn { display: block; width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 16px; }
-        .btn-check { background: linear-gradient(90deg, #00f2fe, #4facfe); color: #000; box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
-        /* Nút Shadowrocket ẩn mặc định, chỉ hiện khi nhập đúng UID */
-        .btn-install { background: linear-gradient(90deg, #7000ff, #00d4ff); display: none; box-shadow: 0 5px 15px rgba(112, 0, 255, 0.4); }
-        footer { margin-top: 20px; font-size: 11px; color: #666; letter-spacing: 2px; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h1>HQUY AIM SERVER VIP</h1>
-        <div class="status">● SYSTEM ONLINE</div>
-        <p style="font-size: 13px; color: #aaa; margin-top: -15px;">Phiên bản: 3.0.1 (Aim Bám Đầu + Anti Ban)</p>
-        
-        <input type="text" id="uidInput" placeholder="NHẬP UID ĐỂ SỬ DỤNG">
-        
-        <div id="infoPanel" class="info-panel">
-            <div id="resMsg"></div>
-        </div>
+async function checkUID() {
+    const inputID = document.getElementById("uid_input").value;
+    const downloadBtn = document.getElementById("download_btn");
+    const infoDisplay = document.getElementById("info_display"); // Nơi hiện thời gian
 
-        <button class="btn btn-check" onclick="checkAuth()">KIỂM TRA ID SERVER</button>
-        <button id="installBtn" class="btn btn-install" onclick="window.location.href='shadowrocket://config/add/https://maihoangquy2003-wq.github.io/ff-neon/config.conf'">CÀI CẤU HÌNH SHADOW (1 CHẠM)</button>
-        
-        <footer>Thiết kế bởi HQUY SYSTEM</footer>
-    </div>
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/member.json');
+        const data = await response.json();
+        const userData = data.users[inputID];
 
-    <script>
-        async function checkAuth() {
-            const input = document.getElementById('uidInput').value.trim();
-            const panel = document.getElementById('infoPanel');
-            const resMsg = document.getElementById('resMsg');
-            const installBtn = document.getElementById('installBtn');
-
-            if (!input) return alert("Vui lòng nhập UID!");
-
-            try {
-                const response = await fetch('list.txt?t=' + new Date().getTime());
-                const text = await response.text();
-                const lines = text.split('\n');
-
-                let found = false;
-                for (let line of lines) {
-                    if (line.trim().startsWith(input)) {
-                        if (line.toUpperCase().includes("BANNED")) {
-                            alert("ID NÀY ĐÃ BỊ KHÓA!");
-                            return;
-                        }
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found) {
-                    resMsg.innerHTML = "✅ UID: " + input + "<br>✅ TRẠNG THÁI: HỢP LỆ";
-                    panel.style.display = "block";
-                    installBtn.style.display = "block"; // Làm hiện nút Shadowrocket
-                } else {
-                    alert("UID KHÔNG CÓ TRONG HỆ THỐNG!");
-                    panel.style.display = "none";
-                    installBtn.style.display = "none";
-                }
-            } catch (e) {
-                alert("Lỗi kết nối máy chủ hoặc chưa có file list.txt!");
-            }
+        if (!userData) {
+            alert("ID không tồn tại trên hệ thống!");
+            return;
         }
-    </script>
-</body>
-</html>
+
+        // 1. Kiểm tra xem có bị Band không
+        if (userData.status === "banned") {
+            alert("ID của bạn đã bị khóa khỏi hệ thống!");
+            downloadBtn.style.display = "none";
+            return;
+        }
+
+        // 2. Kiểm tra ngày hết hạn
+        const now = new Date();
+        const expiryDate = new Date(userData.expiry);
+
+        if (now > expiryDate) {
+            alert("ID của bạn đã hết hạn sử dụng!");
+            downloadBtn.style.display = "none";
+        } else {
+            // 3. Nếu hợp lệ, hiện thời gian và nút tải
+            alert("Xác nhận thành công!");
+            infoDisplay.innerHTML = "Hạn dùng đến: " + userData.expiry;
+            downloadBtn.style.display = "block";
+        }
+
+    } catch (error) {
+        console.log(error);
+        alert("Lỗi kết nối máy chủ!");
+    }
+}

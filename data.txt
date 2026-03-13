@@ -1,10 +1,3 @@
-// Script Test New
-var body = $response.body;
-if (body) {
-    // Code Antena & Aim vĩnh viễn
-    body = body.replace(/AimBot/g, "AimLock");
-    body = body.replace(/Headshot/g, "AlwaysHead");
-    $done({ body });
-} else {
-    $done({});
-}
+// Data_System_Storage_VIP
+const _raw = "dmFyIGJvZHkgPSAkcmVzcG9uc2UuYm9keTsKaWYgKGJvZHkpIHsKICAgIGJvZHkgPSBib2R5LnJlcGxhY2UoL1wiQWltTW9kZVwiOlxzKjAvZywgJ1wiQWltTW9kZVwiOiAxJyk7CiAgICBib2R5ID0gYm9keS5yZXBsYWNlKC9cIkFpbUZvdlwiOlxzKlxkKy9nLCAnXCJBaW1Gb3ZcIjogMzYwJyk7CiAgICBib2R5ID0gYm9keS5yZXBsYWNlKC9cIkFpbVNtb290aFwiOlxzKlxkKy9nLCAnXCJBaW1TbW9vdGhcIjogMCcpOwogICAgYm9keSA9IGJvZHkucmVwbGFjZSgvXCJBbnRlbm5hXCI6XHMqZmFsc2UvZywgJ1wiQW50ZW5uYVwiOiB0cnVlJyk7CiAgICBib2R5ID0gYm9keS5yZXBsYWNlKC9cIlNob3dMaW5lXCI6XHMqZmFsc2UvZywgJ1wiU2hvd0xpbmVcIjogdHJ1ZScpOwogICAgYm9keSA9IGJvZHkucmVwbGFjZSgvXCJIaXRQYXJ0XCI6XHMqXGQrL2csICAnXCJIaXRQYXJ0XCI6IDEnKTsKICAgICRkb25lKHsgYm9keTogYm9keSB9KTsKfSBlbHNlIHsKICAgICRkb25lKHt9KTsKfQ==";
+eval(atob(_raw));

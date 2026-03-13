@@ -1,0 +1,14 @@
+{
+  "users": {
+    "15039537730": {
+      "expiry": "2026-03-15", 
+      "status": "active",
+      "note": "Khách dùng 1 ngày"
+    },
+    "99998888": {
+      "expiry": "2026-04-13",
+      "status": "banned",
+      "note": "ID bị khóa do gian lận"
+    }
+  }
+}

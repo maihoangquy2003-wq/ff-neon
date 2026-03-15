@@ -6,7 +6,9 @@
     }
   }
 }
- "users": {
+
+{
+  "users": {
     "1953348993": {
       "expiry": "2026-12-31",
       "status": "active"

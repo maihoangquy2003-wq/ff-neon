@@ -3,378 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HQUY TA SYSTEM | V3.5 PREMIUM EDITION</title>
+    <title>HQUY TA PREMIUM SYSTEM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --neon-blue: #00f2ff;
-            --neon-purple: #bc13fe;
-            --neon-red: #ff003c;
-            --neon-green: #39ff14;
-            --bg-dark: #02050a;
-            --glass: rgba(10, 20, 40, 0.8);
+            --primary: #00f2ff;
+            --secondary: #bc13fe;
+            --danger: #ff003c;
+            --success: #39ff14;
+            --warning: #ffae00;
+            --bg: #02050a;
+            --card-bg: rgba(10, 20, 40, 0.85);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
-            background: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(188, 19, 254, 0.1) 0%, transparent 40%);
+            background-color: var(--bg);
             color: #fff;
+            font-family: 'Rajdhani', sans-serif;
             margin: 0;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: 'Orbitron', 'Segoe UI', sans-serif;
-            overflow: hidden;
         }
 
-        /* Hiệu ứng màn hình quét */
-        body::before {
-            content: "";
-            position: fixed; top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(0, 242, 255, 0.2);
-            z-index: 10;
-            animation: scanning 4s linear infinite;
+        /* Hiệu ứng Matrix Background */
+        #matrix-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.15;
         }
 
-        @keyframes scanning {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        .container {
-            width: 90%;
-            max-width: 450px;
-            background: var(--glass);
-            padding: 35px;
+        .main-card {
+            width: 92%; max-width: 460px;
+            background: var(--card-bg);
             border-radius: 40px;
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0, 242, 255, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(30px);
+            border: 2px solid rgba(0, 242, 255, 0.2);
+            padding: 35px 25px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            text-align: center;
             position: relative;
-            z-index: 5;
-            animation: slideIn 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation: fadeIn 0.8s ease-out;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: scale(0.9) translateY(30px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header h1 {
-            font-size: 32px;
-            margin: 0;
-            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 5px;
+        .logo-area h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px; font-weight: 900; margin: 0;
+            background: linear-gradient(to right, var(--primary), #fff, var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 4px;
             filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.5));
         }
 
-        .header p { font-size: 10px; color: #556b8d; letter-spacing: 3px; margin: 5px 0 25px 0; }
-
-        .info-bar {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
-            border-radius: 100px;
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            margin-bottom: 25px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--neon-blue);
-            font-size: 13px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        .ip-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0,0,0,0.6); padding: 8px 18px; border-radius: 50px;
+            border: 1px solid var(--primary); color: var(--primary);
+            font-weight: bold; font-size: 14px; margin: 20px 0;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
         }
 
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 20px;
-            transition: 0.3s;
-        }
-        .stat-box:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); }
-        .stat-box span { display: block; font-size: 9px; color: #777; margin-bottom: 5px; text-transform: uppercase; }
-        .stat-box b { font-size: 15px; letter-spacing: 1px; }
-
-        /* Server Grid */
-        .grid-title { text-align: left; font-size: 11px; color: #556b8d; margin: 0 0 12px 10px; text-transform: uppercase; }
+        /* Server Selector */
+        .server-title { text-align: left; font-size: 11px; color: #666; margin: 10px 0 10px 15px; letter-spacing: 2px; }
         .server-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         
-        .srv-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #1a2a3a;
-            padding: 20px;
-            border-radius: 25px;
-            cursor: pointer;
+        .srv-option {
+            background: rgba(255,255,255,0.03); border: 2px solid #1a2a3a;
+            padding: 20px 10px; border-radius: 25px; cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
         }
-        .srv-item i { font-size: 28px; color: #333; margin-bottom: 10px; display: block; transition: 0.3s; }
-        .srv-item span { font-size: 12px; font-weight: bold; color: #555; display: block; }
+        .srv-option i { font-size: 24px; color: #444; margin-bottom: 8px; display: block; }
+        .srv-option span { font-weight: 700; font-size: 13px; color: #666; }
 
-        .srv-item.active {
-            border-color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.1);
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(255, 0, 60, 0.3);
+        .srv-option.active {
+            border-color: var(--danger); background: rgba(255, 0, 60, 0.1);
+            transform: scale(1.05); box-shadow: 0 8px 20px rgba(255, 0, 60, 0.2);
         }
-        .srv-item.active i { color: var(--neon-red); filter: drop-shadow(0 0 8px var(--neon-red)); }
-        .srv-item.active span { color: #fff; }
+        .srv-option.active i { color: var(--danger); filter: drop-shadow(0 0 5px var(--danger)); }
+        .srv-option.active span { color: #fff; }
 
         /* Input UID */
-        .uid-container { position: relative; margin-bottom: 20px; }
+        .input-group { position: relative; margin-bottom: 20px; }
         .uid-input {
-            width: 100%;
-            padding: 20px;
-            background: #000;
-            border: 1px solid #1a2a3a;
-            border-radius: 20px;
-            color: var(--neon-blue);
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
-            letter-spacing: 2px;
+            width: 100%; padding: 22px; background: #000;
+            border: 1px solid #1a2a3a; border-radius: 25px;
+            color: var(--primary); font-family: 'Orbitron', sans-serif;
+            font-size: 18px; text-align: center; letter-spacing: 3px;
             transition: 0.3s;
         }
-        .uid-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 242, 255, 0.3); }
+        .uid-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
 
-        .btn-verify {
-            width: 100%;
-            padding: 18px;
-            border-radius: 20px;
-            border: none;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5, #00d2ff);
-            background-size: 200%;
-            color: white;
-            font-size: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.5s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+        .btn-main {
+            width: 100%; padding: 18px; border-radius: 25px; border: none;
+            font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 16px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px;
+            transition: 0.4s; text-transform: uppercase;
         }
-        .btn-verify:hover { background-position: right; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(58, 123, 213, 0.4); }
+        .btn-verify { background: linear-gradient(135deg, var(--primary), #00a2ff); color: #000; }
+        .btn-verify:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 242, 255, 0.4); }
 
-        /* Result Area */
-        #result-box { display: none; margin-top: 30px; animation: fadeInUp 0.6s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* Result Area (Hidden initially) */
+        #result-panel { display: none; margin-top: 30px; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .res-card {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 25px;
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            text-align: left;
-            margin-bottom: 20px;
+        .info-table {
+            background: rgba(0,0,0,0.4); padding: 20px; border-radius: 25px;
+            border: 1px dashed rgba(255,255,255,0.1); margin-bottom: 20px;
         }
-        .res-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
-        .res-row span { color: #888; font-size: 12px; }
-        .res-row b { color: var(--neon-blue); font-size: 14px; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .info-row span { color: #888; font-size: 14px; }
+        .info-row b { color: var(--primary); font-size: 15px; }
 
-        .btn-dl {
-            width: 100%;
-            padding: 16px;
-            border-radius: 18px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: bold;
-            margin-bottom: 12px;
-            transition: 0.3s;
+        .btn-cfg { background: var(--success); color: #000; margin-bottom: 15px; }
+        .btn-cert { background: var(--warning); color: #000; }
+
+        /* Band Overlay */
+        .band-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: none;
+            flex-direction: column; justify-content: center; align-items: center;
         }
-        .btn-config { background: var(--neon-green); color: #000; box-shadow: 0 5px 15px rgba(57, 255, 20, 0.3); }
-        .btn-cert { background: #ffae00; color: #000; box-shadow: 0 5px 15px rgba(255, 174, 0, 0.3); }
-        .btn-dl:active { transform: scale(0.95); }
+        .band-screen i { font-size: 80px; color: var(--danger); margin-bottom: 20px; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        /* Màn hình chặn (Band) */
-        .ban-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: #000; z-index: 1000;
-            display: none; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-        }
-        .ban-overlay i { font-size: 100px; color: var(--neon-red); margin-bottom: 30px; }
-        .ban-overlay h2 { color: #fff; letter-spacing: 5px; }
-
-        .footer-link { margin-top: 25px; color: #556b8d; font-size: 11px; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
 
-    <div class="ban-overlay" id="ban-ui">
-        <i class="fas fa-radiation-alt fa-spin"></i>
-        <h2>ACCESS DENIED</h2>
-        <p style="color: #444;">YOUR IP HAS BEEN PERMANENTLY BANNED</p>
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="band-screen" id="band-ui">
+        <i class="fas fa-user-slash"></i>
+        <h1 style="color: var(--danger); letter-spacing: 5px;">ACCESS DENIED</h1>
+        <p style="color: #444;">IP CỦA BẠN ĐÃ BỊ CHẶN KHỎI HỆ THỐNG</p>
     </div>
 
-    <div class="container" id="main-ui">
-        <div class="header">
+    <div class="main-card" id="app-ui">
+        <div class="logo-area">
             <h1>HQUY TA</h1>
-            <p>PREMIUM V3.5 SYSTEM</p>
+            <p style="font-size: 10px; color: #444; letter-spacing: 3px; margin-top: 5px;">PREMIUM V3.5 SYSTEM</p>
         </div>
 
-        <div class="info-bar">
-            <i class="fas fa-microchip"></i>
-            IP: <span id="display-ip">Đang quét...</span>
+        <div class="ip-badge">
+            <i class="fas fa-network-wired"></i>
+            IP: <span id="user-ip">Đang quét...</span>
         </div>
 
-        <div class="stats">
-            <div class="stat-box"><span>SERVER</span><b style="color: var(--neon-green)">STABLE</b></div>
-            <div class="stat-box"><span>VERSION</span><b style="color: var(--neon-purple)">V3.5 VIP</b></div>
-        </div>
-
-        <div id="verify-area">
-            <div class="grid-title">SELECT SECURITY SERVER</div>
+        <div id="auth-form">
+            <div class="server-title">CHỌN MÁY CHỦ BẠN ĐÃ MUA:</div>
             <div class="server-grid">
-                <div class="srv-item" id="srv-no" onclick="setServer('no')">
-                    <i class="fas fa-shield-virus"></i>
+                <div class="srv-option" id="srv-no" onclick="selectSrv('no')">
+                    <i class="fas fa-shield-alt"></i>
                     <span>NO ANTENA</span>
                 </div>
-                <div class="srv-item active" id="srv-vip" onclick="setServer('vip')">
+                <div class="srv-option active" id="srv-vip" onclick="selectSrv('vip')">
                     <i class="fas fa-satellite-dish"></i>
                     <span>ANTENA VIP</span>
                 </div>
             </div>
 
-            <div class="uid-container">
-                <input type="text" class="uid-input" id="uid_field" placeholder="INPUT UID VIP">
+            <div class="input-group">
+                <input type="text" id="uid_field" class="uid-input" placeholder="NHẬP MÃ UID VIP">
             </div>
 
-            <button class="btn-verify" onclick="processAuth()">
-                <i class="fas fa-unlock-alt"></i> VERIFY SYSTEM
+            <button class="btn-main btn-verify" onclick="handleVerify()">
+                <i class="fas fa-fingerprint"></i> XÁC MINH TRUY CẬP
             </button>
         </div>
 
-        <div id="result-box">
-            <div class="res-card">
-                <div class="res-row"><span>CLIENT ID</span><b id="res-uid">-</b></div>
-                <div class="res-row"><span>EXPIRE DATE</span><b id="res-exp" style="color: var(--neon-green)">-</b></div>
-                <div class="res-row"><span>MACHINE</span><b id="res-name">-</b></div>
+        <div id="result-panel">
+            <div class="info-table">
+                <div class="info-row"><span>UID KHÁCH:</span><b id="res-uid">-</b></div>
+                <div class="info-row"><span>HẠN SỬ DỤNG:</span><b id="res-exp" style="color: var(--success)">-</b></div>
+                <div class="info-row"><span>LOẠI SEVER:</span><b id="res-srv">-</b></div>
             </div>
 
-            <a href="#" id="dl-config" class="btn-dl btn-config">
-                <i class="fas fa-file-code"></i> INSTALL CONFIG VIP
-            </a>
-            <a href="#" id="dl-cert" class="btn-dl btn-cert">
-                <i class="fas fa-certificate"></i> INSTALL SSL CERT
-            </a>
+            <button class="btn-main btn-cfg" id="dl-config">
+                <i class="fas fa-cloud-download-alt"></i> CÀI CONFIG NGAY
+            </button>
+            <button class="btn-main btn-cert" id="dl-cert">
+                <i class="fas fa-file-contract"></i> CÀI FILE CERT (SSL)
+            </button>
         </div>
 
-        <a href="https://t.me/0353594606" class="footer-link">
-            <i class="fab fa-telegram"></i> SUPPORT CENTER: 0353594606
-        </a>
+        <div style="margin-top: 30px;">
+            <a href="https://t.me/0353594606" style="text-decoration: none; color: #555; font-size: 12px; font-weight: bold;">
+                <i class="fab fa-telegram"></i> HỖ TRỢ: 0353594606
+            </a>
+        </div>
     </div>
 
     <script>
-        const CFG = {
+        const CONFIG = {
             BOT_TOKEN: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ",
-            ADMIN_ID: "7329868082",
-            REPO: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
+            CHAT_ID: "7329868082",
+            GITHUB_REPO: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
         };
 
         let currentType = 'vip';
-        let userIP = "";
+        let clientIP = "";
 
-        // 1. Khởi tạo hệ thống & Kiểm tra Band IP
-        async function bootstrap() {
+        // Khởi tạo hiệu ứng Matrix & Kiểm tra IP
+        async function init() {
+            startMatrix();
             try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                userIP = data.ip;
-                document.getElementById('display-ip').innerText = userIP;
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json();
+                clientIP = d.ip;
+                document.getElementById('user-ip').innerText = clientIP;
 
-                // Kiểm tra band từ file vip mặc định
-                const db = await (await fetch(`${CFG.REPO}/antena.json?t=${Date.now()}`)).json();
-                if(db.banned_ips && db.banned_ips.includes(userIP)) {
-                    document.getElementById('ban-ui').style.display = 'flex';
-                    document.getElementById('main-ui').style.display = 'none';
+                // Kiểm tra band IP từ file antena.json (File chính quản lý IP)
+                const db = await (await fetch(`${CONFIG.GITHUB_REPO}/antena.json?t=${Date.now()}`)).json();
+                if(db.banned_ips?.includes(clientIP)) {
+                    document.getElementById('band-ui').style.display = 'flex';
+                    document.getElementById('app-ui').style.display = 'none';
                 }
-            } catch(e) { console.log("System offline"); }
+            } catch(e) { console.log("Network error"); }
         }
 
-        // 2. Chọn Server
-        function setServer(t) {
-            currentType = t;
-            document.querySelectorAll('.srv-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(t === 'no' ? 'srv-no' : 'srv-vip').classList.add('active');
+        function selectSrv(type) {
+            currentType = type;
+            document.querySelectorAll('.srv-option').forEach(el => el.classList.remove('active'));
+            document.getElementById(type === 'no' ? 'srv-no' : 'srv-vip').classList.add('active');
         }
 
-        // 3. Xử lý xác minh cực mạnh
-        async function processAuth() {
-            const val = document.getElementById('uid_field').value.trim();
-            if(!val) return alert("HÃY NHẬP UID TRƯỚC!");
+        async function handleVerify() {
+            const uid = document.getElementById('uid_field').value.trim();
+            if(!uid) return alert("VUI LÒNG NHẬP UID!");
 
-            // CHIA 2 FILE RIÊNG BIỆT: VIP gọi antena.json, Thường gọi noantena.json
-            const targetFile = currentType === 'vip' ? 'antena.json' : 'noantena.json';
+            // XÁC ĐỊNH FILE JSON TƯƠNG ỨNG
+            const fileName = currentType === 'vip' ? 'antena.json' : 'noantena.json';
 
             try {
-                const response = await fetch(`${CFG.REPO}/${targetFile}?t=${Date.now()}`);
-                if(!response.ok) throw new Error("File not found");
+                const response = await fetch(`${CONFIG.GITHUB_REPO}/${fileName}?t=${Date.now()}`);
+                if(!response.ok) throw new Error();
                 
                 const data = await response.json();
-                const account = data.users[val];
+                const user = data.users[uid];
 
-                if(account) {
-                    // Thành công: Hiển thị giao diện kết quả
-                    document.getElementById('verify-area').style.display = 'none';
-                    document.getElementById('result-box').style.display = 'block';
+                if(user) {
+                    // XÁC MINH THÀNH CÔNG
+                    document.getElementById('auth-form').style.display = 'none';
+                    document.getElementById('result-panel').style.display = 'block';
 
-                    document.getElementById('res-uid').innerText = val;
-                    document.getElementById('res-exp').innerText = account.expiry;
-                    document.getElementById('res-name').innerText = currentType === 'vip' ? 'ANTENA VIP SERVER' : 'NO ANTENA SERVER';
+                    document.getElementById('res-uid').innerText = uid;
+                    document.getElementById('res-exp').innerText = user.expiry;
+                    document.getElementById('res-srv').innerText = currentType === 'vip' ? 'ANTENA VIP' : 'NO ANTENA';
 
-                    // Cập nhật Link tải (Chia đúng file)
-                    const conf = currentType === 'vip' ? 'antena.conf' : 'no_antena.conf';
-                    const cert = currentType === 'vip' ? 'cert_antena.pem' : 'cert_antena.pem'; // Có thể đổi cert_noantena.pem nếu có
+                    // Gán link tải file RIÊNG BIỆT
+                    const cfgFile = currentType === 'vip' ? 'antena.conf' : 'no_antena.conf';
+                    const certFile = currentType === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem'; // Bạn sẽ tạo sau
 
-                    document.getElementById('dl-config').href = `shadowrocket://config/add/${CFG.REPO}/${conf}`;
-                    document.getElementById('dl-cert').href = `${CFG.REPO}/${cert}`;
+                    document.getElementById('dl-config').onclick = () => window.location.href = `shadowrocket://config/add/${CONFIG.GITHUB_REPO}/${cfgFile}`;
+                    document.getElementById('dl-cert').onclick = () => window.location.href = `${CONFIG.GITHUB_REPO}/${certFile}`;
 
-                    // Tự động gửi Telegram
-                    pushNotify(val, account.expiry);
+                    sendToTele(uid, user.expiry);
                 } else {
-                    alert("THẤT BẠI: UID KHÔNG TỒN TẠI TRONG MÁY CHỦ NÀY!");
+                    alert("UID KHÔNG CÓ QUYỀN TRUY CẬP MÁY CHỦ NÀY!");
                 }
             } catch(e) {
-                alert("LỖI KẾT NỐI: KHÔNG TÌM THẤY DỮ LIỆU SERVER " + targetFile.toUpperCase());
+                alert("LỖI KẾT NỐI SERVER: " + fileName.toUpperCase());
             }
         }
 
-        // 4. Hàm gửi Telegram cực chi tiết
-        function pushNotify(uid, exp) {
-            const srv = currentType === 'vip' ? '💎 ANTENA VIP' : '🛡️ NO ANTENA';
-            const time = new Date().toLocaleString('vi-VN');
-            const text = `🔥 **THÔNG BÁO TRUY CẬP HỆ THỐNG**\n` +
-                         `━━━━━━━━━━━━━━━━━━\n` +
-                         `👤 **UID:** \`${uid}\`\n` +
-                         `🌐 **IP:** \`${userIP}\`\n` +
-                         `📡 **Server:** ${srv}\n` +
-                         `⏳ **Hết hạn:** ${exp}\n` +
-                         `⏰ **Thời gian:** ${time}\n` +
-                         `━━━━━━━━━━━━━━━━━━`;
+        async function sendToTele(uid, exp) {
+            const srvName = currentType === 'vip' ? '💎 ANTENA VIP' : '🛡️ NO ANTENA';
+            const message = `🚀 **KHÁCH LOGIN THÀNH CÔNG**\n` +
+                          `━━━━━━━━━━━━━━━━━━\n` +
+                          `👤 UID: \`${uid}\`\n` +
+                          `🌐 IP: \`${clientIP}\`\n` +
+                          `📡 SEVER: \`${srvName}\`\n` +
+                          `⏳ HẠN: \`${exp}\`\n` +
+                          `━━━━━━━━━━━━━━━━━━`;
 
-            fetch(`https://api.telegram.org/bot${CFG.BOT_TOKEN}/sendMessage`, {
+            await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: CFG.ADMIN_ID, text: text, parse_mode: 'Markdown' })
+                body: JSON.stringify({
+                    chat_id: CONFIG.CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
             });
         }
 
-        bootstrap();
+        // Hiệu ứng Matrix
+        function startMatrix() {
+            const canvas = document.getElementById('matrix-bg');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const letters = "0101010101010101";
+            const fontSize = 10;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+            function draw() {
+                ctx.fillStyle = "rgba(2, 5, 10, 0.05)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#00f2ff";
+                ctx.font = fontSize + "px monospace";
+                drops.forEach((y, i) => {
+                    const text = letters[Math.floor(Math.random() * letters.length)];
+                    ctx.fillText(text, i * fontSize, y * fontSize);
+                    if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                });
+            }
+            setInterval(draw, 33);
+        }
+
+        init();
     </script>
 </body>
 </html>

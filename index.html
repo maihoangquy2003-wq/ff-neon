@@ -3,385 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HQUY TA | CYBER DRAGON ULTIMATE · NEO</title>
+    <title>HQUY TA | CYBER DRAGON ULTIMATE</title>
     
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    
+
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body, html { width: 100%; height: 100%; background: #03050a; color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; position: relative; }
-        
-        /* Particle background */
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.5; }
-        
-        /* Glitch overlay */
-        .glitch-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(0,255,255,0.02) 0px, rgba(255,0,100,0.02) 2px, transparent 4px); pointer-events: none; z-index: 10; mix-blend-mode: overlay; }
-        
-        /* Blur orbs */
-        .orb { position: fixed; width: 500px; height: 500px; border-radius: 50%; filter: blur(120px); opacity: 0.15; animation: orbFloat 20s infinite alternate; z-index: -1; }
-        .orb1 { background: #00f2ff; top: -100px; left: -100px; } .orb2 { background: #bc13fe; bottom: -100px; right: -100px; animation-delay: -5s; }
-        @keyframes orbFloat { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(200px,100px) scale(1.5); } }
-        
-        /* Main wrapper */
-        .cyber-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; perspective: 1200px; }
-        .cyber-card { width: 100%; max-width: 620px; background: rgba(8, 12, 18, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(0, 242, 255, 0.25); border-radius: 50px; padding: 35px 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 50px rgba(0,242,255,0.3); animation: cardRise 1s ease; transition: all 0.4s; }
-        @keyframes cardRise { 0% { opacity: 0; transform: translateY(80px) rotateX(10deg); } 100% { opacity: 1; transform: translateY(0) rotateX(0); } }
-        
-        /* Header */
-        .logo-header h1 { font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; letter-spacing: 8px; background: linear-gradient(45deg, #00f2ff, #ff00e6, #39ff14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px cyan); margin-bottom: 5px; animation: glitch 2.5s infinite; }
-        @keyframes glitch { 0% { text-shadow: 2px 2px red; } 20% { text-shadow: -2px -2px lime; } 40% { text-shadow: 2px -2px blue; } 60% { text-shadow: -2px 2px yellow; } 80% { text-shadow: 2px 2px magenta; } 100% { text-shadow: -2px -2px cyan; } }
-        
-        /* IP tracker */
-        .ip-tracker { background: rgba(0,20,20,0.7); border: 1px solid #0ff3; border-radius: 60px; padding: 12px 25px; margin: 15px auto 25px; display: inline-flex; align-items: center; gap: 15px; font-family: 'Share Tech Mono', monospace; color: #0ff; box-shadow: 0 0 20px #0ff3; }
-        
-        /* SERVER GRID — nâng cấp 4 lựa chọn */
-        .server-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 30px; }
-        .srv-box { background: rgba(0, 15, 25, 0.7); border: 2px solid #1f3a4a; border-radius: 35px; padding: 22px 10px; cursor: pointer; transition: 0.3s; text-align: center; position: relative; overflow: hidden; backdrop-filter: blur(10px); }
-        .srv-box i { font-size: 36px; color: #2f4f6f; margin-bottom: 12px; transition: 0.3s; }
-        .srv-box span { font-weight: 800; font-size: 14px; color: #6b8fa0; display: block; letter-spacing: 1px; }
-        .srv-box::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); opacity: 0; transition: 0.5s; }
-        .srv-box:hover::after { opacity: 1; }
-        .srv-box.active { border-color: #ff0055; box-shadow: 0 0 35px #ff0055; background: rgba(255,0,85,0.1); }
-        .srv-box.active i { color: #ff0055; text-shadow: 0 0 20px red; }
-        .srv-box.active span { color: white; }
-        
-        /* UID nhập với keypad ảo (ẩn hiện) */
-        .uid-zone { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .uid-field { flex: 1; padding: 22px; border-radius: 30px; background: #0a0e14; border: 2px solid #1f3a4a; color: #0ff; font-family: 'Orbitron', sans-serif; font-size: 24px; text-align: center; letter-spacing: 4px; transition: 0.3s; min-width: 200px; }
-        .uid-field:focus { border-color: #0ff; box-shadow: 0 0 30px #0ff; }
-        .btn-keypad { background: #1a2a3a; border: none; border-radius: 30px; width: 70px; color: #0ff; font-size: 28px; cursor: pointer; transition: 0.2s; }
-        .btn-keypad:hover { background: #0ff; color: black; }
-        
-        /* Nút cyber chính */
-        .btn-cyber { width: 100%; padding: 20px; border-radius: 40px; border: none; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 18px; text-transform: uppercase; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px; background: linear-gradient(145deg, #001c28, #00101a); color: #0ff; border: 1px solid #0ff5; position: relative; overflow: hidden; }
-        .btn-cyber:hover { transform: translateY(-3px); box-shadow: 0 15px 30px #0ff5; }
-        .btn-cyber i { font-size: 22px; }
-        .btn-verify { background: linear-gradient(145deg, #0ff2, #f0f); color: #000; font-weight: 900; border: none; }
-        
-        /* Kết quả panel mở rộng */
-        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
-        .info-tile { background: rgba(0,10,20,0.7); border-radius: 30px; padding: 20px; border: 1px solid #0ff3; backdrop-filter: blur(5px); }
-        .info-tile .label { color: #7f9fbf; font-size: 12px; letter-spacing: 2px; }
-        .info-tile .value { color: #0ff; font-size: 20px; font-weight: 700; font-family: 'Share Tech Mono', monospace; }
-        
-        /* Console log */
-        .console-panel { background: #010a10; border-radius: 25px; padding: 20px; font-family: 'Share Tech Mono', monospace; font-size: 12px; color: #0f0; border: 1px solid #0ff3; height: 130px; overflow-y: auto; margin-bottom: 20px; text-align: left; box-shadow: inset 0 0 20px #000; }
-        .console-panel div { margin: 4px 0; border-bottom: 1px dotted #0ff2; padding-bottom: 3px; }
-        
-        /* Progress bar */
-        .scan-progress { height: 8px; background: #1f3a4a; border-radius: 10px; margin: 20px 0; overflow: hidden; display: none; }
-        .scan-progress .bar { height: 100%; width: 0%; background: linear-gradient(90deg, #0ff, #f0f); transition: width 0.2s; }
-        
-        /* Ban overlay */
-        .ban-overlay { position: fixed; inset: 0; background: #000; z-index: 99999; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .ban-overlay i { font-size: 120px; color: red; animation: pulse 1s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 50px red; } }
-        
-        /* Footer admin */
-        .admin-link { margin-top: 25px; display: flex; justify-content: center; gap: 25px; color: #4f6f8f; font-size: 14px; }
-        .admin-link a { color: #4f6f8f; text-decoration: none; transition: 0.3s; }
-        .admin-link a:hover { color: #0ff; }
-        
-        /* Ẩn hiện UI */
+        :root {
+            --primary: #00f2ff;
+            --secondary: #bc13fe;
+            --danger: #ff003c;
+            --success: #39ff14;
+            --warning: #ffae00;
+            --bg: #010409;
+            --glass: rgba(13, 17, 23, 0.9);
+            --glow: 0 0 15px rgba(0, 242, 255, 0.5);
+        }
+
+        /* Reset & Base */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: var(--bg); color: #fff;
+            font-family: 'Rajdhani', sans-serif; overflow: hidden;
+        }
+
+        /* Nền Matrix Nhị Phân */
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.25;
+        }
+
+        /* Hiệu ứng mờ ảo di động */
+        .blur-circle {
+            position: fixed; width: 300px; height: 300px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            filter: blur(80px); opacity: 0.1; z-index: -1;
+            animation: moveBlur 15s infinite alternate;
+        }
+
+        @keyframes moveBlur {
+            0% { top: 10%; left: 10%; }
+            100% { top: 80%; left: 70%; }
+        }
+
+        /* Container Chính */
+        .cyber-wrapper {
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; padding: 15px;
+        }
+
+        .cyber-card {
+            width: 100%; max-width: 480px;
+            background: var(--glass);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 40px; padding: 40px 25px;
+            text-align: center; position: relative;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), var(--glow);
+            animation: cardAppear 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.7) rotateX(20deg); }
+            to { opacity: 1; transform: scale(1) rotateX(0); }
+        }
+
+        /* Header Neon */
+        .logo-header h1 {
+            font-family: 'Orbitron', sans-serif; font-size: 38px; font-weight: 900;
+            margin: 0; letter-spacing: 6px; text-transform: uppercase;
+            background: linear-gradient(135deg, var(--primary), #fff, var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px var(--primary));
+            animation: glitchText 3s infinite;
+        }
+
+        @keyframes glitchText {
+            0% { text-shadow: 2px 2px var(--danger); }
+            50% { text-shadow: -2px -2px var(--primary); }
+            100% { text-shadow: 2px 2px var(--danger); }
+        }
+
+        /* IP Tracking UI */
+        .ip-tracker {
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 100px; padding: 10px 20px; margin: 25px auto;
+            display: inline-flex; align-items: center; gap: 10px;
+            color: var(--primary); font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1);
+        }
+
+        /* Server Grid */
+        .server-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 30px;
+        }
+        .srv-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2.5px solid #1a2a3a; padding: 25px 10px;
+            border-radius: 30px; cursor: pointer; transition: 0.4s;
+            position: relative; overflow: hidden;
+        }
+        .srv-box i { font-size: 30px; color: #333; margin-bottom: 12px; transition: 0.3s; }
+        .srv-box span { display: block; font-weight: 800; font-size: 13px; color: #555; }
+
+        .srv-box.active {
+            border-color: var(--danger); background: rgba(255, 0, 60, 0.08);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
+            transform: scale(1.05);
+        }
+        .srv-box.active i { color: var(--danger); filter: drop-shadow(0 0 8px var(--danger)); }
+        .srv-box.active span { color: #fff; }
+
+        /* Input UID System */
+        .uid-wrapper { position: relative; margin-bottom: 25px; }
+        .uid-field {
+            width: 100%; padding: 22px; border-radius: 25px;
+            background: #000; border: 1.5px solid #1a2a3a;
+            color: var(--primary); font-family: 'Orbitron', sans-serif;
+            font-size: 22px; text-align: center; letter-spacing: 5px;
+            transition: 0.3s;
+        }
+        .uid-field:focus { border-color: var(--primary); box-shadow: var(--glow); }
+
+        /* Buttons */
+        .btn-cyber {
+            width: 100%; padding: 20px; border-radius: 25px; border: none;
+            font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 16px;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            margin-bottom: 15px; position: relative;
+        }
+        .btn-verify { background: linear-gradient(90deg, #00f2ff, #0077ff); color: #000; }
+        .btn-verify:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0, 242, 255, 0.4); }
+
+        /* Result Panel */
         #result-panel { display: none; }
-        #advanced-panel { display: none; margin-top: 20px; }
+        .result-info {
+            background: rgba(0,0,0,0.6); padding: 25px; border-radius: 30px;
+            border: 1px dashed rgba(255,255,255,0.1); margin-bottom: 25px; text-align: left;
+        }
+        .row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .label { color: #888; font-size: 13px; }
+        .value { color: var(--primary); font-weight: bold; }
+
+        .btn-config { background: var(--success); color: #000; }
+        .btn-cert { background: var(--warning); color: #000; }
+
+        /* Ban Screen */
+        .ban-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 99999; display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        .ban-overlay i { font-size: 100px; color: var(--danger); margin-bottom: 25px; }
+
     </style>
 </head>
 <body>
-    <div id="particles-js"></div>
-    <div class="glitch-layer"></div>
-    <div class="orb orb1"></div>
-    <div class="orb orb2"></div>
-    
-    <!-- BAN SCREEN -->
-    <div class="ban-overlay" id="banSystem">
-        <i class="fas fa-skull-crossbow fa-spin"></i>
-        <h1 style="color: #ff0055; font-family: Orbitron; font-size: 60px;">BANNED</h1>
-        <p style="color: #555;">IP ĐÃ BỊ PHONG TỎA VĨNH VIỄN</p>
-        <p style="color: #333; font-size: 12px; margin-top: 20px;">Mã lỗi: 0xDEADBEEF</p>
+
+    <canvas id="bg-canvas"></canvas>
+    <div class="blur-circle"></div>
+
+    <div class="ban-overlay" id="ban-system">
+        <i class="fas fa-radiation fa-spin"></i>
+        <h1 style="color: var(--danger); letter-spacing: 10px; font-family: 'Orbitron';">BANNED</h1>
+        <p style="color: #555;">IP CỦA BẠN ĐÃ BỊ LIỆT VÀO DANH SÁCH ĐEN</p>
     </div>
-    
+
     <div class="cyber-wrapper">
-        <div class="cyber-card" id="mainCard">
+        <div class="cyber-card" id="main-system">
             <div class="logo-header">
                 <h1>HQUY TA</h1>
-                <p style="color: #4f6f8f; letter-spacing: 6px; font-size: 11px;">// CYBER DRAGON ULTIMATE NEO //</p>
+                <p style="font-size: 10px; color: #444; letter-spacing: 5px; margin: 5px 0;">ACCESS GRANTED V5.0</p>
             </div>
-            
-            <!-- IP + hệ thống thông tin -->
+
             <div class="ip-tracker">
-                <i class="fas fa-network-wired"></i> <span id="ip-addr">ĐANG QUÉT...</span>
-                <i class="fas fa-shield-halved" style="margin-left: auto; color: #39ff14;"></i>
+                <i class="fas fa-shield-virus"></i>
+                IP: <span id="ip-addr">Đang quét...</span>
             </div>
-            
-            <!-- GIAO DIỆN CHÍNH -->
+
             <div id="auth-ui">
-                <div style="display: flex; justify-content: space-between; color: #4f6f8f; margin-bottom: 10px;">
-                    <span><i class="fas fa-satellite"></i> CHỌN SERVER</span>
-                    <span><i class="fas fa-lock"></i> MÃ HÓA END-TO-END</span>
-                </div>
+                <div style="text-align: left; margin: 0 0 10px 15px; font-size: 11px; color: #444; font-weight: bold;">SECURITY SELECTION</div>
                 <div class="server-grid">
                     <div class="srv-box" id="srv-no" onclick="selectSrv('no')">
-                        <i class="fas fa-shield-halved"></i>
+                        <i class="fas fa-user-shield"></i>
                         <span>NO ANTENA</span>
                     </div>
                     <div class="srv-box active" id="srv-vip" onclick="selectSrv('vip')">
                         <i class="fas fa-satellite-dish"></i>
                         <span>ANTENA VIP</span>
                     </div>
-                    <div class="srv-box" id="srv-ultra" onclick="selectSrv('ultra')">
-                        <i class="fas fa-rocket"></i>
-                        <span>ANTENA ULTRA</span>
-                    </div>
-                    <div class="srv-box" id="srv-pro" onclick="selectSrv('pro')">
-                        <i class="fas fa-microchip"></i>
-                        <span>ANTENA PRO</span>
-                    </div>
                 </div>
-                
-                <!-- Khu vực nhập UID + keypad ảo đơn giản -->
-                <div class="uid-zone">
-                    <input type="text" id="uid_val" class="uid-field" placeholder="UID" maxlength="10" inputmode="numeric">
-                    <button class="btn-keypad" onclick="appendUid('7')"><i class="fas fa-circle"></i></button>
-                    <button class="btn-keypad" onclick="appendUid('8')"><i class="fas fa-circle"></i></button>
+
+                <div class="uid-wrapper">
+                    <input type="text" id="uid_val" class="uid-field" placeholder="INPUT UID">
                 </div>
-                
-                <!-- Thanh tiến trình giả -->
-                <div class="scan-progress" id="scanProgress"><div class="bar" id="progressBar"></div></div>
-                
+
                 <button class="btn-cyber btn-verify" onclick="startVerification()">
-                    <i class="fas fa-fingerprint"></i> XÁC THỰC & QUÉT
-                </button>
-                
-                <!-- Nút mở rộng (fake) -->
-                <button class="btn-cyber" style="background: transparent; border: 1px solid #4f6f8f;" onclick="showAdvanced()">
-                    <i class="fas fa-terminal"></i> CHẾ ĐỘ NÂNG CAO
+                    <i class="fas fa-fingerprint"></i> VERIFY LOGIN
                 </button>
             </div>
-            
-            <!-- PANEL KẾT QUẢ MỞ RỘNG -->
+
             <div id="result-panel">
-                <div class="console-panel" id="liveConsole">
-                    <div>> SYSTEM READY</div>
-                    <div>> VERIFYING CREDENTIALS...</div>
+                <div class="result-info">
+                    <div class="row"><span>UID:</span><b class="value" id="res-uid">-</b></div>
+                    <div class="row"><span>HẠN DÙNG:</span><b class="value" id="res-exp" style="color: var(--success)">-</b></div>
+                    <div class="row"><span>SERVER:</span><b class="value" id="res-srv">-</b></div>
+                    <div class="row"><span>BẢO MẬT:</span><b class="value" style="color: var(--secondary)">ENC-V2</b></div>
                 </div>
-                
-                <div class="result-grid">
-                    <div class="info-tile"><span class="label">UID</span><div class="value" id="res-uid">-</div></div>
-                    <div class="info-tile"><span class="label">HẠN DÙNG</span><div class="value" id="res-exp">-</div></div>
-                    <div class="info-tile"><span class="label">SERVER</span><div class="value" id="res-srv">-</div></div>
-                    <div class="info-tile"><span class="label">BẢO MẬT</span><div class="value">AES-256-GCM</div></div>
-                    <div class="info-tile"><span class="label">THIẾT BỊ</span><div class="value" id="res-device">-</div></div>
-                    <div class="info-tile"><span class="label">PING</span><div class="value" id="res-ping">-</div></div>
-                </div>
-                
-                <!-- Hàng nút lệnh mở rộng -->
-                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0;">
-                    <button class="btn-cyber" style="flex: 1; background: #39ff14; color: black;" id="dl-config"><i class="fas fa-download"></i> CONFIG</button>
-                    <button class="btn-cyber" style="flex: 1; background: #ffae00; color: black;" id="dl-cert"><i class="fas fa-shield"></i> CERT</button>
-                    <button class="btn-cyber" style="flex: 1; background: #bc13fe;" id="injectBtn"><i class="fas fa-syringe"></i> INJECT</button>
-                </div>
-                
-                <button class="btn-cyber" style="background: #111; color: #aaa;" onclick="logout()"><i class="fas fa-power-off"></i> THOÁT</button>
+
+                <button class="btn-cyber btn-config" id="dl-config">
+                    <i class="fas fa-file-invoice"></i> INSTALL CONFIG
+                </button>
+                <button class="btn-cyber btn-cert" id="dl-cert">
+                    <i class="fas fa-certificate"></i> INSTALL SSL CERT
+                </button>
+                <button class="btn-cyber" style="background: #111; color: #555;" onclick="location.reload()">
+                    <i class="fas fa-power-off"></i> LOGOUT
+                </button>
             </div>
-            
-            <!-- PANEL NÂNG CAO (ẩn hiện) -->
-            <div id="advanced-panel">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
-                    <div><i class="fas fa-microchip"></i> CPU: <span id="cpuStat">0%</span></div>
-                    <div><i class="fas fa-memory"></i> RAM: <span id="ramStat">0%</span></div>
-                </div>
-                <button class="btn-cyber" onclick="runFakeScan()"><i class="fas fa-bug"></i> QUÉT LỖ HỔNG</button>
-                <button class="btn-cyber" style="background: transparent;" onclick="hideAdvanced()"><i class="fas fa-chevron-up"></i> THU GỌN</button>
-            </div>
-            
-            <!-- Link admin -->
-            <div class="admin-link">
-                <a href="https://t.me/0353594606"><i class="fab fa-telegram"></i> ADMIN</a>
-                <a href="#" onclick="showBanAlert()"><i class="fas fa-ban"></i> KIỂM TRA BAN</a>
-                <a href="#" onclick="location.reload()"><i class="fas fa-sync-alt"></i> RESET</a>
-            </div>
+
+            <a href="https://t.me/0353594606" style="margin-top: 30px; display: block; text-decoration: none; color: #444; font-size: 12px; font-weight: bold;">
+                <i class="fab fa-telegram"></i> ADMIN: 0353594606
+            </a>
         </div>
     </div>
-    
+
     <script>
-        // ========== CẤU HÌNH LÕI ==========
         const CORE = {
             BOT: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ",
             CID: "7329868082",
             GIT: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
         };
-        
+
         let currentSrv = 'vip';
         let clientIP = "";
-        let fakeDevice = "iPhone 15 Pro (iOS 18)";
-        let consoleBuffer = [];
-        
-        // ========== INIT ==========
+
+        // 1. Matrix Background Logic
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let cols = 0;
+        let drops = [];
+
+        function initMatrix() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cols = Math.floor(canvas.width / 15);
+            drops = Array(cols).fill(1);
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(1, 4, 9, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00f2ff";
+            ctx.font = "15px Share Tech Mono";
+            for(let i = 0; i < drops.length; i++) {
+                const text = Math.floor(Math.random() * 2);
+                ctx.fillText(text, i * 15, drops[i] * 15);
+                if(drops[i] * 15 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+
+        // 2. IP System & Ban Check
         async function boot() {
-            initParticles();
+            initMatrix();
+            setInterval(drawMatrix, 50);
+            window.onresize = initMatrix;
+
             try {
                 const r = await fetch('https://api.ipify.org?format=json');
                 const d = await r.json();
                 clientIP = d.ip;
                 document.getElementById('ip-addr').innerText = clientIP;
-                
-                // Kiểm tra ban từ antena.json (giả lập)
-                const db = await (await fetch(`${CORE.GIT}/antena.json?t=${Date.now()}`)).catch(()=>null);
-                if (db && db.ok) {
-                    const data = await db.json();
-                    if (data.banned_ips && data.banned_ips.includes(clientIP)) {
-                        document.getElementById('banSystem').style.display = 'flex';
-                        document.getElementById('mainCard').style.display = 'none';
-                    }
+
+                // Tự động kiểm tra Band IP từ file antena.json
+                const db = await (await fetch(`${CORE.GIT}/antena.json?t=${Date.now()}`)).json();
+                if(db.banned_ips?.includes(clientIP)) {
+                    document.getElementById('ban-system').style.display = 'flex';
+                    document.getElementById('main-system').style.display = 'none';
                 }
-            } catch (e) { console.log("IP error", e); document.getElementById('ip-addr').innerText = "0.0.0.0"; }
-            
-            // fake system stats
-            setInterval(() => {
-                document.getElementById('cpuStat').innerText = (Math.random()*20+30).toFixed(1)+'%';
-                document.getElementById('ramStat').innerText = (Math.random()*30+40).toFixed(1)+'%';
-            }, 2000);
-            
-            // console fake
-            pushConsole("HQUY TA · NEO v9.7 READY");
-            pushConsole("KẾT NỐI SECURE CHANNEL");
+            } catch(e) { console.log("Init Error"); }
         }
-        
-        function initParticles() {
-            particlesJS('particles-js', {
-                particles: { number: { value: 60 }, color: { value: '#00f2ff' }, shape: { type: 'circle' }, opacity: { value: 0.3 }, size: { value: 2 }, line_linked: { enable: true, distance: 150, color: '#0ff', opacity: 0.2 } }, interactivity: { events: { onhover: { enable: true, mode: 'repulse' } } } 
-            });
-        }
-        
-        function pushConsole(msg) {
-            let panel = document.getElementById('liveConsole');
-            if (!panel) return;
-            let d = document.createElement('div');
-            d.innerHTML = '> ' + msg;
-            panel.appendChild(d);
-            panel.scrollTop = panel.scrollHeight;
-            if (panel.children.length > 8) panel.removeChild(panel.children[0]);
-        }
-        
-        // ========== CHỌN SERVER (4 loại) ==========
+
         function selectSrv(type) {
             currentSrv = type;
             document.querySelectorAll('.srv-box').forEach(b => b.classList.remove('active'));
             document.getElementById(`srv-${type}`).classList.add('active');
-            pushConsole(`SERVER >>> ${type.toUpperCase()}`);
         }
-        
-        // Keypad ảo đơn giản
-        function appendUid(num) {
-            let inp = document.getElementById('uid_val');
-            inp.value += num;
-        }
-        
-        // ========== XÁC THỰC CHÍNH ==========
+
+        // 3. Logic Xác Minh Xuyên Lục Địa
         async function startVerification() {
             const uid = document.getElementById('uid_val').value.trim();
-            if (!uid) return Swal.fire('LỖI', 'NHẬP UID', 'error');
-            
-            // Hiện progress bar
-            let prog = document.getElementById('scanProgress');
-            let bar = document.getElementById('progressBar');
-            prog.style.display = 'block';
-            bar.style.width = '0%';
-            
-            pushConsole(`BẮT ĐẦU XÁC THỰC UID: ${uid}`);
-            
-            // Giả lập quét
-            for (let i=0; i<=100; i+=20) {
-                await new Promise(r => setTimeout(r, 300));
-                bar.style.width = i+'%';
-                pushConsole(`QUÉT TIẾN ĐỘ ${i}%`);
-            }
-            
-            // Xác định file tương ứng với server
-            let targetFile = 'antena.json'; // mặc định vip
-            if (currentSrv === 'no') targetFile = 'noantena.json';
-            else if (currentSrv === 'ultra' || currentSrv === 'pro') targetFile = 'antena.json'; // gộp chung cho demo
-            
+            if(!uid) return Swal.fire('LỖI', 'Nhập UID đi ba!', 'error');
+
+            // CHIA FILE RIÊNG BIỆT
+            const target = currentSrv === 'vip' ? 'antena.json' : 'noantena.json';
+
+            Swal.fire({
+                title: 'ĐANG QUÉT DỮ LIỆU...',
+                html: 'Vui lòng chờ hệ thống đối chiếu UID',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
             try {
-                const res = await fetch(`${CORE.GIT}/${targetFile}?t=${Date.now()}`);
-                if (!res.ok) throw new Error('HTTP '+res.status);
+                const res = await fetch(`${CORE.GIT}/${target}?t=${Date.now()}`);
+                if(!res.ok) throw new Error();
                 const data = await res.json();
                 const user = data.users[uid];
-                
-                if (user) {
-                    pushConsole("✅ UID HỢP LỆ, ĐANG TẢI THÔNG TIN");
-                    bar.style.width = '100%';
-                    
+
+                if(user) {
+                    Swal.close();
                     document.getElementById('auth-ui').style.display = 'none';
                     document.getElementById('result-panel').style.display = 'block';
-                    
+
                     document.getElementById('res-uid').innerText = uid;
-                    document.getElementById('res-exp').innerText = user.expiry || '∞';
+                    document.getElementById('res-exp').innerText = user.expiry;
                     document.getElementById('res-srv').innerText = currentSrv.toUpperCase();
-                    document.getElementById('res-device').innerText = fakeDevice;
-                    document.getElementById('res-ping').innerText = Math.floor(Math.random()*30+10)+' ms';
-                    
-                    // Gán link tải config/cert theo server
-                    let cfgLink = currentSrv === 'no' ? 'no_antena.conf' : 'antena.conf';
-                    let certLink = currentSrv === 'no' ? 'cert_noantena.pem' : 'cert_antena.pem';
-                    
-                    document.getElementById('dl-config').onclick = () => window.location.href = `shadowrocket://config/add/${CORE.GIT}/${cfgLink}`;
-                    document.getElementById('dl-cert').onclick = () => window.open(`${CORE.GIT}/${certLink}`);
-                    
-                    // Gửi Telegram log
-                    logToTele(uid, user.expiry, currentSrv);
-                    
-                    // Thêm nút inject giả
-                    document.getElementById('injectBtn').onclick = () => Swal.fire('INJECT', 'ĐÃ TIÊM THÀNH CÔNG PAYLOAD', 'success');
-                    
+
+                    // TÁCH LINK FILE RIÊNG BIỆT
+                    const cfg = currentSrv === 'vip' ? 'antena.conf' : 'no_antena.conf';
+                    const cert = currentSrv === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
+
+                    document.getElementById('dl-config').onclick = () => location.href = `shadowrocket://config/add/${CORE.GIT}/${cfg}`;
+                    document.getElementById('dl-cert').onclick = () => location.href = `${CORE.GIT}/${cert}`;
+
+                    // GỬI TELEGRAM ĐẢM BẢO
+                    logToTele(uid, user.expiry);
                 } else {
-                    pushConsole("❌ UID KHÔNG TỒN TẠI");
-                    Swal.fire('THẤT BẠI', 'UID KHÔNG CÓ TRONG DATABASE', 'error');
+                    Swal.fire('THẤT BẠI', `UID này không thuộc máy chủ ${target}`, 'error');
                 }
-            } catch (e) {
-                pushConsole("⚠️ LỖI KẾT NỐI GITHUB");
-                Swal.fire('LỖI', 'KHÔNG THỂ TẢI DỮ LIỆU', 'error');
+            } catch(e) {
+                Swal.fire('LỖI KẾT NỐI', 'Không tìm thấy database trên GitHub!', 'error');
             }
-            
-            prog.style.display = 'none';
         }
-        
-        async function logToTele(uid, exp, srv) {
-            const srvIcon = { 'vip':'💎', 'no':'🛡️', 'ultra':'🚀', 'pro':'⚙️' }[srv] || '📡';
-            const msg = `🚀 **LOGIN ULTIMATE**\nUID: \`${uid}\`\nIP: \`${clientIP}\`\nSERVER: ${srvIcon} ${srv.toUpperCase()}\nEXP: \`${exp}\`\nDEVICE: ${fakeDevice}`;
+
+        // 4. Hệ thống báo cáo Telegram Fixed
+        async function logToTele(uid, exp) {
+            const srv = currentSrv === 'vip' ? '💎 VIP' : '🛡️ THƯỜNG';
+            const msg = `🚀 **LOGIN THÀNH CÔNG V5.0**\n` +
+                        `━━━━━━━━━━━━━━━━━━\n` +
+                        `👤 UID: \`${uid}\`\n` +
+                        `🌐 IP: \`${clientIP}\`\n` +
+                        `📡 SERVER: ${srv}\n` +
+                        `⏳ HẠN: \`${exp}\`\n` +
+                        `━━━━━━━━━━━━━━━━━━`;
+
             await fetch(`https://api.telegram.org/bot${CORE.BOT}/sendMessage`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({ chat_id: CORE.CID, text: msg, parse_mode:'Markdown' })
-            }).catch(()=>{});
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CORE.CID, text: msg, parse_mode: 'Markdown' })
+            });
         }
-        
-        // ========== CÁC CHỨC NĂNG PHỤ ==========
-        function showAdvanced() {
-            document.getElementById('advanced-panel').style.display = 'block';
-        }
-        function hideAdvanced() {
-            document.getElementById('advanced-panel').style.display = 'none';
-        }
-        function runFakeScan() {
-            Swal.fire({ title:'QUÉT HỆ THỐNG', text:'ĐANG PHÂN TÍCH...', timer:2000, showConfirmButton:false });
-            pushConsole("BẮT ĐẦU QUÉT LỖ HỔNG...");
-            setTimeout(() => pushConsole("KHÔNG TÌM THẤY LỖ HỔNG NGUY HIỂM"), 2000);
-        }
-        function showBanAlert() {
-            Swal.fire({ title:'BAN CHECK', text:'IP CỦA BẠN: '+clientIP+'\nTRẠNG THÁI: SẠCH', icon:'info' });
-        }
-        function logout() {
-            document.getElementById('auth-ui').style.display = 'block';
-            document.getElementById('result-panel').style.display = 'none';
-            document.getElementById('uid_val').value = '';
-        }
-        
+
         boot();
     </script>
 </body>

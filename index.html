@@ -285,9 +285,30 @@
 
                     pushTele(entry, user.expiry);
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Fail', text: `UID KHÔNG CÓ TRÊN HỆ THốNG SOLITUDE PROXY VUI LÒNG LIÊN HÊ ADMIN`, background: '#1a003', color: '#df00ff' });
+                    // NÂNG CẤP THÔNG BÁO LỖI NEON TẠI ĐÂY
+                    Swal.fire({
+                        icon: 'error',
+                        title: '<span style="font-family: Orbitron;">ACCESS DENIED</span>',
+                        html: `<div style="color: #fff; font-size: 14px; padding: 10px;">
+                                 UID: <span style="color: #df00ff; font-weight: bold;">${entry}</span><br>
+                                 <p style="margin-top: 15px; opacity: 0.9;">UID KHÔNG CÓ TRÊN HỆ THỐNG SOLITUDE PROXY.<br>VUI LÒNG LIÊN HỆ ADMIN</p>
+                               </div>`,
+                        background: '#0a0a0f',
+                        color: '#df00ff',
+                        iconColor: '#ff003c',
+                        confirmButtonText: 'QUAY LẠI',
+                        confirmButtonColor: '#df00ff',
+                        showClass: { popup: 'animate__animated animate__headShake' },
+                        didOpen: () => {
+                            const p = Swal.getPopup();
+                            p.style.border = '2px solid #df00ff';
+                            p.style.boxShadow = '0 0 20px #df00ff';
+                        }
+                    });
                 }
-            } catch(e) { Swal.fire('ERROR', 'SERVER UNREACHABLE', 'error'); }
+            } catch(e) { 
+                Swal.fire({ icon: 'error', title: 'FAIL', text: 'SERVER UNREACHABLE', background: '#0a0a0f', color: '#ff003c' }); 
+            }
         }
 
         async function pushTele(id, exp) {

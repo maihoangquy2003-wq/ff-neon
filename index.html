@@ -233,25 +233,18 @@
 
         async function init() {
             try {
-                // Lấy IP người dùng
                 const r = await fetch('https://api.ipify.org?format=json');
                 const d = await r.json();
                 userIP = d.ip;
                 document.getElementById('ip-node').innerText = userIP;
 
-                // Lấy file cấu hình với tham số chống Cache
-                const resp = await fetch(`${_CFG.g}/antena.json?v=${new Date().getTime()}`);
-                const vault = await resp.json();
-                
-                // KIỂM TRA IP VÀ TỰ ĐỘNG ĐÓNG/MỞ MÀN HÌNH CHẶN
+                const vault = await (await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`)).json();
                 if(vault.banned_ips && vault.banned_ips.includes(userIP)) {
                     document.getElementById('blacklisted').style.display = 'flex';
                 } else {
                     document.getElementById('blacklisted').style.display = 'none';
                 }
-            } catch(e) {
-                console.log("Ban System Error:", e);
-            }
+            } catch(e) {}
         }
 
         function switchNode(t) {
@@ -275,6 +268,18 @@
             try {
                 const resp = await fetch(`${_CFG.g}/${target}?t=${Date.now()}`);
                 const data = await resp.json();
+                
+                // KIỂM TRA CHẶN ID TỪ DANH SÁCH BANNED_IDS
+                if(data.banned_ids && data.banned_ids.includes(entry)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '<span style="font-family: Orbitron;">ACCOUNT BANNED</span>',
+                        text: 'Tài khoản này đã bị cấm khỏi hệ thống.',
+                        background: '#0a0a0f', color: '#ff003c', confirmButtonColor: '#ff003c'
+                    });
+                    return;
+                }
+
                 const user = data.users[entry];
 
                 if(user) {
@@ -305,13 +310,7 @@
                         color: '#df00ff',
                         iconColor: '#ff003c',
                         confirmButtonText: 'QUAY LẠI',
-                        confirmButtonColor: '#df00ff',
-                        showClass: { popup: 'animate__animated animate__headShake' },
-                        didOpen: () => {
-                            const p = Swal.getPopup();
-                            p.style.border = '2px solid #df00ff';
-                            p.style.boxShadow = '0 0 20px #df00ff';
-                        }
+                        confirmButtonColor: '#df00ff'
                     });
                 }
             } catch(e) { 

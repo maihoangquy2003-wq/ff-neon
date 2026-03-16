@@ -1,259 +1,245 @@
-<!DOCTYPE html>
+<!DOCTYPE html<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HQUY TA | GOD EDITION V7.0</title>
+    <title>HQUY TA | NEON OVERDRIVE V7.1</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --glow-color: #00f2ff;
-            --bg-deep: #020205;
-            --accent: #bc13fe;
-            --text-main: #e0e0e0;
+            --neon-blue: #00f2ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #bc13fe;
+            --neon-green: #39ff14;
+            --bg-dark: #050505;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; cursor: crosshair; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--bg-deep); color: var(--text-main);
-            font-family: 'Fira Code', monospace; overflow: hidden;
+            background: var(--bg-dark); color: #fff;
+            font-family: 'Rajdhani', sans-serif; overflow: hidden;
         }
 
-        /* Particles Background */
+        /* Particles Layer */
         #particles-js {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
         }
 
-        /* Overlay Noise Effect */
-        .noise {
+        /* Animated Gradient Background */
+        .bg-gradient {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.05; pointer-events: none; z-index: 2;
+            background: radial-gradient(circle at 50% 50%, rgba(188, 19, 254, 0.15), transparent 60%);
+            z-index: 2; pointer-events: none;
         }
 
-        /* Main System Interface */
         .system-root {
             position: relative; z-index: 10;
             display: flex; justify-content: center; align-items: center;
-            height: 100vh; perspective: 1000px;
+            height: 100vh; padding: 15px;
         }
 
+        /* RGB Border Animation */
         .terminal-window {
-            width: 92%; max-width: 460px;
-            background: rgba(5, 5, 10, 0.85);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            border-radius: 15px; padding: 30px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 255, 0.05);
-            transform-style: preserve-3d;
-            animation: float 6s ease-in-out infinite;
+            width: 100%; max-width: 440px;
+            background: rgba(10, 10, 15, 0.9);
+            border-radius: 25px; padding: 35px 25px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotateX(2deg); }
-            50% { transform: translateY(-15px) rotateX(-2deg); }
+        .terminal-window::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--neon-blue), var(--neon-purple), var(--neon-pink), transparent);
+            animation: rotateRGB 4s linear infinite; z-index: -1;
+        }
+        .terminal-window::after {
+            content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.95);
+            border-radius: 21px; z-index: -1;
         }
 
-        /* Branding */
-        .brand-zone { text-align: center; margin-bottom: 25px; }
+        @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
+
+        /* Branding Neon */
         .brand-zone h1 {
-            font-family: 'Orbitron', sans-serif; font-size: 32px; margin: 0;
-            background: linear-gradient(to right, #00f2ff, #fff, #bc13fe);
+            font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0;
+            background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 8px; filter: drop-shadow(0 0 10px rgba(0,242,255,0.5));
+            text-align: center; letter-spacing: 5px;
+            filter: drop-shadow(0 0 15px var(--neon-blue));
         }
 
-        /* Console Status */
-        .console-header {
-            font-size: 11px; color: #555; border-bottom: 1px solid #1a1a1a;
-            padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between;
+        /* Status UI */
+        .node-info {
+            background: rgba(255, 255, 255, 0.05); border-radius: 100px;
+            padding: 8px 15px; margin: 20px 0; display: flex;
+            justify-content: space-between; font-size: 12px;
+            border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue);
         }
 
-        /* Server Toggle */
-        .srv-bridge {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;
-        }
+        /* Server Grid */
+        .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .node-btn {
-            background: rgba(255,255,255,0.02); border: 1px solid #222;
-            padding: 15px; border-radius: 8px; transition: 0.4s;
-            text-align: center; opacity: 0.6;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid #222;
+            padding: 20px 10px; border-radius: 15px; cursor: pointer;
+            transition: 0.4s; text-align: center;
         }
-        .node-btn i { font-size: 24px; display: block; margin-bottom: 8px; }
-        .node-btn span { font-size: 10px; font-weight: bold; letter-spacing: 2px; }
-        
-        .node-btn.active {
-            opacity: 1; border-color: var(--glow-color);
-            background: rgba(0, 242, 255, 0.05);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-            color: var(--glow-color);
-        }
+        .node-btn i { font-size: 28px; margin-bottom: 10px; color: #444; }
+        .node-btn span { font-size: 11px; font-weight: bold; color: #444; letter-spacing: 1px; }
 
-        /* Deep Input */
-        .input-wrapper { position: relative; margin-bottom: 25px; }
-        .input-wrapper::before {
-            content: ">"; position: absolute; left: 15px; top: 50%;
-            transform: translateY(-50%); color: var(--glow-color); font-weight: bold;
-        }
+        .node-btn.active#n1 { border-color: var(--neon-purple); box-shadow: 0 0 15px rgba(188, 19, 254, 0.3); }
+        .node-btn.active#n1 i, .node-btn.active#n1 span { color: var(--neon-purple); }
+
+        .node-btn.active#n2 { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+        .node-btn.active#n2 i, .node-btn.active#n2 span { color: var(--neon-blue); }
+
+        /* Input Field */
         .id-input {
-            width: 100%; background: #000; border: 1px solid #1a1a1a;
-            padding: 18px 18px 18px 35px; border-radius: 8px;
-            color: var(--glow-color); font-family: 'Fira Code'; font-size: 18px;
-            letter-spacing: 3px; transition: 0.3s;
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333;
+            padding: 20px; border-radius: 15px; color: #fff;
+            font-family: 'Orbitron'; font-size: 20px; text-align: center;
+            letter-spacing: 3px; margin-bottom: 25px; transition: 0.3s;
         }
-        .id-input:focus { border-color: var(--glow-color); box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); }
+        .id-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
 
-        /* Action Engine */
+        /* Buttons Neon */
         .engine-btn {
-            width: 100%; padding: 18px; border: none; border-radius: 8px;
-            background: var(--glow-color); color: #000;
-            font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.3);
-            transition: 0.3s;
+            width: 100%; padding: 20px; border: none; border-radius: 15px;
+            font-family: 'Orbitron'; font-weight: 900; cursor: pointer;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: #000; text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s; box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4);
         }
-        .engine-btn:active { transform: scale(0.97); filter: brightness(0.8); }
+        .engine-btn:active { transform: scale(0.96); }
 
-        /* Data Visualization */
+        /* Data Panel */
         #data-flow { display: none; }
-        .info-card {
-            background: rgba(0,0,0,0.4); border: 1px solid #111;
-            padding: 20px; border-radius: 10px; margin-bottom: 20px;
+        .data-card {
+            background: rgba(255,255,255,0.03); border-radius: 15px;
+            padding: 20px; margin-bottom: 20px; border: 1px dashed #333;
         }
-        .info-row {
-            display: flex; justify-content: space-between; padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 13px;
-        }
-        .label { color: #555; }
-        .val { color: var(--glow-color); font-weight: bold; }
+        .d-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .d-row:last-child { border: none; }
+        .lbl { color: #666; font-size: 11px; }
+        .val { color: var(--neon-green); font-weight: bold; }
 
-        /* Secret Buttons */
-        .inject-btn {
-            width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 8px;
-            border: 1px solid #333; background: transparent; color: #fff;
-            font-family: 'Fira Code'; font-size: 12px; transition: 0.3s;
+        .btn-sub {
+            width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px;
+            background: transparent; border: 1px solid #333; color: #fff;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
         }
-        .inject-btn:hover { border-color: var(--glow-color); color: var(--glow-color); }
+        .btn-sub:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
 
-        /* Ban Screen */
-        .access-denied {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 10000; display: none;
-            flex-direction: column; justify-content: center; align-items: center;
-            color: red; text-align: center;
+        /* Ban Overlay */
+        .ban-screen {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
         }
     </style>
 </head>
 <body>
 
     <div id="particles-js"></div>
-    <div class="noise"></div>
+    <div class="bg-gradient"></div>
 
-    <div class="access-denied" id="blacklisted">
-        <h1 style="font-family: Orbitron; font-size: 50px; margin: 0;">FIREWALL BLOCK</h1>
-        <p style="letter-spacing: 5px;">IP_ADDRESS BANNED FROM MOTHERBOARD</p>
+    <div class="ban-screen" id="blacklisted">
+        <i class="fas fa-skull-crossbones" style="font-size: 80px; color: red; margin-bottom: 20px;"></i>
+        <h1 style="color:red; font-family: Orbitron;">IP BLOCKED</h1>
     </div>
 
     <div class="system-root">
-        <div class="terminal-window animate__animated animate__fadeInUp">
-            <div class="console-header">
-                <span><i class="fas fa-microchip"></i> KERNEL: 7.0.2</span>
-                <span id="ip-node">NODE: 0.0.0.0</span>
-            </div>
-
+        <div class="terminal-window">
             <div class="brand-zone">
                 <h1>HQUY TA</h1>
-                <p style="font-size: 9px; color: #444; letter-spacing: 3px;">CRYPTOGRAPHIC ACCESS POINT</p>
+                <p style="text-align: center; font-size: 10px; color: #666; letter-spacing: 3px; margin: 5px 0 20px 0;">NEON OVERDRIVE V7.1</p>
+            </div>
+
+            <div class="node-info">
+                <span><i class="fas fa-network-wired"></i> <span id="ip-node">SCANNING...</span></span>
+                <span>ONLINE <i class="fas fa-circle" style="font-size: 8px; color: var(--neon-green)"></i></span>
             </div>
 
             <div id="auth-layer">
                 <div class="srv-bridge">
                     <div class="node-btn" id="n1" onclick="switchNode('no')">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>NO_ANTENA</span>
+                        <i class="fas fa-shield-halved"></i>
+                        <span>NO ANTENA</span>
                     </div>
                     <div class="node-btn active" id="n2" onclick="switchNode('vip')">
-                        <i class="fas fa-bolt"></i>
-                        <span>ANTENA_VIP</span>
+                        <i class="fas fa-bolt-lightning"></i>
+                        <span>ANTENA VIP</span>
                     </div>
                 </div>
 
-                <div class="input-wrapper">
-                    <input type="text" id="uid_entry" class="id-input" placeholder="SESSION_ID">
-                </div>
+                <input type="text" id="uid_entry" class="id-input" placeholder="ID: 863XXXX">
 
                 <button class="engine-btn" onclick="startInjection()">
-                    INJECT SESSION
+                    VERIFY ACCESS
                 </button>
             </div>
 
             <div id="data-flow">
-                <div class="info-card">
-                    <div class="info-row"><span class="label">ID_MATCH:</span><span class="val" id="v-uid">-</span></div>
-                    <div class="info-row"><span class="label">SEC_TOKEN:</span><span class="val" id="v-exp" style="color: #39ff14">-</span></div>
-                    <div class="info-row"><span class="label">GATEWAY:</span><span class="val" id="v-srv">-</span></div>
+                <div class="data-card">
+                    <div class="d-row"><span class="lbl">ID:</span><span class="val" id="v-uid">-</span></div>
+                    <div class="d-row"><span class="lbl">EXPIRE:</span><span class="val" id="v-exp">-</span></div>
+                    <div class="d-row"><span class="lbl">GATEWAY:</span><span class="val" id="v-srv" style="color: var(--neon-purple)">-</span></div>
                 </div>
 
-                <button class="inject-btn" id="get-c">
-                    <i class="fas fa-file-code"></i> PULL CONFIGURATION
+                <button class="btn-sub" id="get-c" style="background: rgba(57, 255, 20, 0.05); border-color: var(--neon-green); color: var(--neon-green);">
+                    <i class="fas fa-cloud-download"></i> INSTALL CONFIG (.CONF)
                 </button>
-                <button class="inject-btn" id="get-p">
-                    <i class="fas fa-key"></i> SYNC SSL CERTIFICATE
+                <button class="btn-sub" id="get-p" style="background: rgba(0, 242, 255, 0.05); border-color: var(--neon-blue); color: var(--neon-blue);">
+                    <i class="fas fa-cert"></i> INSTALL CERTIFICATE (.PEM)
                 </button>
                 
-                <button class="engine-btn" style="background: transparent; color: #ff003c; border: 1px solid #ff003c;" onclick="location.reload()">
-                    CLOSE CONNECTION
+                <button class="engine-btn" style="background: #111; color: #ff003c; border: 1px solid #ff003c; margin-top: 10px;" onclick="location.reload()">
+                    LOGOUT SESSION
                 </button>
             </div>
 
-            <div style="text-align: center; margin-top: 25px;">
-                <a href="https://t.me/0353594606" style="color: #333; text-decoration: none; font-size: 11px;">
-                    <i class="fab fa-telegram"></i> SECURE_SUPPORT_LINE
-                </a>
-            </div>
+            <p style="text-align: center; margin-top: 25px; font-size: 11px; color: #444;">
+                <i class="fab fa-telegram"></i> SUPPORT: @0353594606
+            </p>
         </div>
     </div>
 
     <script>
-        // MÃ HÓA CẤU HÌNH (Bịt mắt người thường)
-        const _SECRET_CONFIG = {
-            _0xT: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ",
-            _0xC: "7329868082",
-            _0xG: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
+        const _CFG = {
+            t: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ",
+            c: "7329868082",
+            g: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
         };
 
         let nodeType = 'vip';
-        let userNodeIP = "0.0.0.0";
+        let userIP = "SCANNING...";
 
-        // 1. Particle Engine (Neural Effect)
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#00f2ff" },
+                "number": { "value": 100 },
+                "color": { "value": ["#00f2ff", "#ff00ff"] },
                 "shape": { "type": "circle" },
-                "opacity": { "value": 0.2 },
+                "opacity": { "value": 0.4 },
                 "size": { "value": 2 },
                 "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 },
-                "move": { "enable": true, "speed": 1.5 }
-            },
-            "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } }
+                "move": { "enable": true, "speed": 2 }
+            }
         });
 
-        // 2. Core Boot
-        async function bootSystem() {
+        async function init() {
             try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                userNodeIP = data.ip;
-                document.getElementById('ip-node').innerText = `NODE: ${userNodeIP}`;
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json();
+                userIP = d.ip;
+                document.getElementById('ip-node').innerText = userIP;
 
-                // Anti-Ban Kiểm tra trực tiếp từ file antena.json
-                const vault = await (await fetch(`${_SECRET_CONFIG._0xG}/antena.json?nocache=${Date.now()}`)).json();
-                if(vault.banned_ips?.includes(userNodeIP)) {
+                const vault = await (await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`)).json();
+                if(vault.banned_ips?.includes(userIP)) {
                     document.getElementById('blacklisted').style.display = 'flex';
                 }
             } catch(e) {}
@@ -265,78 +251,63 @@
             document.getElementById(t === 'no' ? 'n1' : 'n2').classList.add('active');
         }
 
-        // 3. Execution Engine
         async function startInjection() {
             const entry = document.getElementById('uid_entry').value.trim();
             if(!entry) return;
 
-            const targetDB = nodeType === 'vip' ? 'antena.json' : 'noantena.json';
+            const target = nodeType === 'vip' ? 'antena.json' : 'noantena.json';
             
             Swal.fire({
-                title: 'EXECUTING INJECTION...',
-                html: '<div style="font-size: 10px; color: #555; text-align: left; font-family: Fira Code;">> Authenticating ID...<br>> Bypassing Firewall...<br>> Linking Database...</div>',
-                background: '#05050a', color: '#00f2ff',
+                title: 'AUTHENTICATING...',
+                background: '#0a0a0f', color: '#00f2ff',
                 didOpen: () => Swal.showLoading()
             });
 
             try {
-                const response = await fetch(`${_SECRET_CONFIG._0xG}/${targetDB}?t=${Date.now()}`);
-                const data = await response.json();
-                const record = data.users[entry];
+                const resp = await fetch(`${_CFG.g}/${target}?t=${Date.now()}`);
+                const data = await resp.json();
+                const user = data.users[entry];
 
-                if(record) {
-                    setTimeout(() => {
-                        Swal.close();
-                        document.getElementById('auth-layer').classList.add('animate__animated', 'animate__fadeOutDown');
-                        setTimeout(() => {
-                            document.getElementById('auth-layer').style.display = 'none';
-                            document.getElementById('data-flow').style.display = 'block';
-                            document.getElementById('data-flow').classList.add('animate__animated', 'animate__fadeInUp');
-                        }, 500);
+                if(user) {
+                    Swal.close();
+                    document.getElementById('auth-layer').style.display = 'none';
+                    document.getElementById('data-flow').style.display = 'block';
+                    
+                    document.getElementById('v-uid').innerText = entry;
+                    document.getElementById('v-exp').innerText = user.expiry;
+                    document.getElementById('v-srv').innerText = nodeType.toUpperCase();
 
-                        document.getElementById('v-uid').innerText = entry;
-                        document.getElementById('v-exp').innerText = record.expiry;
-                        document.getElementById('v-srv').innerText = nodeType.toUpperCase() + "_CHANNEL";
+                    const conf = nodeType === 'vip' ? 'antena.conf' : 'no_antena.conf';
+                    const cert = nodeType === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
 
-                        // Map files
-                        const cPath = nodeType === 'vip' ? 'antena.conf' : 'no_antena.conf';
-                        const pPath = nodeType === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
+                    document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`;
+                    document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${cert}`;
 
-                        document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_SECRET_CONFIG._0xG}/${cPath}`;
-                        document.getElementById('get-p').onclick = () => location.href = `${_SECRET_CONFIG._0xG}/${pPath}`;
-
-                        // Báo Telegram
-                        pushLog(entry, record.expiry);
-                    }, 1500);
+                    pushTele(entry, user.expiry);
                 } else {
-                    Swal.fire({ icon: 'error', title: 'ACCESS DENIED', text: 'IDENTITY NOT MATCHED IN CURRENT NODE', background: '#05050a', color: '#ff003c' });
+                    Swal.fire({ icon: 'error', title: 'FAILED', text: `ID NOT FOUND IN ${target}`, background: '#0a0a0f', color: '#ff003c' });
                 }
-            } catch(e) {
-                Swal.fire('FAIL', 'CRITICAL CONNECTION ERROR', 'error');
-            }
+            } catch(e) { Swal.fire('ERROR', 'SERVER UNREACHABLE', 'error'); }
         }
 
-        // 4. Secure Telegram Logger
-        async function pushLog(uid, expiry) {
-            const platform = nodeType === 'vip' ? '🔱 GOD_VIP' : '🔒 NORMAL';
-            const payload = `🚨 **CORE_ACCESS_DETECTED** 🚨\n` +
-                            `━━━━━━━━━━━━━━━━━━\n` +
-                            `🆔 UID: \`${uid}\`\n` +
-                            `📍 IP: \`${userNodeIP}\`\n` +
-                            `📡 NODE: ${platform}\n` +
-                            `⏳ TTL: ${expiry}\n` +
-                            `━━━━━━━━━━━━━━━━━━`;
+        async function pushTele(id, exp) {
+            const mode = nodeType === 'vip' ? '🟣 ANTENA VIP' : '🔵 NO ANTENA';
+            const msg = `🌟 **NEON ACCESS V7.1** 🌟\n` +
+                        `━━━━━━━━━━━━━━━━━━\n` +
+                        `👤 USER: \`${id}\`\n` +
+                        `🌐 IP: \`${userIP}\`\n` +
+                        `📡 NODE: ${mode}\n` +
+                        `⏳ EXP: ${exp}\n` +
+                        `━━━━━━━━━━━━━━━━━━`;
 
-            try {
-                await fetch(`https://api.telegram.org/bot${_SECRET_CONFIG._0xT}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: _SECRET_CONFIG._0xC, text: payload, parse_mode: 'Markdown' })
-                });
-            } catch(f) { console.error("Logger Failed"); }
+            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' })
+            });
         }
 
-        bootSystem();
+        init();
     </script>
 </body>
 </html>

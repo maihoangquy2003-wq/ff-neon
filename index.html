@@ -3,297 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HQUY TA SYSTEM | CYBER ULTRA PREMIUM</title>
+    <title>HQUY TA | CYBER DRAGON ULTIMATE</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
     <style>
         :root {
-            --neon-cyan: #00f2ff;
-            --neon-pink: #ff00ff;
-            --neon-purple: #bc13fe;
-            --neon-green: #39ff14;
-            --neon-red: #ff003c;
-            --bg-black: #02050a;
-            --glass-bg: rgba(6, 11, 25, 0.85);
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --primary: #00f2ff;
+            --secondary: #bc13fe;
+            --danger: #ff003c;
+            --success: #39ff14;
+            --warning: #ffae00;
+            --bg: #010409;
+            --glass: rgba(13, 17, 23, 0.9);
+            --glow: 0 0 15px rgba(0, 242, 255, 0.5);
         }
 
-        /* Base Setup */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        /* Reset & Base */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--bg-black); color: #fff;
-            font-family: 'Rajdhani', sans-serif; overflow-x: hidden;
+            background: var(--bg); color: #fff;
+            font-family: 'Rajdhani', sans-serif; overflow: hidden;
         }
 
-        /* Matrix Rain Canvas */
-        #matrix-canvas {
+        /* Nền Matrix Nhị Phân */
+        #bg-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; opacity: 0.2; pointer-events: none;
+            z-index: -1; opacity: 0.25;
         }
 
-        /* Layout */
-        .wrapper {
+        /* Hiệu ứng mờ ảo di động */
+        .blur-circle {
+            position: fixed; width: 300px; height: 300px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            filter: blur(80px); opacity: 0.1; z-index: -1;
+            animation: moveBlur 15s infinite alternate;
+        }
+
+        @keyframes moveBlur {
+            0% { top: 10%; left: 10%; }
+            100% { top: 80%; left: 70%; }
+        }
+
+        /* Container Chính */
+        .cyber-wrapper {
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; padding: 20px;
-            background: radial-gradient(circle at center, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
+            height: 100vh; padding: 15px;
         }
 
-        .main-container {
-            width: 100%; max-width: 500px;
-            background: var(--glass-bg);
-            border-radius: 45px;
+        .cyber-card {
+            width: 100%; max-width: 480px;
+            background: var(--glass);
             border: 1px solid rgba(0, 242, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0, 242, 255, 0.1), inset 0 0 30px rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(25px);
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            animation: containerEntry 1s ease-out;
+            border-radius: 40px; padding: 40px 25px;
+            text-align: center; position: relative;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), var(--glow);
+            animation: cardAppear 1.2s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        @keyframes containerEntry {
-            from { opacity: 0; transform: scale(0.8) translateY(50px); filter: blur(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        @keyframes cardAppear {
+            from { opacity: 0; transform: scale(0.7) rotateX(20deg); }
+            to { opacity: 1; transform: scale(1) rotateX(0); }
         }
 
-        /* Decorative Corners */
-        .corner {
-            position: absolute; width: 25px; height: 25px;
-            border: 3px solid var(--neon-cyan);
-        }
-        .top-l { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
-        .top-r { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
-        .bot-l { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
-        .bot-r { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
-
-        /* Header UI */
-        .header h1 {
-            font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
-            margin: 0; letter-spacing: 5px; text-transform: uppercase;
-            background: linear-gradient(135deg, var(--neon-cyan), #fff, var(--neon-purple));
+        /* Header Neon */
+        .logo-header h1 {
+            font-family: 'Orbitron', sans-serif; font-size: 38px; font-weight: 900;
+            margin: 0; letter-spacing: 6px; text-transform: uppercase;
+            background: linear-gradient(135deg, var(--primary), #fff, var(--secondary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.6));
+            filter: drop-shadow(0 0 10px var(--primary));
+            animation: glitchText 3s infinite;
         }
 
-        .system-status {
-            display: flex; justify-content: center; gap: 10px; margin: 15px 0;
-        }
-        .status-pill {
-            background: rgba(0,0,0,0.4); padding: 5px 15px; border-radius: 50px;
-            font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.1);
-            letter-spacing: 1px; color: var(--neon-cyan);
+        @keyframes glitchText {
+            0% { text-shadow: 2px 2px var(--danger); }
+            50% { text-shadow: -2px -2px var(--primary); }
+            100% { text-shadow: 2px 2px var(--danger); }
         }
 
-        /* IP Card */
-        .ip-card {
-            background: linear-gradient(90deg, rgba(0, 242, 255, 0.1), rgba(188, 19, 254, 0.1));
-            border-radius: 20px; padding: 15px; margin: 25px 0;
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            display: flex; align-items: center; justify-content: center; gap: 12px;
+        /* IP Tracking UI */
+        .ip-tracker {
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 100px; padding: 10px 20px; margin: 25px auto;
+            display: inline-flex; align-items: center; gap: 10px;
+            color: var(--primary); font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1);
+        }
+
+        /* Server Grid */
+        .server-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 30px;
+        }
+        .srv-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2.5px solid #1a2a3a; padding: 25px 10px;
+            border-radius: 30px; cursor: pointer; transition: 0.4s;
             position: relative; overflow: hidden;
         }
-        .ip-card::after {
-            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: linear-gradient(transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg); animation: shine 3s infinite;
-        }
-        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
+        .srv-box i { font-size: 30px; color: #333; margin-bottom: 12px; transition: 0.3s; }
+        .srv-box span { display: block; font-weight: 800; font-size: 13px; color: #555; }
 
-        /* Server Selection Grid */
-        .srv-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;
+        .srv-box.active {
+            border-color: var(--danger); background: rgba(255, 0, 60, 0.08);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.2);
+            transform: scale(1.05);
         }
-        .srv-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid #1a2a3a; padding: 25px 15px;
-            border-radius: 30px; cursor: pointer; transition: var(--transition);
-            position: relative;
-        }
-        .srv-item i { font-size: 32px; color: #333; margin-bottom: 12px; transition: 0.3s; }
-        .srv-item span { display: block; font-weight: 800; font-size: 13px; color: #555; text-transform: uppercase; }
-
-        .srv-item.active {
-            border-color: var(--neon-red);
-            background: rgba(255, 0, 60, 0.1);
-            box-shadow: 0 0 25px rgba(255, 0, 60, 0.3);
-            transform: translateY(-5px);
-        }
-        .srv-item.active i { color: var(--neon-red); filter: drop-shadow(0 0 8px var(--neon-red)); }
-        .srv-item.active span { color: #fff; }
+        .srv-box.active i { color: var(--danger); filter: drop-shadow(0 0 8px var(--danger)); }
+        .srv-box.active span { color: #fff; }
 
         /* Input UID System */
-        .input-box {
-            position: relative; margin-bottom: 25px;
-        }
-        .uid-input {
-            width: 100%; padding: 22px 30px; border-radius: 25px;
+        .uid-wrapper { position: relative; margin-bottom: 25px; }
+        .uid-field {
+            width: 100%; padding: 22px; border-radius: 25px;
             background: #000; border: 1.5px solid #1a2a3a;
-            color: var(--neon-cyan); font-family: 'Orbitron', sans-serif;
-            font-size: 20px; text-align: center; letter-spacing: 4px;
+            color: var(--primary); font-family: 'Orbitron', sans-serif;
+            font-size: 22px; text-align: center; letter-spacing: 5px;
             transition: 0.3s;
         }
-        .uid-input:focus {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
-        }
+        .uid-field:focus { border-color: var(--primary); box-shadow: var(--glow); }
 
-        /* Action Buttons */
-        .btn-action {
+        /* Buttons */
+        .btn-cyber {
             width: 100%; padding: 20px; border-radius: 25px; border: none;
             font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 16px;
-            text-transform: uppercase; cursor: pointer; transition: var(--transition);
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 15px; position: relative;
         }
-        .btn-verify {
-            background: linear-gradient(45deg, var(--neon-cyan), #0077ff);
-            color: #000; box-shadow: 0 10px 30px rgba(0, 242, 255, 0.3);
-        }
-        .btn-verify:active { transform: scale(0.96); }
+        .btn-verify { background: linear-gradient(90deg, #00f2ff, #0077ff); color: #000; }
+        .btn-verify:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0, 242, 255, 0.4); }
 
-        /* Result Panel UI */
+        /* Result Panel */
         #result-panel { display: none; }
-        .result-card {
-            background: rgba(0,0,0,0.5); padding: 25px; border-radius: 30px;
-            border: 1px dashed rgba(255,255,255,0.1); margin-bottom: 25px;
-            text-align: left; animation: fadeIn 0.5s ease;
+        .result-info {
+            background: rgba(0,0,0,0.6); padding: 25px; border-radius: 30px;
+            border: 1px dashed rgba(255,255,255,0.1); margin-bottom: 25px; text-align: left;
         }
-        .res-line {
-            display: flex; justify-content: space-between; padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .res-line:last-child { border: none; }
-        .res-label { color: #888; font-size: 13px; text-transform: uppercase; }
-        .res-val { color: var(--neon-cyan); font-weight: bold; font-size: 15px; }
+        .row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .label { color: #888; font-size: 13px; }
+        .value { color: var(--primary); font-weight: bold; }
 
-        .btn-dl-cfg { background: var(--neon-green); color: #000; box-shadow: 0 10px 20px rgba(57, 255, 20, 0.2); }
-        .btn-dl-cert { background: #ffae00; color: #000; box-shadow: 0 10px 20px rgba(255, 174, 0, 0.2); }
+        .btn-config { background: var(--success); color: #000; }
+        .btn-cert { background: var(--warning); color: #000; }
 
-        /* Ban Overlay */
-        .ban-screen {
+        /* Ban Screen */
+        .ban-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 99999; display: none;
             flex-direction: column; justify-content: center; align-items: center;
         }
-        .ban-screen i { font-size: 120px; color: var(--neon-red); margin-bottom: 30px; filter: drop-shadow(0 0 20px var(--neon-red)); }
+        .ban-overlay i { font-size: 100px; color: var(--danger); margin-bottom: 25px; }
 
-        /* Support Link */
-        .support-btn {
-            margin-top: 30px; display: block; text-decoration: none;
-            color: #444; font-size: 12px; font-weight: bold; transition: 0.3s;
-        }
-        .support-btn:hover { color: var(--neon-cyan); }
     </style>
 </head>
 <body>
 
-    <canvas id="matrix-canvas"></canvas>
+    <canvas id="bg-canvas"></canvas>
+    <div class="blur-circle"></div>
 
-    <div class="ban-screen" id="ban-ui">
-        <i class="fas fa-biohazard fa-beat"></i>
-        <h1 style="color: var(--neon-red); letter-spacing: 10px;">BANNED</h1>
-        <p style="color: #444;">TRUY CẬP ĐÃ BỊ VÔ HIỆU HÓA TRÊN TOÀN HỆ THỐNG</p>
+    <div class="ban-overlay" id="ban-system">
+        <i class="fas fa-radiation fa-spin"></i>
+        <h1 style="color: var(--danger); letter-spacing: 10px; font-family: 'Orbitron';">BANNED</h1>
+        <p style="color: #555;">IP CỦA BẠN ĐÃ BỊ LIỆT VÀO DANH SÁCH ĐEN</p>
     </div>
 
-    <div class="wrapper">
-        <div class="main-container" id="main-app">
-            <div class="corner top-l"></div><div class="corner top-r"></div>
-            <div class="corner bot-l"></div><div class="corner bot-r"></div>
-
-            <div class="header">
+    <div class="cyber-wrapper">
+        <div class="cyber-card" id="main-system">
+            <div class="logo-header">
                 <h1>HQUY TA</h1>
-                <div class="system-status">
-                    <span class="status-pill"><i class="fas fa-circle-notch fa-spin"></i> SEVER: ONLINE</span>
-                    <span class="status-pill" style="color:var(--neon-purple)">VER: V4.0 X-PRO</span>
-                </div>
+                <p style="font-size: 10px; color: #444; letter-spacing: 5px; margin: 5px 0;">ACCESS GRANTED V5.0</p>
             </div>
 
-            <div class="ip-card">
-                <i class="fas fa-globe-asia" style="color: var(--neon-cyan)"></i>
-                <span id="ip-display" style="font-weight: 900; letter-spacing: 2px;">SCANNING IP...</span>
+            <div class="ip-tracker">
+                <i class="fas fa-shield-virus"></i>
+                IP: <span id="ip-addr">Đang quét...</span>
             </div>
 
-            <div id="auth-section">
-                <div style="text-align: left; margin: 0 0 12px 15px; font-size: 11px; color: #555; letter-spacing: 2px;">DATABASE SELECTION</div>
-                <div class="srv-grid">
-                    <div class="srv-item" id="srv-no" onclick="changeSrv('no')">
+            <div id="auth-ui">
+                <div style="text-align: left; margin: 0 0 10px 15px; font-size: 11px; color: #444; font-weight: bold;">SECURITY SELECTION</div>
+                <div class="server-grid">
+                    <div class="srv-box" id="srv-no" onclick="selectSrv('no')">
                         <i class="fas fa-user-shield"></i>
                         <span>NO ANTENA</span>
                     </div>
-                    <div class="srv-item active" id="srv-vip" onclick="changeSrv('vip')">
+                    <div class="srv-box active" id="srv-vip" onclick="selectSrv('vip')">
                         <i class="fas fa-satellite-dish"></i>
                         <span>ANTENA VIP</span>
                     </div>
                 </div>
 
-                <div class="input-box">
-                    <input type="text" id="uid_input" class="uid-input" placeholder="ENTER UID VIP">
+                <div class="uid-wrapper">
+                    <input type="text" id="uid_val" class="uid-field" placeholder="INPUT UID">
                 </div>
 
-                <button class="btn-action btn-verify" onclick="verifyLogin()">
-                    <i class="fas fa-key"></i> XÁC MINH HỆ THỐNG
+                <button class="btn-cyber btn-verify" onclick="startVerification()">
+                    <i class="fas fa-fingerprint"></i> VERIFY LOGIN
                 </button>
             </div>
 
             <div id="result-panel">
-                <div class="result-card">
-                    <div class="res-line"><span class="res-label">ACCOUNT ID:</span><span class="res-val" id="r-uid">-</span></div>
-                    <div class="res-line"><span class="res-label">EXPIRY DATE:</span><span class="res-val" id="r-exp" style="color:var(--neon-green)">-</span></div>
-                    <div class="res-line"><span class="res-label">STATION:</span><span class="res-val" id="r-srv">-</span></div>
-                    <div class="res-line"><span class="res-label">SECURITY:</span><span class="res-val" style="color:var(--neon-green)">AES-256 ENCRYPTED</span></div>
+                <div class="result-info">
+                    <div class="row"><span>UID:</span><b class="value" id="res-uid">-</b></div>
+                    <div class="row"><span>HẠN DÙNG:</span><b class="value" id="res-exp" style="color: var(--success)">-</b></div>
+                    <div class="row"><span>SERVER:</span><b class="value" id="res-srv">-</b></div>
+                    <div class="row"><span>BẢO MẬT:</span><b class="value" style="color: var(--secondary)">ENC-V2</b></div>
                 </div>
 
-                <button class="btn-action btn-dl-cfg" id="dl-cfg">
-                    <i class="fas fa-download"></i> CÀI CONFIG NGAY
+                <button class="btn-cyber btn-config" id="dl-config">
+                    <i class="fas fa-file-invoice"></i> INSTALL CONFIG
                 </button>
-                <button class="btn-action btn-dl-cert" id="dl-cert">
-                    <i class="fas fa-shield-virus"></i> CÀI CHỨNG CHỈ (PEM)
+                <button class="btn-cyber btn-cert" id="dl-cert">
+                    <i class="fas fa-certificate"></i> INSTALL SSL CERT
                 </button>
-                
-                <button class="btn-action" style="background:#1a2a3a; color:#fff;" onclick="location.reload()">
-                    <i class="fas fa-sync"></i> QUAY LẠI
+                <button class="btn-cyber" style="background: #111; color: #555;" onclick="location.reload()">
+                    <i class="fas fa-power-off"></i> LOGOUT
                 </button>
             </div>
 
-            <a href="https://t.me/0353594606" class="support-btn">
-                <i class="fab fa-telegram-plane"></i> ADMIN SUPPORT: 0353594606
+            <a href="https://t.me/0353594606" style="margin-top: 30px; display: block; text-decoration: none; color: #444; font-size: 12px; font-weight: bold;">
+                <i class="fab fa-telegram"></i> ADMIN: 0353594606
             </a>
         </div>
     </div>
 
     <script>
-        const API = {
-            TELE_TOKEN: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ",
-            TELE_CHAT: "7329868082",
-            GIT_URL: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
+        const CORE = {
+            BOT: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ",
+            CID: "7329868082",
+            GIT: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
         };
 
-        let selectedServer = 'vip';
-        let userIP = "";
+        let currentSrv = 'vip';
+        let clientIP = "";
 
         // 1. Matrix Background Logic
-        const canvas = document.getElementById('matrix-canvas');
+        const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-        let columns;
+        let cols = 0;
         let drops = [];
 
-        function resizeMatrix() {
+        function initMatrix() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            columns = Math.floor(canvas.width / 15);
-            drops = Array(columns).fill(1);
+            cols = Math.floor(canvas.width / 15);
+            drops = Array(cols).fill(1);
         }
 
         function drawMatrix() {
-            ctx.fillStyle = "rgba(2, 5, 10, 0.05)";
+            ctx.fillStyle = "rgba(1, 4, 9, 0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#00f2ff";
-            ctx.font = "15px monospace";
+            ctx.font = "15px Share Tech Mono";
             for(let i = 0; i < drops.length; i++) {
                 const text = Math.floor(Math.random() * 2);
                 ctx.fillText(text, i * 15, drops[i] * 15);
@@ -302,108 +268,99 @@
             }
         }
 
-        // 2. Initialization & IP Scan
-        async function bootSystem() {
-            resizeMatrix();
+        // 2. IP System & Ban Check
+        async function boot() {
+            initMatrix();
             setInterval(drawMatrix, 50);
-            window.addEventListener('resize', resizeMatrix);
+            window.onresize = initMatrix;
 
             try {
-                const res = await fetch('https://api.ipify.org?format=json');
-                const data = await res.json();
-                userIP = data.ip;
-                document.getElementById('ip-display').innerText = userIP;
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json();
+                clientIP = d.ip;
+                document.getElementById('ip-addr').innerText = clientIP;
 
-                // Kiểm tra Band IP từ file antena.json (Server VIP là file chủ)
-                const checkData = await (await fetch(`${API.GIT_URL}/antena.json?t=${Date.now()}`)).json();
-                if(checkData.banned_ips && checkData.banned_ips.includes(userIP)) {
-                    document.getElementById('ban-ui').style.display = 'flex';
-                    document.getElementById('main-app').style.display = 'none';
+                // Tự động kiểm tra Band IP từ file antena.json
+                const db = await (await fetch(`${CORE.GIT}/antena.json?t=${Date.now()}`)).json();
+                if(db.banned_ips?.includes(clientIP)) {
+                    document.getElementById('ban-system').style.display = 'flex';
+                    document.getElementById('main-system').style.display = 'none';
                 }
-            } catch(e) { console.error("Network Init Error"); }
+            } catch(e) { console.log("Init Error"); }
         }
 
-        // 3. Server Selection Logic
-        function changeSrv(type) {
-            selectedServer = type;
-            document.querySelectorAll('.srv-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(type === 'no' ? 'srv-no' : 'srv-vip').classList.add('active');
-            
-            // Effect Haptic (vibrate if supported)
-            if(window.navigator.vibrate) window.navigator.vibrate(20);
+        function selectSrv(type) {
+            currentSrv = type;
+            document.querySelectorAll('.srv-box').forEach(b => b.classList.remove('active'));
+            document.getElementById(`srv-${type}`).classList.add('active');
         }
 
-        // 4. Verification Logic
-        async function verifyLogin() {
-            const uid = document.getElementById('uid_input').value.trim();
-            if(!uid) return Swal.fire({ icon: 'warning', title: 'THIẾU DỮ LIỆU', text: 'Vui lòng nhập UID của bạn!' });
+        // 3. Logic Xác Minh Xuyên Lục Địa
+        async function startVerification() {
+            const uid = document.getElementById('uid_val').value.trim();
+            if(!uid) return Swal.fire('LỖI', 'Nhập UID đi ba!', 'error');
 
-            // TÁCH BIỆT FILE JSON: VIP gọi antena.json | NO gọi noantena.json
-            const targetFile = selectedServer === 'vip' ? 'antena.json' : 'noantena.json';
+            // CHIA FILE RIÊNG BIỆT
+            const target = currentSrv === 'vip' ? 'antena.json' : 'noantena.json';
 
-            Swal.fire({ title: 'ĐANG XÁC MINH...', html: 'Kết nối máy chủ bảo mật...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); }});
+            Swal.fire({
+                title: 'ĐANG QUÉT DỮ LIỆU...',
+                html: 'Vui lòng chờ hệ thống đối chiếu UID',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
 
             try {
-                const response = await fetch(`${API.GIT_URL}/${targetFile}?t=${Date.now()}`);
-                if(!response.ok) throw new Error();
-                
-                const data = await response.json();
-                const account = data.users[uid];
+                const res = await fetch(`${CORE.GIT}/${target}?t=${Date.now()}`);
+                if(!res.ok) throw new Error();
+                const data = await res.json();
+                const user = data.users[uid];
 
-                if(account) {
+                if(user) {
                     Swal.close();
-                    document.getElementById('auth-section').style.display = 'none';
+                    document.getElementById('auth-ui').style.display = 'none';
                     document.getElementById('result-panel').style.display = 'block';
 
-                    document.getElementById('r-uid').innerText = uid;
-                    document.getElementById('r-exp').innerText = account.expiry;
-                    document.getElementById('r-srv').innerText = selectedServer === 'vip' ? 'ANTENA PREMIUM VIP' : 'NO ANTENA NORMAL';
+                    document.getElementById('res-uid').innerText = uid;
+                    document.getElementById('res-exp').innerText = user.expiry;
+                    document.getElementById('res-srv').innerText = currentSrv.toUpperCase();
 
-                    // Gán link tải file RIÊNG BIỆT CHO TỪNG SEVER
-                    const cfg = selectedServer === 'vip' ? 'antena.conf' : 'no_antena.conf';
-                    const cert = selectedServer === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
+                    // TÁCH LINK FILE RIÊNG BIỆT
+                    const cfg = currentSrv === 'vip' ? 'antena.conf' : 'no_antena.conf';
+                    const cert = currentSrv === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
 
-                    document.getElementById('dl-cfg').onclick = () => { window.location.href = `shadowrocket://config/add/${API.GIT_URL}/${cfg}`; };
-                    document.getElementById('dl-cert').onclick = () => { window.location.href = `${API.GIT_URL}/${cert}`; };
+                    document.getElementById('dl-config').onclick = () => location.href = `shadowrocket://config/add/${CORE.GIT}/${cfg}`;
+                    document.getElementById('dl-cert').onclick = () => location.href = `${CORE.GIT}/${cert}`;
 
-                    // FIX LỖI TELEGRAM: Gửi log chi tiết
-                    sendTelegramLog(uid, account.expiry);
+                    // GỬI TELEGRAM ĐẢM BẢO
+                    logToTele(uid, user.expiry);
                 } else {
-                    Swal.fire({ icon: 'error', title: 'TRUY CẬP THẤT BẠI', text: 'UID không tồn tại trên máy chủ ' + targetFile });
+                    Swal.fire('THẤT BẠI', `UID này không thuộc máy chủ ${target}`, 'error');
                 }
             } catch(e) {
-                Swal.fire({ icon: 'error', title: 'LỖI KẾT NỐI', text: 'Không thể kết nối tới cơ sở dữ liệu GitHub!' });
+                Swal.fire('LỖI KẾT NỐI', 'Không tìm thấy database trên GitHub!', 'error');
             }
         }
 
-        // 5. Telegram Messenger (Fixed & Enhanced)
-        async function sendTelegramLog(uid, exp) {
-            const srvText = selectedServer === 'vip' ? '💎 ANTENA VIP' : '🛡️ NO ANTENA';
-            const timestamp = new Date().toLocaleString('vi-VN');
-            
-            const fullMessage = `🔥 **THÔNG BÁO LOGIN V4.0**\n` +
-                              `━━━━━━━━━━━━━━━━━━\n` +
-                              `👤 **UID:** \`${uid}\`\n` +
-                              `🌐 **IP:** \`${userIP}\`\n` +
-                              `📡 **SERVER:** ${srvText}\n` +
-                              `⏳ **HẾT HẠN:** ${exp}\n` +
-                              `⏰ **TIME:** ${timestamp}\n` +
-                              `━━━━━━━━━━━━━━━━━━`;
+        // 4. Hệ thống báo cáo Telegram Fixed
+        async function logToTele(uid, exp) {
+            const srv = currentSrv === 'vip' ? '💎 VIP' : '🛡️ THƯỜNG';
+            const msg = `🚀 **LOGIN THÀNH CÔNG V5.0**\n` +
+                        `━━━━━━━━━━━━━━━━━━\n` +
+                        `👤 UID: \`${uid}\`\n` +
+                        `🌐 IP: \`${clientIP}\`\n` +
+                        `📡 SERVER: ${srv}\n` +
+                        `⏳ HẠN: \`${exp}\`\n` +
+                        `━━━━━━━━━━━━━━━━━━`;
 
-            try {
-                await fetch(`https://api.telegram.org/bot${API.TELE_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: API.TELE_CHAT,
-                        text: fullMessage,
-                        parse_mode: 'Markdown'
-                    })
-                });
-            } catch(error) { console.error("Telegram Log Failed"); }
+            await fetch(`https://api.telegram.org/bot${CORE.BOT}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: CORE.CID, text: msg, parse_mode: 'Markdown' })
+            });
         }
 
-        bootSystem();
+        boot();
     </script>
 </body>
 </html>

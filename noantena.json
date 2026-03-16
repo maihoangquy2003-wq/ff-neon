@@ -1,17 +1,9 @@
 {
   "users": {
-    "863016442": {
-      "expiry": "2026-12-31",
-      "type": "PREMIUM HTTP",
-      "status": "active"
-    },
-    "123456789": {
-      "expiry": "2024-01-01", 
-      "status": "active"
-    },
-    "999999999": {
-      "expiry": "2026-12-31",
-      "status": "banned"
-    }
-  }
+    "86301644213": { "expiry": "2026-12-31", "type": "vip" },
+    "123456789": { "expiry": "2026-06-20", "type": "no" }
+  },
+  "banned_ips": [
+    "1.1.1.1"
+  ]
 }

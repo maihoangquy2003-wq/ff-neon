@@ -33,6 +33,7 @@
             text-align: center;
             backdrop-filter: blur(20px);
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         h1 { font-size: 26px; color: var(--neon-blue); margin: 0; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px var(--neon-blue); }
@@ -80,31 +81,31 @@
             color: white; font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
-        /* Result Panel - Mặc định ẩn File Cert */
-        #vip-panel { display: none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 20px; border: 1px solid var(--neon-blue); }
+        /* Result Panel - Nơi chứa File Cert ẩn */
+        #vip-panel { display: none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 20px; border: 1px solid var(--neon-blue); }
         .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
         .info-row b { color: var(--neon-blue); }
         
-        .action-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .action-btns { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
         .btn-dl { 
-            width: 100%; padding: 14px; border-radius: 12px; text-decoration: none; 
+            width: 100%; padding: 14px; border-radius: 15px; text-decoration: none; 
             text-align: center; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
         .btn-support {
             margin-top: 20px; background: rgba(255,255,255,0.05); border: 1px solid #1a2a4a;
-            color: #888; padding: 10px; border-radius: 15px; font-size: 12px; cursor: pointer; width: 100%;
+            color: #888; padding: 12px; border-radius: 15px; font-size: 12px; cursor: pointer; width: 100%;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="main-content">
         <h1>HQUY TA SEVER</h1>
         <div class="sub-title">HQUY PREMIUM SERVER</div>
 
         <div class="ip-box">
-            <i class="fas fa-globe"></i> IP CỦA BẠN: <span id="user-ip">Đang lấy...</span>
+            <i class="fas fa-globe"></i> IP CỦA BẠN: <span id="user-ip">...</span>
         </div>
 
         <div class="status-grid">
@@ -113,7 +114,7 @@
         </div>
 
         <div id="auth-section">
-            <div class="section-label"><i class="fas fa-list"></i> CHỌN SERVER BẠN ĐÃ MUA</div>
+            <div class="section-label">CHỌN SERVER BẠN ĐÃ MUA</div>
             <div class="server-grid">
                 <div class="server-item" id="srv-no" onclick="selectServer('no')">
                     <i class="fas fa-shield-alt"></i>
@@ -125,7 +126,6 @@
                 </div>
             </div>
 
-            <div class="section-label"><i class="fas fa-fingerprint"></i> XÁC MINH UID</div>
             <input type="text" id="uid_input" placeholder="NHẬP MÃ UID VIP">
             <button class="btn-main" onclick="handleVerify()">XÁC MINH TRUY CẬP</button>
         </div>
@@ -153,18 +153,29 @@
     <script>
         const CONFIG = {
             TOKEN: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ", //
-            CHAT_ID: "7329868082", // ID của bạn
-            GITHUB: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
+            CHAT_ID: "7329868082", 
+            GITHUB: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main" //
         };
 
         let selectedType = "vip"; 
-        let userIP = "Unknown";
+        let userIP = "";
 
-        // Lấy IP tự động
-        fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => {
-            userIP = d.ip;
-            document.getElementById('user-ip').innerText = userIP;
-        });
+        // Tự động lấy IP và kiểm tra Band ID
+        async function initSystem() {
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                userIP = ipData.ip;
+                document.getElementById('user-ip').innerText = userIP;
+
+                // Kiểm tra danh sách đen từ GitHub
+                const res = await fetch(`${CONFIG.GITHUB}/antena.json?t=${Date.now()}`);
+                const data = await res.json();
+                if(data.banned_ips && data.banned_ips.includes(userIP)) {
+                    document.getElementById('main-content').innerHTML = "<h2 style='color:red;'>BỊ CHẶN TRUY CẬP</h2><p>Thiết bị của bạn đã bị cấm khỏi hệ thống.</p>";
+                }
+            } catch(e) {}
+        }
 
         function selectServer(type) {
             selectedType = type;
@@ -173,58 +184,49 @@
         }
 
         async function handleVerify() {
-            const uid = document.getElementById('uid_input').value.trim();
-            if(!uid) return alert("Vui lòng nhập UID!");
+            const uidInput = document.getElementById('uid_input').value.trim();
+            if(!uidInput) return alert("Vui lòng nhập UID!");
 
             try {
                 const res = await fetch(`${CONFIG.GITHUB}/antena.json?t=${Date.now()}`);
                 const data = await res.json();
-                const user = data.users[uid];
+                const userData = data.users[uidInput];
 
-                if(user) {
-                    // Hiện kết quả và file Cert
+                if(userData) {
+                    // Hiển thị bảng kết quả và nút Cert
                     document.getElementById('auth-section').style.display = 'none';
                     document.getElementById('vip-panel').style.display = 'block';
                     
-                    document.getElementById('res-uid').innerText = uid;
-                    document.getElementById('res-expiry').innerText = user.expiry;
-                    
-                    const serverName = selectedType === "vip" ? "ANTENA VIP" : "NO ANTENA";
-                    document.getElementById('res-server').innerText = serverName;
+                    document.getElementById('res-uid').innerText = uidInput;
+                    document.getElementById('res-expiry').innerText = userData.expiry;
+                    document.getElementById('res-server').innerText = selectedType === "vip" ? "ANTENA VIP" : "NO ANTENA";
 
                     // Gán link tải file
-                    const configFile = selectedType === "vip" ? "antena.conf" : "no_antena.conf";
-                    const certFile = "cert_antena.pem"; // File cert chung hoặc riêng tùy bạn
-                    
-                    document.getElementById('link-cfg').href = `shadowrocket://config/add/${CONFIG.GITHUB}/${configFile}`;
-                    document.getElementById('link-cert').href = `${CONFIG.GITHUB}/${certFile}`;
+                    const cfgFile = selectedType === "vip" ? "antena.conf" : "no_antena.conf";
+                    document.getElementById('link-cfg').href = `shadowrocket://config/add/${CONFIG.GITHUB}/${cfgFile}`;
+                    document.getElementById('link-cert').href = `${CONFIG.GITHUB}/cert_antena.pem`;
 
-                    // GỬI TELEGRAM - ĐÃ FIX LỖI GỬI UID
-                    sendTele(uid, user.expiry, serverName);
+                    // GỬI TELEGRAM - ĐÃ FIX LỖI TỰ GỬI ID
+                    sendToBot(uidInput, userData.expiry);
                 } else {
                     alert("UID KHÔNG TỒN TẠI!");
                 }
             } catch(e) { alert("Lỗi kết nối Server!"); }
         }
 
-        function sendTele(uid, expiry, srv) {
-            const time = new Date().toLocaleString('vi-VN');
-            const msg = `🚀 **THÔNG BÁO LOGIN VIP**\n━━━━━━━━━━━━━\n👤 **UID:** \`${uid}\`\n🌐 **IP:** \`${userIP}\`\n📡 **Server:** \`${srv}\`\n⏳ **Hạn dùng:** \`${expiry}\`\n⏰ **Thời gian:** ${time}`;
+        function sendToBot(uid, expiry) {
+            const srvName = selectedType === "vip" ? "ANTENA VIP" : "NO ANTENA";
+            const timeStr = new Date().toLocaleString('vi-VN');
+            const message = `🚀 **THÔNG BÁO LOGIN**\n👤 UID: \`${uid}\`\n🌐 IP: \`${userIP}\`\n📡 Server: \`${srvName}\`\n⏳ Hạn: \`${expiry}\`\n⏰ Lúc: \`${timeStr}\``;
             
-            const url = `https://api.telegram.org/bot${CONFIG.TOKEN}/sendMessage`;
-            
-            fetch(url, {
+            fetch(`https://api.telegram.org/bot${CONFIG.TOKEN}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CONFIG.CHAT_ID,
-                    text: msg,
-                    parse_mode: 'Markdown'
-                })
-            }).then(res => {
-                if(!res.ok) console.error("Bot gửi tin thất bại, kiểm tra Chat ID hoặc Token.");
+                body: JSON.stringify({ chat_id: CONFIG.CHAT_ID, text: message, parse_mode: 'Markdown' })
             });
         }
+
+        initSystem();
     </script>
 </body>
 </html>

@@ -17,9 +17,9 @@
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, rgba(188, 19, 254, 0.15), transparent 60%); z-index: 2; pointer-events: none; }
         .system-root { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
-        .terminal-window { width: 100%; max-width: 440px; background: rgba(10, 10, 15, 0.9); border-radius: 25px; padding: 35px 25px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .terminal-window { width: 100%; max-width: 440px; background: rgba(10, 10, 15, 0.95); border-radius: 25px; padding: 35px 25px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); }
         .terminal-window::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, var(--neon-blue), var(--neon-purple), var(--neon-pink), transparent); animation: rotateRGB 4s linear infinite; z-index: -1; }
-        .terminal-window::after { content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.95); border-radius: 21px; z-index: -1; }
+        .terminal-window::after { content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.98); border-radius: 21px; z-index: -1; }
         @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
         .brand-zone h1 { font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 15px var(--neon-blue)); }
         .node-info { background: rgba(255, 255, 255, 0.05); border-radius: 100px; padding: 8px 15px; margin: 20px 0; display: flex; justify-content: space-between; font-size: 12px; border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue); }
@@ -50,7 +50,6 @@
     <div class="ban-screen" id="blacklisted">
         <i class="fas fa-skull-crossbones" style="font-size: 80px; color: red; margin-bottom: 20px;"></i>
         <h1 style="color:red; font-family: Orbitron;">IP BLOCKED</h1>
-        <p id="ban-reason" style="color: #666; margin-top: 10px;"></p>
     </div>
 
     <div class="system-root">
@@ -117,26 +116,16 @@
                 userIP = d.ip;
                 document.getElementById('ip-node').innerText = userIP;
 
-                // Fetch chống Cache để Unban có tác dụng ngay
                 const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`);
                 const vault = await resp.json();
                 
+                // Kiểm tra chặn IP
                 if(vault.banned_ips && vault.banned_ips.includes(userIP)) {
                     document.getElementById('blacklisted').style.display = 'flex';
-                    sendTeleAlert(`🚫 IP BỊ CHẶN TRUY CẬP: \`${userIP}\``);
                 } else {
-                    // QUAN TRỌNG: Nếu IP không có trong list chặn, ẩn màn hình đen đi
                     document.getElementById('blacklisted').style.display = 'none';
                 }
-            } catch(e) { console.log("System Check Passed"); }
-        }
-
-        async function sendTeleAlert(msg) {
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' })
-            });
+            } catch(e) { console.log("Init Error"); }
         }
 
         function switchNode(t) {
@@ -150,7 +139,12 @@
             if(!entry) return;
 
             const target = nodeType === 'vip' ? 'antena.json' : 'noantena.json';
-            Swal.fire({ title: 'AUTHENTICATING...', background: '#0a0a0f', color: '#00f2ff', didOpen: () => Swal.showLoading() });
+            
+            Swal.fire({
+                title: 'AUTHENTICATING...',
+                background: '#0a0a0f', color: '#00f2ff',
+                didOpen: () => Swal.showLoading()
+            });
 
             try {
                 const resp = await fetch(`${_CFG.g}/${target}?t=${Date.now()}`);
@@ -158,8 +152,13 @@
 
                 // 1. Kiểm tra Ban UID
                 if(data.banned_ids && data.banned_ids.includes(entry)) {
-                    Swal.fire({ icon: 'error', title: 'ACCOUNT BANNED', text: 'UID này đã bị cấm!', background: '#0a0a0f', color: '#ff003c' });
-                    sendTeleAlert(`⛔ UID BỊ CẤM CỐ VÀO: \`${entry}\` (IP: ${userIP})`);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ACCOUNT BANNED',
+                        text: 'Tài khoản đã bị cấm!',
+                        background: '#0a0a0f', color: '#ff003c'
+                    });
+                    sendTeleAlert(`⛔ UID BỊ CẤM TRUY CẬP: \`${entry}\` (IP: ${userIP})`);
                     return;
                 }
 
@@ -168,20 +167,38 @@
                     Swal.close();
                     document.getElementById('auth-layer').style.display = 'none';
                     document.getElementById('data-flow').style.display = 'block';
+                    
+                    // Hiển thị thông tin lên giao diện
                     document.getElementById('v-uid').innerText = entry;
                     document.getElementById('v-exp').innerText = user.expiry;
-                    document.getElementById('v-srv').innerText = nodeType.toUpperCase();
+                    document.getElementById('v-srv').innerText = nodeType === 'vip' ? 'ANTENA VIP' : 'NO ANTENA';
 
                     const conf = nodeType === 'vip' ? 'antena.conf' : 'no_antena.conf';
                     const cert = nodeType === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
+
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`;
                     document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${cert}`;
 
-                    sendTeleAlert(`🌟 **ĐĂNG NHẬP THÀNH CÔNG**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\``);
+                    sendTeleAlert(`🌟 **ĐĂNG NHẬP THÀNH CÔNG**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\`\n📡 NODE: ${nodeType.toUpperCase()}`);
                 } else {
-                    Swal.fire({ icon: 'error', title: 'ACCESS DENIED', text: 'UID không tồn tại!', background: '#0a0a0f', color: '#ff003c' });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        html: `<div style="color: #ff00ff; font-weight: bold;">UID KHÔNG CÓ TRÊN HỆ THỐNG SOLITUDE PROXY VUI LÒNG LIÊN HỆ ADMIN</div>`,
+                        background: '#0a0a0f', color: '#ff00ff'
+                    });
                 }
-            } catch(e) { Swal.fire({ icon: 'error', title: 'FAIL', text: 'SERVER BUSY', background: '#0a0a0f', color: '#ff003c' }); }
+            } catch(e) { 
+                Swal.fire({ icon: 'error', title: 'FAIL', text: 'SERVER UNREACHABLE', background: '#0a0a0f', color: '#ff003c' }); 
+            }
+        }
+
+        async function sendTeleAlert(msg) {
+            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' })
+            });
         }
 
         init();

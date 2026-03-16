@@ -3,266 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HQUY TA | GOD MODE V6.0</title>
+    <title>HQUY TA | GOD EDITION V7.0</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
         :root {
-            --neon: #00f2ff;
-            --pink: #ff00ff;
-            --dark: #050505;
-            --row-bg: rgba(0, 242, 255, 0.03);
+            --glow-color: #00f2ff;
+            --bg-deep: #020205;
+            --accent: #bc13fe;
+            --text-main: #e0e0e0;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body, html { margin: 0; padding: 0; background: var(--dark); color: #fff; font-family: 'Share Tech Mono', monospace; overflow: hidden; height: 100vh; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; cursor: crosshair; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: var(--bg-deep); color: var(--text-main);
+            font-family: 'Fira Code', monospace; overflow: hidden;
+        }
 
-        /* Scanning Grid Background */
-        #grid-bg {
+        /* Particles Background */
+        #particles-js {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+        }
+
+        /* Overlay Noise Effect */
+        .noise {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px; z-index: -1; animation: gridMove 20s linear infinite;
-        }
-        @keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 600px; } }
-
-        /* Main Console Layout */
-        .console-container {
-            display: flex; justify-content: center; align-items: center; height: 100vh; padding: 20px;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05; pointer-events: none; z-index: 2;
         }
 
-        .glass-console {
-            width: 100%; max-width: 450px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 2px solid var(--neon);
-            border-radius: 20px; padding: 40px 30px;
-            position: relative; box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
-            overflow: hidden;
+        /* Main System Interface */
+        .system-root {
+            position: relative; z-index: 10;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; perspective: 1000px;
         }
 
-        /* Scanline Effect */
-        .glass-console::before {
-            content: " "; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(0, 242, 255, 0.5); z-index: 10; animation: scan 4s linear infinite;
-        }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-
-        .header h1 {
-            font-family: 'Orbitron', sans-serif; font-size: 28px; text-align: center;
-            letter-spacing: 5px; margin: 0; color: var(--neon); text-shadow: 0 0 10px var(--neon);
-        }
-
-        /* IP System Display */
-        .status-bar {
-            background: #000; border: 1px solid #111; border-radius: 5px;
-            padding: 8px 15px; font-size: 12px; margin: 20px 0;
-            display: flex; justify-content: space-between; color: var(--neon);
+        .terminal-window {
+            width: 92%; max-width: 460px;
+            background: rgba(5, 5, 10, 0.85);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 15px; padding: 30px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 242, 255, 0.05);
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
         }
 
-        /* Server Selection Custom */
-        .srv-selector { display: flex; gap: 10px; margin-bottom: 25px; }
-        .srv-btn {
-            flex: 1; padding: 15px; background: transparent; border: 1px solid #222;
-            border-radius: 10px; color: #444; cursor: pointer; transition: 0.3s;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateX(2deg); }
+            50% { transform: translateY(-15px) rotateX(-2deg); }
         }
-        .srv-btn i { font-size: 20px; }
-        .srv-btn.active { border-color: var(--pink); color: #fff; background: rgba(255, 0, 255, 0.05); box-shadow: 0 0 15px rgba(255, 0, 255, 0.2); }
 
-        /* Input UID Styling */
-        .input-group { position: relative; margin-bottom: 25px; }
-        .main-input {
-            width: 100%; background: #000; border: 1px solid #222;
-            padding: 20px; border-radius: 12px; color: var(--neon);
-            font-size: 20px; text-align: center; letter-spacing: 5px;
+        /* Branding */
+        .brand-zone { text-align: center; margin-bottom: 25px; }
+        .brand-zone h1 {
+            font-family: 'Orbitron', sans-serif; font-size: 32px; margin: 0;
+            background: linear-gradient(to right, #00f2ff, #fff, #bc13fe);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 8px; filter: drop-shadow(0 0 10px rgba(0,242,255,0.5));
         }
-        .main-input:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
 
-        /* Action Buttons */
-        .btn-fire {
-            width: 100%; padding: 18px; border: none; border-radius: 12px;
-            font-family: 'Orbitron', sans-serif; font-weight: 900;
-            cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
-            background: var(--neon); color: #000;
+        /* Console Status */
+        .console-header {
+            font-size: 11px; color: #555; border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between;
         }
-        .btn-fire:hover { filter: brightness(1.2); transform: scale(1.02); }
 
-        /* Result View */
-        #result-view { display: none; text-align: left; }
-        .data-table { background: #000; border-radius: 10px; padding: 15px; margin-bottom: 20px; border: 1px solid #111; }
-        .data-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #111; }
-        .data-row:last-child { border: none; }
-        .label { color: #555; font-size: 11px; text-transform: uppercase; }
-        .val { color: var(--neon); font-weight: bold; }
+        /* Server Toggle */
+        .srv-bridge {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;
+        }
+        .node-btn {
+            background: rgba(255,255,255,0.02); border: 1px solid #222;
+            padding: 15px; border-radius: 8px; transition: 0.4s;
+            text-align: center; opacity: 0.6;
+        }
+        .node-btn i { font-size: 24px; display: block; margin-bottom: 8px; }
+        .node-btn span { font-size: 10px; font-weight: bold; letter-spacing: 2px; }
+        
+        .node-btn.active {
+            opacity: 1; border-color: var(--glow-color);
+            background: rgba(0, 242, 255, 0.05);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            color: var(--glow-color);
+        }
 
-        /* Secret Button styling */
-        .btn-secret { background: #111; color: #fff; border: 1px solid #222; margin-bottom: 10px; }
-        .btn-secret:hover { border-color: var(--neon); color: var(--neon); }
+        /* Deep Input */
+        .input-wrapper { position: relative; margin-bottom: 25px; }
+        .input-wrapper::before {
+            content: ">"; position: absolute; left: 15px; top: 50%;
+            transform: translateY(-50%); color: var(--glow-color); font-weight: bold;
+        }
+        .id-input {
+            width: 100%; background: #000; border: 1px solid #1a1a1a;
+            padding: 18px 18px 18px 35px; border-radius: 8px;
+            color: var(--glow-color); font-family: 'Fira Code'; font-size: 18px;
+            letter-spacing: 3px; transition: 0.3s;
+        }
+        .id-input:focus { border-color: var(--glow-color); box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); }
 
-        /* Ban Overlay */
-        .ban-screen {
+        /* Action Engine */
+        .engine-btn {
+            width: 100%; padding: 18px; border: none; border-radius: 8px;
+            background: var(--glow-color); color: #000;
+            font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.3);
+            transition: 0.3s;
+        }
+        .engine-btn:active { transform: scale(0.97); filter: brightness(0.8); }
+
+        /* Data Visualization */
+        #data-flow { display: none; }
+        .info-card {
+            background: rgba(0,0,0,0.4); border: 1px solid #111;
+            padding: 20px; border-radius: 10px; margin-bottom: 20px;
+        }
+        .info-row {
+            display: flex; justify-content: space-between; padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 13px;
+        }
+        .label { color: #555; }
+        .val { color: var(--glow-color); font-weight: bold; }
+
+        /* Secret Buttons */
+        .inject-btn {
+            width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 8px;
+            border: 1px solid #333; background: transparent; color: #fff;
+            font-family: 'Fira Code'; font-size: 12px; transition: 0.3s;
+        }
+        .inject-btn:hover { border-color: var(--glow-color); color: var(--glow-color); }
+
+        /* Ban Screen */
+        .access-denied {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 1000; display: none;
+            background: #000; z-index: 10000; display: none;
             flex-direction: column; justify-content: center; align-items: center;
+            color: red; text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div id="grid-bg"></div>
-    
-    <div class="ban-screen" id="ban-ui">
-        <h1 style="color:red; font-size: 50px;">ACCESS DENIED</h1>
-        <p>YOUR IP IS PERMANENTLY BLACKLISTED</p>
+    <div id="particles-js"></div>
+    <div class="noise"></div>
+
+    <div class="access-denied" id="blacklisted">
+        <h1 style="font-family: Orbitron; font-size: 50px; margin: 0;">FIREWALL BLOCK</h1>
+        <p style="letter-spacing: 5px;">IP_ADDRESS BANNED FROM MOTHERBOARD</p>
     </div>
 
-    <div class="console-container">
-        <div class="glass-console" id="main-console">
-            <div class="header">
-                <h1>SYSTEM V6.0</h1>
+    <div class="system-root">
+        <div class="terminal-window animate__animated animate__fadeInUp">
+            <div class="console-header">
+                <span><i class="fas fa-microchip"></i> KERNEL: 7.0.2</span>
+                <span id="ip-node">NODE: 0.0.0.0</span>
             </div>
 
-            <div class="status-bar">
-                <span><i class="fas fa-terminal"></i> IP_ADDR:</span>
-                <span id="my-ip">FETCHING...</span>
+            <div class="brand-zone">
+                <h1>HQUY TA</h1>
+                <p style="font-size: 9px; color: #444; letter-spacing: 3px;">CRYPTOGRAPHIC ACCESS POINT</p>
             </div>
 
-            <div id="login-form">
-                <div class="srv-selector">
-                    <div class="srv-btn" id="s1" onclick="selectSrv('no')">
-                        <i class="fas fa-user-secret"></i>
-                        <span style="font-size: 10px;">NO_ANTENA</span>
+            <div id="auth-layer">
+                <div class="srv-bridge">
+                    <div class="node-btn" id="n1" onclick="switchNode('no')">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>NO_ANTENA</span>
                     </div>
-                    <div class="srv-btn active" id="s2" onclick="selectSrv('vip')">
-                        <i class="fas fa-dragon"></i>
-                        <span style="font-size: 10px;">ANTENA_VIP</span>
+                    <div class="node-btn active" id="n2" onclick="switchNode('vip')">
+                        <i class="fas fa-bolt"></i>
+                        <span>ANTENA_VIP</span>
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <input type="text" id="uid_field" class="main-input" placeholder="ID_863XXXX">
+                <div class="input-wrapper">
+                    <input type="text" id="uid_entry" class="id-input" placeholder="SESSION_ID">
                 </div>
 
-                <button class="btn-fire" onclick="executeSystem()">
-                    <i class="fas fa-bolt"></i> EXECUTE SECURITY
+                <button class="engine-btn" onclick="startInjection()">
+                    INJECT SESSION
                 </button>
             </div>
 
-            <div id="result-view">
-                <div class="data-table">
-                    <div class="data-row"><span class="label">IDENTITY:</span><span class="val" id="r-uid">-</span></div>
-                    <div class="data-row"><span class="label">EXPIRE_ON:</span><span class="val" id="r-exp" style="color:#39ff14">-</span></div>
-                    <div class="data-row"><span class="label">STATION:</span><span class="val" id="r-srv">-</span></div>
+            <div id="data-flow">
+                <div class="info-card">
+                    <div class="info-row"><span class="label">ID_MATCH:</span><span class="val" id="v-uid">-</span></div>
+                    <div class="info-row"><span class="label">SEC_TOKEN:</span><span class="val" id="v-exp" style="color: #39ff14">-</span></div>
+                    <div class="info-row"><span class="label">GATEWAY:</span><span class="val" id="v-srv">-</span></div>
                 </div>
 
-                <button class="btn-fire btn-secret" id="dl-c">
-                    <i class="fas fa-code-branch"></i> INJECT CONFIG (.CONF)
+                <button class="inject-btn" id="get-c">
+                    <i class="fas fa-file-code"></i> PULL CONFIGURATION
                 </button>
-                <button class="btn-fire btn-secret" id="dl-p">
-                    <i class="fas fa-shield-alt"></i> DOWNLOAD ENCRYPTED CERT
+                <button class="inject-btn" id="get-p">
+                    <i class="fas fa-key"></i> SYNC SSL CERTIFICATE
                 </button>
-                <button class="btn-fire" style="background:#ff003c; color:#fff" onclick="location.reload()">
-                    <i class="fas fa-unlink"></i> TERMINATE SESSION
+                
+                <button class="engine-btn" style="background: transparent; color: #ff003c; border: 1px solid #ff003c;" onclick="location.reload()">
+                    CLOSE CONNECTION
                 </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <a href="https://t.me/0353594606" style="color: #333; text-decoration: none; font-size: 11px;">
+                    <i class="fab fa-telegram"></i> SECURE_SUPPORT_LINE
+                </a>
             </div>
         </div>
     </div>
 
     <script>
-        // MÃ HÓA CƠ BẢN ĐỂ GIẤU LINK TRONG SOURCE
-        const _0xAlpha = "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ"; // Bot Token
-        const _0xBeta = "7329868082"; // Chat ID
-        const _0xBase = "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main";
+        // MÃ HÓA CẤU HÌNH (Bịt mắt người thường)
+        const _SECRET_CONFIG = {
+            _0xT: "8433633651:AAeskPVzmcJJODy0-J1m-PkIs-lSYFFxRJQ",
+            _0xC: "7329868082",
+            _0xG: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main"
+        };
 
-        let currentType = 'vip';
-        let userIP = "";
+        let nodeType = 'vip';
+        let userNodeIP = "0.0.0.0";
 
-        async function init() {
+        // 1. Particle Engine (Neural Effect)
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00f2ff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.2 },
+                "size": { "value": 2 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1.5 }
+            },
+            "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } }
+        });
+
+        // 2. Core Boot
+        async function bootSystem() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json');
                 const data = await res.json();
-                userIP = data.ip;
-                document.getElementById('my-ip').innerText = userIP;
+                userNodeIP = data.ip;
+                document.getElementById('ip-node').innerText = `NODE: ${userNodeIP}`;
 
-                // Tự động quét Band IP từ antena.json
-                const check = await (await fetch(`${_0xBase}/antena.json?v=${Date.now()}`)).json();
-                if(check.banned_ips?.includes(userIP)) {
-                    document.getElementById('ban-ui').style.display = 'flex';
+                // Anti-Ban Kiểm tra trực tiếp từ file antena.json
+                const vault = await (await fetch(`${_SECRET_CONFIG._0xG}/antena.json?nocache=${Date.now()}`)).json();
+                if(vault.banned_ips?.includes(userNodeIP)) {
+                    document.getElementById('blacklisted').style.display = 'flex';
                 }
             } catch(e) {}
         }
 
-        function selectSrv(t) {
-            currentType = t;
-            document.querySelectorAll('.srv-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(t === 'no' ? 's1' : 's2').classList.add('active');
+        function switchNode(t) {
+            nodeType = t;
+            document.querySelectorAll('.node-btn').forEach(n => n.classList.remove('active'));
+            document.getElementById(t === 'no' ? 'n1' : 'n2').classList.add('active');
         }
 
-        async function executeSystem() {
-            const uid = document.getElementById('uid_field').value.trim();
-            if(!uid) return Swal.fire({ icon: 'error', title: 'EMPTY ID', background: '#000', color: '#fff' });
+        // 3. Execution Engine
+        async function startInjection() {
+            const entry = document.getElementById('uid_entry').value.trim();
+            if(!entry) return;
 
-            // File đích tương ứng
-            const dbPath = currentType === 'vip' ? 'antena.json' : 'noantena.json';
+            const targetDB = nodeType === 'vip' ? 'antena.json' : 'noantena.json';
             
-            Swal.fire({ title: 'CONNECTING...', allowOutsideClick: false, background: '#000', color: '#00f2ff', didOpen: () => Swal.showLoading() });
+            Swal.fire({
+                title: 'EXECUTING INJECTION...',
+                html: '<div style="font-size: 10px; color: #555; text-align: left; font-family: Fira Code;">> Authenticating ID...<br>> Bypassing Firewall...<br>> Linking Database...</div>',
+                background: '#05050a', color: '#00f2ff',
+                didOpen: () => Swal.showLoading()
+            });
 
             try {
-                const resp = await fetch(`${_0xBase}/${dbPath}?v=${Date.now()}`);
-                const db = await resp.json();
-                const user = db.users[uid];
+                const response = await fetch(`${_SECRET_CONFIG._0xG}/${targetDB}?t=${Date.now()}`);
+                const data = await response.json();
+                const record = data.users[entry];
 
-                if(user) {
-                    Swal.close();
-                    document.getElementById('login-form').style.display = 'none';
-                    document.getElementById('result-view').style.display = 'block';
-                    
-                    document.getElementById('r-uid').innerText = uid;
-                    document.getElementById('r-exp').innerText = user.expiry;
-                    document.getElementById('r-srv').innerText = currentType.toUpperCase();
+                if(record) {
+                    setTimeout(() => {
+                        Swal.close();
+                        document.getElementById('auth-layer').classList.add('animate__animated', 'animate__fadeOutDown');
+                        setTimeout(() => {
+                            document.getElementById('auth-layer').style.display = 'none';
+                            document.getElementById('data-flow').style.display = 'block';
+                            document.getElementById('data-flow').classList.add('animate__animated', 'animate__fadeInUp');
+                        }, 500);
 
-                    // Gán logic tải file (Kín kẽ)
-                    const cFile = currentType === 'vip' ? 'antena.conf' : 'no_antena.conf';
-                    const pFile = currentType === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
+                        document.getElementById('v-uid').innerText = entry;
+                        document.getElementById('v-exp').innerText = record.expiry;
+                        document.getElementById('v-srv').innerText = nodeType.toUpperCase() + "_CHANNEL";
 
-                    document.getElementById('dl-c').onclick = () => {
-                        window.location.href = `shadowrocket://config/add/${_0xBase}/${cFile}`;
-                    };
-                    document.getElementById('dl-p').onclick = () => {
-                        window.location.href = `${_0xBase}/${pFile}`;
-                    };
+                        // Map files
+                        const cPath = nodeType === 'vip' ? 'antena.conf' : 'no_antena.conf';
+                        const pPath = nodeType === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
 
-                    // Gửi tin nhắn Tele ngầm (Fix lỗi)
-                    sendLog(uid, user.expiry);
+                        document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_SECRET_CONFIG._0xG}/${cPath}`;
+                        document.getElementById('get-p').onclick = () => location.href = `${_SECRET_CONFIG._0xG}/${pPath}`;
+
+                        // Báo Telegram
+                        pushLog(entry, record.expiry);
+                    }, 1500);
                 } else {
-                    Swal.fire({ icon: 'warning', title: 'INVALID ID', text: `ID NOT FOUND IN ${dbPath.toUpperCase()}`, background: '#000', color: '#fff' });
+                    Swal.fire({ icon: 'error', title: 'ACCESS DENIED', text: 'IDENTITY NOT MATCHED IN CURRENT NODE', background: '#05050a', color: '#ff003c' });
                 }
             } catch(e) {
-                Swal.fire('SERVER ERROR', 'FAILED TO LINK TO GITHUB DATABASE', 'error');
+                Swal.fire('FAIL', 'CRITICAL CONNECTION ERROR', 'error');
             }
         }
 
-        async function sendLog(id, exp) {
-            const mode = currentType === 'vip' ? '💎 VIP' : '🛡️ NORMAL';
-            const text = `⚠️ **GOD-MODE LOG** ⚠️\n` +
-                         `━━━━━━━━━━━━━━━━━━\n` +
-                         `👤 USER: \`${id}\`\n` +
-                         `🌐 IP: \`${userIP}\`\n` +
-                         `📡 MODE: ${mode}\n` +
-                         `⏳ EXP: ${exp}\n` +
-                         `━━━━━━━━━━━━━━━━━━`;
+        // 4. Secure Telegram Logger
+        async function pushLog(uid, expiry) {
+            const platform = nodeType === 'vip' ? '🔱 GOD_VIP' : '🔒 NORMAL';
+            const payload = `🚨 **CORE_ACCESS_DETECTED** 🚨\n` +
+                            `━━━━━━━━━━━━━━━━━━\n` +
+                            `🆔 UID: \`${uid}\`\n` +
+                            `📍 IP: \`${userNodeIP}\`\n` +
+                            `📡 NODE: ${platform}\n` +
+                            `⏳ TTL: ${expiry}\n` +
+                            `━━━━━━━━━━━━━━━━━━`;
 
-            // Sử dụng Fetch POST để đảm bảo dữ liệu về
-            fetch(`https://api.telegram.org/bot${_0xAlpha}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: _0xBeta, text: text, parse_mode: 'Markdown' })
-            });
+            try {
+                await fetch(`https://api.telegram.org/bot${_SECRET_CONFIG._0xT}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: _SECRET_CONFIG._0xC, text: payload, parse_mode: 'Markdown' })
+                });
+            } catch(f) { console.error("Logger Failed"); }
         }
 
-        init();
+        bootSystem();
     </script>
 </body>
 </html>

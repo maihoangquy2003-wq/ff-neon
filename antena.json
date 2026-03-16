@@ -1,4 +1,9 @@
 {
-  "users": { 8630164421 },
-  "banned_ips": ["118.69.29.47", "IP_KHAC"]
+  "users": {
+    "8630164421": { "expiry": "2026-12-31", "status": "active" }
+  },
+  "banned_ips": [
+    "118.69.29.47", 
+    "IP_CUA_NGUOI_MUON_CHAN"
+  ]
 }

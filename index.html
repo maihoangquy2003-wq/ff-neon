@@ -233,16 +233,23 @@
 
         async function init() {
             try {
+                // Lấy IP người dùng
                 const r = await fetch('https://api.ipify.org?format=json');
                 const d = await r.json();
                 userIP = d.ip;
                 document.getElementById('ip-node').innerText = userIP;
 
-                const vault = await (await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`)).json();
-                if(vault.banned_ips?.includes(userIP)) {
+                // Lấy file cấu hình với tham số chống Cache cực mạnh (?v=...)
+                const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`);
+                const vault = await resp.json();
+                
+                // Kiểm tra IP có trong danh sách đen không
+                if(vault.banned_ips && vault.banned_ips.includes(userIP)) {
                     document.getElementById('blacklisted').style.display = 'flex';
                 }
-            } catch(e) {}
+            } catch(e) {
+                console.log("Ban System Error:", e);
+            }
         }
 
         function switchNode(t) {
@@ -285,7 +292,6 @@
 
                     pushTele(entry, user.expiry);
                 } else {
-                    // NÂNG CẤP THÔNG BÁO LỖI NEON TẠI ĐÂY
                     Swal.fire({
                         icon: 'error',
                         title: '<span style="font-family: Orbitron;">ACCESS DENIED</span>',

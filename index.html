@@ -11,136 +11,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root {
-            --neon-blue: #00f2ff;
-            --neon-pink: #ff00ff;
-            --neon-purple: #bc13fe;
-            --neon-green: #39ff14;
-            --bg-dark: #050505;
-        }
-
+        :root { --neon-blue: #00f2ff; --neon-pink: #ff00ff; --neon-purple: #bc13fe; --neon-green: #39ff14; --bg-dark: #050505; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--bg-dark); color: #fff;
-            font-family: 'Rajdhani', sans-serif; overflow: hidden;
-        }
-
-        /* Particles Layer */
-        #particles-js {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
-        }
-
-        /* Animated Gradient Background */
-        .bg-gradient {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(188, 19, 254, 0.15), transparent 60%);
-            z-index: 2; pointer-events: none;
-        }
-
-        .system-root {
-            position: relative; z-index: 10;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; padding: 15px;
-        }
-
-        /* RGB Border Animation */
-        .terminal-window {
-            width: 100%; max-width: 440px;
-            background: rgba(10, 10, 15, 0.9);
-            border-radius: 25px; padding: 35px 25px;
-            position: relative; overflow: hidden;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .terminal-window::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(transparent, var(--neon-blue), var(--neon-purple), var(--neon-pink), transparent);
-            animation: rotateRGB 4s linear infinite; z-index: -1;
-        }
-        .terminal-window::after {
-            content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.95);
-            border-radius: 21px; z-index: -1;
-        }
-
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, rgba(188, 19, 254, 0.15), transparent 60%); z-index: 2; pointer-events: none; }
+        .system-root { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
+        .terminal-window { width: 100%; max-width: 440px; background: rgba(10, 10, 15, 0.9); border-radius: 25px; padding: 35px 25px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .terminal-window::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, var(--neon-blue), var(--neon-purple), var(--neon-pink), transparent); animation: rotateRGB 4s linear infinite; z-index: -1; }
+        .terminal-window::after { content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.95); border-radius: 21px; z-index: -1; }
         @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
-
-        /* Branding Neon */
-        .brand-zone h1 {
-            font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0;
-            background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-align: center; letter-spacing: 5px;
-            filter: drop-shadow(0 0 15px var(--neon-blue));
-        }
-
-        /* Status UI */
-        .node-info {
-            background: rgba(255, 255, 255, 0.05); border-radius: 100px;
-            padding: 8px 15px; margin: 20px 0; display: flex;
-            justify-content: space-between; font-size: 12px;
-            border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue);
-        }
-
-        /* Server Grid */
+        .brand-zone h1 { font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 15px var(--neon-blue)); }
+        .node-info { background: rgba(255, 255, 255, 0.05); border-radius: 100px; padding: 8px 15px; margin: 20px 0; display: flex; justify-content: space-between; font-size: 12px; border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue); }
         .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .node-btn {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid #222;
-            padding: 20px 10px; border-radius: 15px; cursor: pointer;
-            transition: 0.4s; text-align: center;
-        }
+        .node-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid #222; padding: 20px 10px; border-radius: 15px; cursor: pointer; transition: 0.4s; text-align: center; }
         .node-btn i { font-size: 28px; margin-bottom: 10px; color: #444; }
         .node-btn span { font-size: 11px; font-weight: bold; color: #444; letter-spacing: 1px; }
-
         .node-btn.active#n1 { border-color: var(--neon-purple); box-shadow: 0 0 15px rgba(188, 19, 254, 0.3); }
         .node-btn.active#n1 i, .node-btn.active#n1 span { color: var(--neon-purple); }
-
         .node-btn.active#n2 { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
         .node-btn.active#n2 i, .node-btn.active#n2 span { color: var(--neon-blue); }
-
-        /* Input Field */
-        .id-input {
-            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333;
-            padding: 20px; border-radius: 15px; color: #fff;
-            font-family: 'Orbitron'; font-size: 20px; text-align: center;
-            letter-spacing: 3px; margin-bottom: 25px; transition: 0.3s;
-        }
-        .id-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
-
-        /* Buttons Neon */
-        .engine-btn {
-            width: 100%; padding: 20px; border: none; border-radius: 15px;
-            font-family: 'Orbitron'; font-weight: 900; cursor: pointer;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-            color: #000; text-transform: uppercase; letter-spacing: 2px;
-            transition: 0.3s; box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4);
-        }
-        .engine-btn:active { transform: scale(0.96); }
-
-        /* Data Panel */
+        .id-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 20px; border-radius: 15px; color: #fff; font-family: 'Orbitron'; font-size: 20px; text-align: center; letter-spacing: 3px; margin-bottom: 25px; transition: 0.3s; }
+        .engine-btn { width: 100%; padding: 20px; border: none; border-radius: 15px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4); }
         #data-flow { display: none; }
-        .data-card {
-            background: rgba(255,255,255,0.03); border-radius: 15px;
-            padding: 20px; margin-bottom: 20px; border: 1px dashed #333;
-        }
+        .data-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px dashed #333; }
         .d-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .d-row:last-child { border: none; }
         .lbl { color: #666; font-size: 11px; }
         .val { color: var(--neon-green); font-weight: bold; }
-
-        .btn-sub {
-            width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px;
-            background: transparent; border: 1px solid #333; color: #fff;
-            font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
-        .btn-sub:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
-
-        /* Ban Overlay */
-        .ban-screen {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-        }
+        .btn-sub { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: transparent; border: 1px solid #333; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .ban-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
@@ -151,6 +50,7 @@
     <div class="ban-screen" id="blacklisted">
         <i class="fas fa-skull-crossbones" style="font-size: 80px; color: red; margin-bottom: 20px;"></i>
         <h1 style="color:red; font-family: Orbitron;">IP BLOCKED</h1>
+        <p id="ban-reason" style="color: #666; margin-top: 10px;"></p>
     </div>
 
     <div class="system-root">
@@ -178,10 +78,7 @@
                 </div>
 
                 <input type="text" id="uid_entry" class="id-input" placeholder="ID: 863XXXX">
-
-                <button class="engine-btn" onclick="startInjection()">
-                    VERIFY ACCESS
-                </button>
+                <button class="engine-btn" onclick="startInjection()">VERIFY ACCESS</button>
             </div>
 
             <div id="data-flow">
@@ -190,17 +87,9 @@
                     <div class="d-row"><span class="lbl">TIME:</span><span class="val" id="v-exp">-</span></div>
                     <div class="d-row"><span class="lbl">SEVER:</span><span class="val" id="v-srv" style="color: var(--neon-purple)">-</span></div>
                 </div>
-
-                <button class="btn-sub" id="get-c" style="background: rgba(57, 255, 20, 0.05); border-color: var(--neon-green); color: var(--neon-green);">
-                    <i class="fas fa-cloud-download"></i> INSTALL SOLITUDE
-                </button>
-                <button class="btn-sub" id="get-p" style="background: rgba(0, 242, 255, 0.05); border-color: var(--neon-blue); color: var(--neon-blue);">
-                    <i class="fas fa-cert"></i> INSTALL CERTIFICATE
-                </button>
-                
-                <button class="engine-btn" style="background: #111; color: #ff003c; border: 1px solid #ff003c; margin-top: 10px;" onclick="location.reload()">
-                    LOGOUT SESSION
-                </button>
+                <button class="btn-sub" id="get-c" style="background: rgba(57, 255, 20, 0.05); border-color: var(--neon-green); color: var(--neon-green);"><i class="fas fa-cloud-download"></i> INSTALL SOLITUDE</button>
+                <button class="btn-sub" id="get-p" style="background: rgba(0, 242, 255, 0.05); border-color: var(--neon-blue); color: var(--neon-blue);"><i class="fas fa-cert"></i> INSTALL CERTIFICATE</button>
+                <button class="engine-btn" style="background: #111; color: #ff003c; border: 1px solid #ff003c; margin-top: 10px;" onclick="location.reload()">LOGOUT SESSION</button>
             </div>
 
             <p style="text-align: center; margin-top: 25px; font-size: 11px; color: #444;">
@@ -219,17 +108,7 @@
         let nodeType = 'vip';
         let userIP = "SCANNING...";
 
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 100 },
-                "color": { "value": ["#00f2ff", "#ff00ff"] },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.4 },
-                "size": { "value": 2 },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 },
-                "move": { "enable": true, "speed": 2 }
-            }
-        });
+        particlesJS("particles-js", { "particles": { "number": { "value": 100 }, "color": { "value": ["#00f2ff", "#ff00ff"] }, "shape": { "type": "circle" }, "opacity": { "value": 0.4 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 2 } } });
 
         async function init() {
             try {
@@ -238,13 +117,26 @@
                 userIP = d.ip;
                 document.getElementById('ip-node').innerText = userIP;
 
-                const vault = await (await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`)).json();
+                // Fetch chống Cache để Unban có tác dụng ngay
+                const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`);
+                const vault = await resp.json();
+                
                 if(vault.banned_ips && vault.banned_ips.includes(userIP)) {
                     document.getElementById('blacklisted').style.display = 'flex';
+                    sendTeleAlert(`🚫 IP BỊ CHẶN TRUY CẬP: \`${userIP}\``);
                 } else {
+                    // QUAN TRỌNG: Nếu IP không có trong list chặn, ẩn màn hình đen đi
                     document.getElementById('blacklisted').style.display = 'none';
                 }
-            } catch(e) {}
+            } catch(e) { console.log("System Check Passed"); }
+        }
+
+        async function sendTeleAlert(msg) {
+            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' })
+            });
         }
 
         function switchNode(t) {
@@ -258,81 +150,38 @@
             if(!entry) return;
 
             const target = nodeType === 'vip' ? 'antena.json' : 'noantena.json';
-            
-            Swal.fire({
-                title: 'AUTHENTICATING...',
-                background: '#0a0a0f', color: '#00f2ff',
-                didOpen: () => Swal.showLoading()
-            });
+            Swal.fire({ title: 'AUTHENTICATING...', background: '#0a0a0f', color: '#00f2ff', didOpen: () => Swal.showLoading() });
 
             try {
                 const resp = await fetch(`${_CFG.g}/${target}?t=${Date.now()}`);
                 const data = await resp.json();
-                
-                // KIỂM TRA CHẶN ID TỪ DANH SÁCH BANNED_IDS
+
+                // 1. Kiểm tra Ban UID
                 if(data.banned_ids && data.banned_ids.includes(entry)) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '<span style="font-family: Orbitron;">ACCOUNT BANNED</span>',
-                        text: 'Tài khoản này đã bị cấm khỏi hệ thống.',
-                        background: '#0a0a0f', color: '#ff003c', confirmButtonColor: '#ff003c'
-                    });
+                    Swal.fire({ icon: 'error', title: 'ACCOUNT BANNED', text: 'UID này đã bị cấm!', background: '#0a0a0f', color: '#ff003c' });
+                    sendTeleAlert(`⛔ UID BỊ CẤM CỐ VÀO: \`${entry}\` (IP: ${userIP})`);
                     return;
                 }
 
                 const user = data.users[entry];
-
                 if(user) {
                     Swal.close();
                     document.getElementById('auth-layer').style.display = 'none';
                     document.getElementById('data-flow').style.display = 'block';
-                    
                     document.getElementById('v-uid').innerText = entry;
                     document.getElementById('v-exp').innerText = user.expiry;
                     document.getElementById('v-srv').innerText = nodeType.toUpperCase();
 
                     const conf = nodeType === 'vip' ? 'antena.conf' : 'no_antena.conf';
                     const cert = nodeType === 'vip' ? 'cert_antena.pem' : 'cert_noantena.pem';
-
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`;
                     document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${cert}`;
 
-                    pushTele(entry, user.expiry);
+                    sendTeleAlert(`🌟 **ĐĂNG NHẬP THÀNH CÔNG**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\``);
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '<span style="font-family: Orbitron;">ACCESS DENIED</span>',
-                        html: `<div style="color: #fff; font-size: 14px; padding: 10px;">
-                                 UID: <span style="color: #df00ff; font-weight: bold;">${entry}</span><br>
-                                 <p style="margin-top: 15px; opacity: 0.9;">UID KHÔNG CÓ TRÊN HỆ THỐNG SOLITUDE PROXY.<br>VUI LÒNG LIÊN HỆ ADMIN</p>
-                               </div>`,
-                        background: '#0a0a0f',
-                        color: '#df00ff',
-                        iconColor: '#ff003c',
-                        confirmButtonText: 'QUAY LẠI',
-                        confirmButtonColor: '#df00ff'
-                    });
+                    Swal.fire({ icon: 'error', title: 'ACCESS DENIED', text: 'UID không tồn tại!', background: '#0a0a0f', color: '#ff003c' });
                 }
-            } catch(e) { 
-                Swal.fire({ icon: 'error', title: 'FAIL', text: 'SERVER UNREACHABLE', background: '#0a0a0f', color: '#ff003c' }); 
-            }
-        }
-
-        async function pushTele(id, exp) {
-            const mode = nodeType === 'vip' ? '🟣 ANTENA VIP' : '🔵 NO ANTENA';
-            const msg = `🌟 **NEON ACCESS V7.1** 🌟\n` +
-                        `━━━━━━━━━━━━━━━━━━\n` +
-                        `👤 USER: \`${id}\`\n` +
-                        `🌐 IP: \`${userIP}\`\n` +
-                        `📡 NODE: ${mode}\n` +
-                        `⏳ EXP: ${exp}\n` +
-                        `━━━━━━━━━━━━━━━━━━`;
-
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' })
-            });
+            } catch(e) { Swal.fire({ icon: 'error', title: 'FAIL', text: 'SERVER BUSY', background: '#0a0a0f', color: '#ff003c' }); }
         }
 
         init();

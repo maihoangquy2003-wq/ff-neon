@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HQUY SYSTEM | NEON VIP SERVER</title>
+    <title>HQUY TA | NEON VIP SERVER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -24,7 +24,6 @@
             overflow-x: hidden;
         }
 
-        /* Hiệu ứng Matrix chìm phía sau */
         #canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
 
         .container {
@@ -39,7 +38,6 @@
             position: relative;
         }
 
-        /* Header chia mục */
         .header { text-align: center; margin-bottom: 25px; }
         .header h1 { 
             font-size: 30px; margin: 0; color: var(--neon); 
@@ -48,7 +46,6 @@
         }
         .header p { font-size: 11px; color: #555; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* Mục 1: Thông tin Server */
         .section-title {
             font-size: 13px; color: var(--neon); font-weight: bold;
             display: flex; align-items: center; gap: 8px; margin-bottom: 15px;
@@ -66,7 +63,6 @@
         .info-card span { display: block; font-size: 10px; color: #888; }
         .info-card b { font-size: 13px; color: #39ff14; }
 
-        /* Mục 2: Nhập liệu */
         .input-area { position: relative; margin-bottom: 15px; }
         input {
             width: 100%; padding: 18px; border-radius: 12px;
@@ -76,7 +72,6 @@
         }
         input:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
 
-        /* Nút bấm chuyên nghiệp */
         .btn {
             width: 100%; padding: 16px; border-radius: 12px; border: none;
             font-weight: 900; cursor: pointer; transition: 0.3s;
@@ -88,7 +83,6 @@
         }
         .btn-primary:hover { transform: translateY(-3px); filter: brightness(1.2); }
 
-        /* Mục 3: Dashboard VIP (Ẩn) */
         #vip_dashboard { display: none; margin-top: 25px; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -100,12 +94,27 @@
         .vip-line { display: flex; justify-content: space-between; font-size: 13px; margin: 5px 0; }
         .vip-line b { color: var(--neon); }
 
+        /* Style cho nhóm nút cài đặt */
+        .download-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
         .btn-success {
             background: transparent; border: 2px solid #39ff14; color: #39ff14;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            font-size: 11px; padding: 12px 5px;
         }
         .btn-success:hover { background: #39ff14; color: #000; box-shadow: 0 0 20px #39ff14; }
 
-        /* Footer */
+        .btn-cert {
+            background: transparent; border: 2px solid #ffae00; color: #ffae00;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            font-size: 11px; padding: 12px 5px;
+        }
+        .btn-cert:hover { background: #ffae00; color: #000; box-shadow: 0 0 20px #ffae00; }
+
         .zalo-box {
             margin-top: 25px; text-align: center; font-size: 12px; color: #444;
         }
@@ -144,9 +153,15 @@
                 <div class="vip-line">HẠN DÙNG: <b id="show_expiry">-</b></div>
             </div>
             
-            <a href="shadowrocket://config/add/https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/config.conf" style="text-decoration: none;">
-                <button class="btn btn-success"><i class="fas fa-cloud-download-alt"></i> CÀI CẤU HÌNH (AUTO)</button>
-            </a>
+            <div class="download-group">
+                <a href="shadowrocket://config/add/https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/config.conf" style="text-decoration: none;">
+                    <button class="btn btn-success"><i class="fas fa-cloud-download-alt"></i> CÀI CONFIG</button>
+                </a>
+                
+                <a href="https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/Cường SeverVipAdmin.pem" download style="text-decoration: none;">
+                    <button class="btn btn-cert"><i class="fas fa-certificate"></i> TẢI CERT</button>
+                </a>
+            </div>
         </div>
 
         <div class="zalo-box">
@@ -155,11 +170,16 @@
     </div>
 
     <script>
-        // Hiệu ứng Matrix nền cho đẳng cấp
+        // MATRIX BACKGROUND
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
         const columns = canvas.width / 20;
         const drops = new Array(Math.floor(columns)).fill(1);
         function draw() {
@@ -176,109 +196,48 @@
         }
         setInterval(draw, 50);
 
-        // Logic Check UID
+        // LOGIC XỬ LÝ UID
         async function checkUID() {
             const id = document.getElementById("uid_input").value;
             const dash = document.getElementById("vip_dashboard");
             if(!id) return alert("VUI LÒNG NHẬP UID!");
 
             try {
-                // Thêm timestamp để chống cache id cũ
-                const res = await fetch('https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main/member.json?t=' + Date.now());
+                const currentRepo = "maihoangquy2003-wq/ff-neon";
+                const url = `https://raw.githubusercontent.com/${currentRepo}/main/member.json?t=${new Date().getTime()}`;
+
+                const res = await fetch(url);
+                if (!res.ok) throw new Error("Server Error");
+                
                 const data = await res.json();
                 const user = data.users[id];
 
                 if(!user) {
-                    alert("UID KHÔNG TỒN TẠI TRÊN HỆ THỐNG!");
+                    alert("UID KHÔNG TỒN TẠI!");
                     return;
                 }
 
                 if(user.status === "banned") {
-                    alert("ID CỦA BẠN ĐÃ BỊ KHÓA!");
+                    alert("ID ĐÃ BỊ KHÓA!");
                     return;
                 }
 
-                if(new Date() > new Date(user.expiry)) {
-                    alert("ID ĐÃ HẾT HẠN SỬ DỤNG!");
+                const expiryDate = new Date(user.expiry);
+                const today = new Date();
+
+                if(today > expiryDate) {
+                    alert("ID ĐÃ HẾT HẠN!");
                 } else {
                     document.getElementById("show_id").innerText = id;
                     document.getElementById("show_expiry").innerText = user.expiry;
                     dash.style.display = "block";
-                    alert("KÍCH HOẠT VIP THÀNH CÔNG!");
+                    dash.scrollIntoView({ behavior: 'smooth' });
+                    alert("XÁC MINH THÀNH CÔNG!");
                 }
             } catch(e) {
-                alert("LỖI KẾT NỐI SERVER!");
+                alert("LỖI KẾT NỐI! VUI LÒNG KIỂM TRA LẠI FILE MEMBER.JSON");
             }
         }
     </script>
 </body>
 </html>
-<script>
-    // MATRIX BACKGROUND - ĐÃ FIX MƯỢT HƠN
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const columns = canvas.width / 20;
-    const drops = new Array(Math.floor(columns)).fill(1);
-    function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#00f2ff';
-        ctx.font = '15px monospace';
-        for (let i = 0; i < drops.length; i++) {
-            const text = Math.floor(Math.random() * 2);
-            ctx.fillText(text, i * 20, drops[i] * 20);
-            if (drops[i] * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        }
-    }
-    setInterval(draw, 50);
-
-    // LOGIC XỬ LÝ - ĐÃ FIX LỖI KẾT NỐI
-    async function checkUID() {
-        const id = document.getElementById("uid_input").value;
-        const dash = document.getElementById("vip_dashboard");
-        if(!id) return alert("VUI LÒNG NHẬP UID!");
-
-        try {
-            // Tự động lấy URL chuẩn của bạn
-            const currentRepo = "maihoangquy2003-wq/ff-neon";
-            const url = `https://raw.githubusercontent.com/${currentRepo}/main/member.json?t=${new Date().getTime()}`;
-
-            const res = await fetch(url);
-            
-            if (!res.ok) throw new Error("Không tìm thấy file data");
-            
-            const data = await res.json();
-            const user = data.users[id];
-
-            if(!user) {
-                alert("UID KHÔNG TỒN TẠI TRÊN HỆ THỐNG!");
-                return;
-            }
-
-            if(user.status === "banned") {
-                alert("ID CỦA BẠN ĐÃ BỊ KHÓA!");
-                return;
-            }
-
-            const expiryDate = new Date(user.expiry);
-            const today = new Date();
-
-            if(today > expiryDate) {
-                alert("ID ĐÃ HẾT HẠN SỬ DỤNG!");
-            } else {
-                document.getElementById("show_id").innerText = id;
-                document.getElementById("show_expiry").innerText = user.expiry;
-                dash.style.display = "block";
-                // Hiệu ứng cuộn xuống bảng điều khiển
-                dash.scrollIntoView({ behavior: 'smooth' });
-                alert("XÁC MINH VIP THÀNH CÔNG!");
-            }
-        } catch(e) {
-            console.error(e);
-            alert("LỖI KẾT NỐI SERVER! (Kiểm tra lại file member.json trên GitHub)");
-        }
-    }
-</script>

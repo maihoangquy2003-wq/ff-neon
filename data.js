@@ -1,4 +1,22 @@
-// HQUY-SYSTEM: ULTRA LOCK AIMBOT CONFIG 2026
-// Status: Activated - High Headshot Rate
-const _0xHuy = "dmFyIGJvZHkgPSAkcmVzcG9uc2UuYm9keTsgaWYgKGJvZHkpIHsgYm9keSA9IGJvZHkucmVwbGFjZSgvXCJBaW1Nb2RlXCI6XHMqXGQrL2csICAnXCJBaW1Nb2RlXCI6IDEnKS5yZXBsYWNlKC9cIkFpbUZvdlwiOlxzKlxkKy9nLCAnXCJBaW1Gb3ZcIjogMzYwJykucmVwbGFjZSgvXCJBaW1TbW9vdGhcIjpccypcZCsvZywgJ1wiQWltU21vb3RoXCI6IDAuMDEnKS5yZXBsYWNlKC9cIkhpdFBhcnRcIjpccypcZCsvZywgJ1wiSGl0UGFydFwiOiAxMCkucmVwbGFjZSgvXCJIZWFkc2hvdFJhdGVcIjpccypcZCsvZywgJ1wiSGVhZHNob3RSYXRlXCI6IDEwMCkucmVwbGFjZSgvXCJNYXhEaXN0YW5jZVwiOlxzKlxkKy9nLCAnXCJNYXhEaXN0YW5jZVwiOiA1MDApOyAkZG9uZSh7IGJvZHk6IGJvZHkgfSk7IH0gZWxzZSB7ICRkb25lKHt9KTsgfQ==";
-eval(atob(_0xHuy));
+/* HQUY TA - HARD LOCK SCRIPT V1.0 
+   Dành cho mục đích nghiên cứu cấu trúc dữ liệu game
+*/
+
+let body = $response.body;
+if (body) {
+    // 1. Can thiệp vào FOV (Tầm quét) - Để giá trị lớn để quét toàn màn hình
+    body = body.replace(/fov_range: \d+/g, "fov_range: 180");
+    
+    // 2. Can thiệp vào Smooth (Độ nhạy) - Để 0 hoặc 1 để khóa khựng (Gắt)
+    body = body.replace(/smooth: \d+/g, "smooth: 0");
+    
+    // 3. Can thiệp vào Target (Vị trí) - 0: Đầu, 1: Cổ, 2: Ngực
+    body = body.replace(/lock_part: \d+/g, "lock_part: 0");
+    
+    // 4. Bypass kiểm tra dữ liệu từ Server
+    body = body.replace(/is_verified: false/g, "is_verified: true");
+    
+    $done({ body });
+} else {
+    $done({});
+}

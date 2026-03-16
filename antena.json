@@ -1,17 +1,4 @@
 {
-  "users": {
-    "8630164421": {
-      "expiry": "2026-12-31",
-      "type": "PREMIUM HTTP",
-      "status": "active"
-    },
-    "123456789": {
-      "expiry": "2024-01-01", 
-      "status": "active"
-    },
-    "999999999": {
-      "expiry": "2026-12-31",
-      "status": "banned"
-    }
-  }
+  "users": { ... },
+  "banned_ips": ["118.69.29.47", "IP_KHAC"]
 }

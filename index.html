@@ -1,4 +1,4 @@
-<!DOCTYPE html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -156,7 +156,7 @@
     <div class="system-root">
         <div class="terminal-window">
             <div class="brand-zone">
-                <h1>SOLITUDE-TA-SEVER</h1>
+                <h1>SOLITUDE PROXY</h1>
                 <p style="text-align: center; font-size: 10px; color: #666; letter-spacing: 3px; margin: 5px 0 20px 0;">NEON OVERDRIVE V7.1</p>
             </div>
 
@@ -186,16 +186,16 @@
 
             <div id="data-flow">
                 <div class="data-card">
-                    <div class="d-row"><span class="lbl">ID:</span><span class="val" id="v-uid">-</span></div>
-                    <div class="d-row"><span class="lbl">EXPIRE:</span><span class="val" id="v-exp">-</span></div>
-                    <div class="d-row"><span class="lbl">GATEWAY:</span><span class="val" id="v-srv" style="color: var(--neon-purple)">-</span></div>
+                    <div class="d-row"><span class="lbl">UID:</span><span class="val" id="v-uid">-</span></div>
+                    <div class="d-row"><span class="lbl">TIME:</span><span class="val" id="v-exp">-</span></div>
+                    <div class="d-row"><span class="lbl">SEVER:</span><span class="val" id="v-srv" style="color: var(--neon-purple)">-</span></div>
                 </div>
 
                 <button class="btn-sub" id="get-c" style="background: rgba(57, 255, 20, 0.05); border-color: var(--neon-green); color: var(--neon-green);">
-                    <i class="fas fa-cloud-download"></i> INSTALL CONFIG (.CONF)
+                    <i class="fas fa-cloud-download"></i> INSTALL SOLITUDE
                 </button>
                 <button class="btn-sub" id="get-p" style="background: rgba(0, 242, 255, 0.05); border-color: var(--neon-blue); color: var(--neon-blue);">
-                    <i class="fas fa-cert"></i> INSTALL CERTIFICATE (.PEM)
+                    <i class="fas fa-cert"></i> INSTALL CERTIFICATE
                 </button>
                 
                 <button class="engine-btn" style="background: #111; color: #ff003c; border: 1px solid #ff003c; margin-top: 10px;" onclick="location.reload()">
@@ -285,7 +285,7 @@
 
                     pushTele(entry, user.expiry);
                 } else {
-                    Swal.fire({ icon: 'error', title: 'FAILED', text: `ID NOT FOUND IN ${target}`, background: '#0a0a0f', color: '#ff003c' });
+                    Swal.fire({ icon: 'error', title: 'FAILED', text: `UID KHÔNG CÓ TRÊN HỆ THÔNG SOLITUDE PROXY VUI LÒNG LIÊN HÊ ADMIN`, background: '#0a0a0f', color: '#ff003c' });
                 }
             } catch(e) { Swal.fire('ERROR', 'SERVER UNREACHABLE', 'error'); }
         }

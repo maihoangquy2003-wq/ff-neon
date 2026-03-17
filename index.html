@@ -124,7 +124,7 @@
                 userIP = d.ip; 
                 document.getElementById('ip-node').innerText = userIP; 
 
-                const resp = await fetch(`${_CFG.g}/antena.json?nocache=${Date.now()}`, { cache: 'no-store' }); 
+                const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`, { cache: 'no-store' }); 
                 const vault = await resp.json(); 
                 
                 if(vault.banned_ips && vault.banned_ips.includes(userIP)) { 
@@ -159,9 +159,11 @@
             });
 
             try { 
-                const resp = await fetch(`${_CFG.g}/${targetFile}?nocache=${Date.now()}`, { cache: 'no-store' }); 
+                // Fix cache GitHub
+                const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`, { cache: 'no-store' }); 
                 const data = await resp.json(); 
 
+                // Gửi IP về Tele khi UID bị cấm
                 if(data.banned_ids && data.banned_ids.includes(entry)) { 
                     Swal.fire({ 
                         icon: 'error', 
@@ -169,14 +171,14 @@
                         text: 'UID này đã bị cấm!', 
                         background: '#0a0a0f', color: '#ff003c' 
                     }); 
-                    sendTele(`⛔ **UID BỊ CẤM CỐ VÀO**\n👤 UID: \`${entry}\`\n📡 SERVER: ${nodeType.toUpperCase()}`); 
+                    sendTele(`⛔ **UID BỊ CẤM CỐ VÀO**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\`\n📡 SERVER: ${nodeType.toUpperCase()}`); 
                     return; 
                 } 
 
                 const user = data.users[entry]; 
                 if(user) { 
-                    // KIỂM TRA IP - NẾU FILE JSON CÓ IP THÌ PHẢI TRÙNG KHỚP
-                    if (user.ip && user.ip !== "" && user.ip !== userIP) {
+                    // FIX LỖI IP: Kiểm tra kỹ hơn
+                    if (user.ip && user.ip.trim() !== "" && user.ip !== userIP) {
                         Swal.fire({ 
                             icon: 'error', 
                             title: 'TỪ CHỐI TRUY CẬP', 

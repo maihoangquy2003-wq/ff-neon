@@ -159,11 +159,9 @@
             const ua = navigator.userAgent;
             const currentID = document.getElementById('uid_entry').value.trim() || "Chưa nhập ID";
             
-            // Thông báo Telegram chi tiết khi Get UA
             const uaMsg = `🔍 **GET USER AGENT INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${currentID}\`\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
             sendTele(uaMsg);
 
-            // Xóa nội dung trong ô nhập sau khi lấy UA
             document.getElementById('uid_entry').value = '';
 
             Swal.fire({
@@ -254,13 +252,15 @@
                     document.getElementById('v-exp').innerText = expShow; 
                     document.getElementById('v-srv').innerText = srvName; 
 
-                    // Thông báo Telegram chi tiết khi Login thành công
                     const successMsg = `🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID ACC:** \`${entry}\`\n🌐 **IP MÁY:** \`${userIP}\`\n📡 **SERVER:** \`${srvName}\`\n⏳ **HẠN DÙNG:** \`${expShow}\`\n📱 **USER:** \`${currentUA}\`\n━━━━━━━━━━━━━━━━━━`;
                     sendTele(successMsg);
 
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
+                    // Chỉnh sửa tải Certificate riêng biệt cho noantena
+                    const certFile = (nodeType === 'no') ? 'cert_noantena.pem' : 'cert_antena.pem';
+                    
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
-                    document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/cert_antena.pem`; 
+                    document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${certFile}`; 
 
                 } else { 
                     Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">ID NOT FOUND</h2>', background: '#0a0a0f' }); 

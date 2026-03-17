@@ -1,24 +1,67 @@
 {
-  "banned_ips": [
-    "1.1.1.1",
-    "2.2.2.2"
-  ],
-  "banned_ids": [
-    "0000001",
-    "0000002"
-  ],
   "users": {
-    "8630164412": {
-      "expiry": "2026-12-30",
-      "ip": "118.69.29.47"
+    "8585961839": {
+      "expiry": "2027-12-30",
+      "ip": "118.69.29.47",
+      "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_15 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6.2 Mobile/15E148 Safari/604.1",
+      "status": "active"
     },
-    "8635678": {
-      "expiry": "2026-06-15",
-      "ip": "14.232.x.x"
+    "KHACH_SO_2": {
+      "expiry": "2026-04-15",
+      "ip": "",
+      "ua": "",
+      "status": "active"
     },
-    "8639999": {
-      "expiry": "2026-01-01",
-      "ip": ""
+    "KHACH_SO_3": {
+      "expiry": "2026-05-20",
+      "ip": "",
+      "ua": "",
+      "status": "active"
+    },
+    "KHACH_SO_4": {
+      "expiry": "2026-06-01",
+      "ip": "",
+      "ua": "",
+      "status": "active"
+    },
+    "KHACH_SO_5": {
+      "expiry": "2026-07-10",
+      "ip": "",
+      "ua": "",
+      "status": "active"
+    },
+    "KHACH_SO_6": {
+      "expiry": "2026-08-15",
+      "ip": "",
+      "ua": "",
+      "status": "active"
+    },
+    "KHACH_SO_7": {
+      "expiry": "2026-09-20",
+      "ip": "",
+      "ua": "",
+      "status": "active"
+    },
+    "KHACH_SO_8": {
+      "expiry": "2026-10-25",
+      "ip": "",
+      "ua": "",
+      "status": "active"
+    },
+    "KHACH_SO_9": {
+      "expiry": "2026-11-30",
+      "ip": "",
+      "ua": "",
+      "status": "active"
+    },
+    "KHACH_SO_10": {
+      "expiry": "2026-12-31",
+      "ip": "",
+      "ua": "",
+      "status": "active"
     }
-  }
+  },
+  "banned_ids": ["12345678", "99999999"],
+  "banned_ips": ["1.1.1.1"],
+  "banned_uas": ["Hacker-Browser-V1"]
 }

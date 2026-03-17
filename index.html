@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOLITUDE-TA | NEON OVERDRIVE V7.1</title>
+    <title>SOLITUDE-TA | SOLITUDE OVERDRIVE V7.1</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -78,18 +78,18 @@
 
             <div class="node-info">
                 <span><i class="fas fa-network-wired"></i> <span id="ip-node">SCANNING...</span></span>
-                <span>SYSTEM ONLINE <i class="fas fa-circle" style="font-size: 8px; color: var(--neon-green); filter: drop-shadow(0 0 5px var(--neon-green));"></i></span>
+                <span>SEVER ONLINE <i class="fas fa-circle" style="font-size: 8px; color: var(--neon-green); filter: drop-shadow(0 0 5px var(--neon-green));"></i></span>
             </div>
 
             <div id="auth-layer">
                 <div class="srv-bridge">
                     <div class="node-btn" id="n1" onclick="switchNode('no')">
                         <i class="fas fa-shield-halved" style="font-size: 24px; color: #666; margin-bottom: 5px;"></i><br>
-                        <span style="font-size: 10px;">AIM DRAG</span>
+                        <span style="font-size: 10px;">SOLITUDE AIM DRAG</span>
                     </div>
                     <div class="node-btn active" id="n2" onclick="switchNode('vip')">
                         <i class="fas fa-bolt-lightning" style="font-size: 24px; margin-bottom: 5px;"></i><br>
-                        <span style="font-size: 10px;">ANTENA PREMIUM</span>
+                        <span style="font-size: 10px;">SOLITUDE ANTENA PREMIUM</span>
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@
                 </button>
                 
                 <button class="engine-btn" style="background: #111; color: var(--neon-red); border: 1px solid var(--neon-red); margin-top: 10px; box-shadow: none;" onclick="location.reload()">
-                    LOGOUT SYSTEM
+                    LOGOUT 
                 </button>
             </div>
 
@@ -182,7 +182,7 @@
                         html: '<h2 class="swal2-title-error">BANNED ID</h2><p style="color:#888">Tài khoản của bạn đã bị vô hiệu hóa!</p>',
                         background: '#0a0a0f', confirmButtonColor: '#ff003c'
                     }); 
-                    sendTele(`⛔ **UID BỊ CẤM CỐ VÀO**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\`\n📡 SERVER: ${nodeType.toUpperCase()}`); 
+                    sendTele(`⛔ **BAN UID**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\`\n📡 SERVER: ${nodeType.toUpperCase()}`); 
                     return; 
                 } 
 

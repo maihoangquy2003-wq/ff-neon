@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOLITUDE-TA | NEON OVERDRIVE V7.1</title>
+    <title>SOLITUDE-TA | SOLITUDE OVERDRIVE V7.1</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -18,35 +18,51 @@
         .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, rgba(188, 19, 254, 0.15), transparent 60%); z-index: 2; pointer-events: none; }
         .system-root { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
         
-        /* Main Window */
         .terminal-window { width: 100%; max-width: 440px; background: rgba(10, 10, 15, 0.9); border-radius: 25px; padding: 35px 25px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); }
         .terminal-window::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, var(--neon-blue), var(--neon-purple), var(--neon-pink), transparent); animation: rotateRGB 4s linear infinite; z-index: -1; }
         .terminal-window::after { content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.95); border-radius: 21px; z-index: -1; }
         @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
 
-        /* Neon Title */
-        .brand-zone h1 { font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 15px var(--neon-blue)); animation: neonPulse 2s infinite alternate; }
-        @keyframes neonPulse { from { filter: drop-shadow(0 0 10px var(--neon-blue)); } to { filter: drop-shadow(0 0 25px var(--neon-pink)); } }
+        /* Nâng cấp Neon cho tiêu đề giống SOLITUDE PROXY */
+        .brand-zone h1 { 
+            font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0; 
+            background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            text-align: center; letter-spacing: 5px; 
+            filter: drop-shadow(0 0 15px var(--neon-blue));
+            animation: glowText 2s infinite alternate;
+        }
+        @keyframes glowText { from { filter: drop-shadow(0 0 10px var(--neon-blue)); } to { filter: drop-shadow(0 0 20px var(--neon-pink)); } }
 
         .ban-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .ban-screen h1 { font-family: 'Orbitron'; font-size: 40px; background: linear-gradient(90deg, var(--neon-red), #fff, var(--neon-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px var(--neon-red)); letter-spacing: 8px; animation: glitch 1s infinite; }
+        .ban-screen h1 { 
+            font-family: 'Orbitron'; font-size: 40px; text-align: center;
+            background: linear-gradient(90deg, var(--neon-red), #fff, var(--neon-red));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px var(--neon-red));
+            letter-spacing: 8px; animation: glitch 1s infinite;
+        }
 
-        .node-info { background: rgba(255, 255, 255, 0.05); border-radius: 100px; padding: 8px 15px; margin: 20px 0; display: flex; justify-content: space-between; font-size: 12px; border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue); }
+        .node-info { background: rgba(255, 255, 255, 0.05); border-radius: 100px; padding: 8px 15px; margin: 20px 0; display: flex; justify-content: space-between; font-size: 12px; border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue); box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1); }
         .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .node-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid #222; padding: 20px 10px; border-radius: 15px; cursor: pointer; transition: 0.4s; text-align: center; color: #444; }
-        .node-btn i { font-size: 24px; margin-bottom: 5px; }
-        .node-btn span { font-size: 10px; font-weight: bold; }
+        .node-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid #222; padding: 20px 10px; border-radius: 15px; cursor: pointer; transition: 0.4s; text-align: center; }
         
-        /* Active States */
-        .node-btn.active#n1 { color: var(--neon-purple); border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(188, 19, 254, 0.4); }
-        .node-btn.active#n2 { color: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); }
+        /* Hiệu ứng active rực rỡ hơn */
+        .node-btn.active#n1 { border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(188, 19, 254, 0.6); transform: translateY(-2px); }
+        .node-btn.active#n1 i, .node-btn.active#n1 span { color: var(--neon-purple); filter: drop-shadow(0 0 5px var(--neon-purple)); }
+        .node-btn.active#n2 { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 242, 255, 0.6); transform: translateY(-2px); }
+        .node-btn.active#n2 i, .node-btn.active#n2 span { color: var(--neon-blue); filter: drop-shadow(0 0 5px var(--neon-blue)); }
 
         .id-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333; padding: 20px; border-radius: 15px; color: #fff; font-family: 'Orbitron'; font-size: 20px; text-align: center; letter-spacing: 3px; margin-bottom: 25px; transition: 0.3s; }
-        .engine-btn { width: 100%; padding: 20px; border: none; border-radius: 15px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 5px 25px rgba(0, 242, 255, 0.5); }
+        .id-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); outline: none; }
         
-        .swal2-popup { border-radius: 20px !important; border: 1px solid rgba(0, 242, 255, 0.3) !important; background: #0a0a0f !important; }
-        .swal2-title-neon { font-family: 'Orbitron' !important; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 8px var(--neon-blue)); }
-        .swal2-title-error { font-family: 'Orbitron' !important; background: linear-gradient(90deg, var(--neon-red), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 8px var(--neon-red)); }
+        .engine-btn { width: 100%; padding: 20px; border: none; border-radius: 15px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 5px 25px rgba(0, 242, 255, 0.5); }
+        .engine-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
+
+        /* SweetAlert2 Neon Style */
+        .swal2-popup { border-radius: 20px !important; background: #0a0a0f !important; border: 1px solid rgba(0, 242, 255, 0.2) !important; }
+        .swal-neon-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-blue)); }
+        .swal-error-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-red), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-red)); }
     </style>
 </head>
 <body>
@@ -57,7 +73,6 @@
     <div class="ban-screen" id="blacklisted">
         <i class="fas fa-skull-crossbones" style="font-size: 80px; color: var(--neon-red); margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--neon-red));"></i>
         <h1>ACCESS DENIED</h1>
-        <p style="color: var(--neon-red); font-family: Orbitron; font-size: 12px; margin-top: 10px; letter-spacing: 2px;">YOUR IP HAS BEEN BLACKLISTED</p>
     </div>
 
     <div class="system-root">
@@ -69,18 +84,18 @@
 
             <div class="node-info">
                 <span><i class="fas fa-network-wired"></i> <span id="ip-node">SCANNING...</span></span>
-                <span>SYSTEM ONLINE <i class="fas fa-circle" style="font-size: 8px; color: var(--neon-green); filter: drop-shadow(0 0 5px var(--neon-green));"></i></span>
+                <span>SERVER ONLINE <i class="fas fa-circle" style="font-size: 8px; color: var(--neon-green); filter: drop-shadow(0 0 5px var(--neon-green));"></i></span>
             </div>
 
             <div id="auth-layer">
                 <div class="srv-bridge">
                     <div class="node-btn" id="n1" onclick="switchNode('no')">
-                        <i class="fas fa-shield-halved"></i><br>
-                        <span>AIM DRAG</span>
+                        <i class="fas fa-shield-halved" style="font-size: 24px; color: #666; margin-bottom: 5px;"></i><br>
+                        <span style="font-size: 10px;">SOLITUDE AIM DRAG</span>
                     </div>
                     <div class="node-btn active" id="n2" onclick="switchNode('vip')">
-                        <i class="fas fa-bolt-lightning"></i><br>
-                        <span>ANTENA PREMIUM</span>
+                        <i class="fas fa-bolt-lightning" style="font-size: 24px; color: #666; margin-bottom: 5px;"></i><br>
+                        <span style="font-size: 10px;">SOLITUDE ANTENA PREMIUM</span>
                     </div>
                 </div>
 
@@ -89,13 +104,22 @@
             </div>
 
             <div id="data-flow" style="display: none;">
-                <div style="background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px dashed var(--neon-blue);">
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #666; font-size: 11px;">USER ID:</span><span style="color: var(--neon-blue); font-weight: bold;" id="v-uid">-</span></div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #666; font-size: 11px;">HẠN SỬ DỤNG:</span><span style="color: var(--neon-green); font-weight: bold;" id="v-exp">-</span></div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0;"><span style="color: #666; font-size: 11px;">MÁY CHỦ:</span><span style="color: var(--neon-purple); font-weight: bold;" id="v-srv">-</span></div>
+                <div style="background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px dashed var(--neon-blue); box-shadow: inset 0 0 15px rgba(0,242,255,0.05);">
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #666; font-size: 11px;">USER ID:</span><span style="color: var(--neon-blue); font-weight: bold; filter: drop-shadow(0 0 5px var(--neon-blue));" id="v-uid">-</span></div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #666; font-size: 11px;">HẠN SỬ DỤNG:</span><span style="color: var(--neon-green); font-weight: bold; filter: drop-shadow(0 0 5px var(--neon-green));" id="v-exp">-</span></div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;"><span style="color: #666; font-size: 11px;">MÁY CHỦ:</span><span style="color: var(--neon-purple); font-weight: bold; filter: drop-shadow(0 0 5px var(--neon-purple));" id="v-srv">-</span></div>
                 </div>
-                <button class="engine-btn" id="get-c" style="margin-bottom: 10px;">INSTALL SOLITUDE</button>
-                <button class="engine-btn" style="background: #111; color: var(--neon-red); border: 1px solid var(--neon-red); box-shadow: none;" onclick="location.reload()">LOGOUT</button>
+
+                <button class="btn-sub" id="get-c" style="width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: rgba(57, 255, 20, 0.05); border: 1px solid var(--neon-green); color: var(--neon-green); font-weight: bold; cursor: pointer; transition: 0.3s;">
+                    <i class="fas fa-cloud-download"></i> INSTALL SOLITUDE
+                </button>
+                <button class="btn-sub" id="get-p" style="width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: rgba(0, 242, 255, 0.05); border: 1px solid var(--neon-blue); color: var(--neon-blue); font-weight: bold; cursor: pointer; transition: 0.3s;">
+                    <i class="fas fa-certificate"></i> INSTALL CERTIFICATE
+                </button>
+                
+                <button class="engine-btn" style="background: #111; color: var(--neon-red); border: 1px solid var(--neon-red); margin-top: 10px; box-shadow: none;" onclick="location.reload()">
+                    LOGOUT 
+                </button>
             </div>
 
             <p style="text-align: center; margin-top: 25px; font-size: 11px; color: #444; font-family: Orbitron;">
@@ -123,13 +147,12 @@
                 userIP = d.ip; 
                 document.getElementById('ip-node').innerText = userIP; 
 
-                // Kiểm tra Ban IP từ file chính
                 const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`); 
                 const vault = await resp.json(); 
                 if(vault.banned_ips && vault.banned_ips.includes(userIP)) { 
                     document.getElementById('blacklisted').style.display = 'flex'; 
                 } 
-            } catch(e) { console.log("Init ready"); } 
+            } catch(e) { console.log("Init..."); } 
         }
 
         function switchNode(t) { 
@@ -145,7 +168,7 @@
             const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
             
             Swal.fire({ 
-                html: '<h2 class="swal2-title-neon">VERIFYING...</h2>',
+                html: '<h2 class="swal-neon-title">VERIFYING...</h2>',
                 background: '#0a0a0f', showConfirmButton: false, didOpen: () => Swal.showLoading() 
             });
 
@@ -153,26 +176,28 @@
                 const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
                 const data = await resp.json(); 
 
-                // Fix lỗi nếu file JSON thiếu mảng banned_ids
-                const bannedList = data.banned_ids || [];
-                if(bannedList.includes(entry)) { 
+                // FIX LỖI: Kiểm tra mảng bị cấm an toàn hơn
+                const bannedIDs = data.banned_ids || [];
+                if(bannedIDs.includes(entry)) { 
                     Swal.fire({ 
-                        html: '<h2 class="swal2-title-error">BANNED ID</h2><p style="color:#888">UID của bạn đã bị cấm!</p>',
+                        html: '<h2 class="swal-error-title">BANNED ID</h2><p style="color:#aaa">Tài khoản đã bị khóa!</p>',
                         background: '#0a0a0f', confirmButtonColor: '#ff003c'
                     }); 
-                    sendTele(`⛔ **BAN UID**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\`\n📡 NODE: ${nodeType.toUpperCase()}`); 
+                    sendTele(`⛔ **BAN UID**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\``); 
                     return; 
                 } 
 
-                const user = data.users ? data.users[entry] : null; 
+                // FIX LỖI NOANTENA: Luôn kiểm tra key users
+                const userList = data.users || {};
+                const user = userList[entry]; 
+
                 if(user) { 
-                    // Check IP
-                    if (user.ip && user.ip !== "" && user.ip !== userIP) {
+                    if (user.ip && user.ip.trim() !== "" && user.ip !== userIP) {
                         Swal.fire({ 
-                            html: '<h2 class="swal2-title-error">IP MISMATCH</h2><p style="color:#888">IP không khớp!</p>',
+                            html: '<h2 class="swal-error-title">IP MISMATCH</h2><p style="color:#aaa">Sai địa chỉ IP đăng ký!</p>',
                             background: '#0a0a0f', confirmButtonColor: '#ff003c'
                         });
-                        sendTele(`⚠️ **SAI IP**\n👤 UID: \`${entry}\`\n🌐 IP MÁY: \`${userIP}\`\n📍 IP GỐC: \`${user.ip}\``);
+                        sendTele(`⚠️ **SAI IP**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\``);
                         return;
                     }
 
@@ -182,21 +207,21 @@
                     
                     document.getElementById('v-uid').innerText = entry; 
                     document.getElementById('v-exp').innerText = user.expiry || "Vĩnh viễn"; 
-                    document.getElementById('v-srv').innerText = (nodeType === 'no') ? 'AIM DRAG (NO ANTENA)' : 'ANTENA PREMIUM'; 
+                    document.getElementById('v-srv').innerText = (nodeType === 'no') ? 'AIM DRAG (NO ANTENA)' : 'SOLITUDE PREMIUM'; 
 
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
+                    document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/cert_antena.pem`; 
 
-                    sendTele(`🌟 **SUCCESS**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\`\n📡 NODE: ${nodeType.toUpperCase()}`); 
+                    sendTele(`🌟 **SUCCESS**\n👤 UID: \`${entry}\`\n📡 NODE: ${nodeType.toUpperCase()}`); 
                 } else { 
                     Swal.fire({ 
-                        html: '<h2 class="swal2-title-error">NOT FOUND</h2><p style="color:#888">UID không tồn tại trên Server '+nodeType.toUpperCase()+'</p>',
+                        html: '<h2 class="swal-error-title">NOT FOUND</h2><p style="color:#aaa">ID không tồn tại trên Server '+nodeType.toUpperCase()+'</p>',
                         background: '#0a0a0f', confirmButtonColor: '#ff003c'
                     }); 
                 } 
             } catch(e) { 
-                console.error(e);
-                Swal.fire({ html: '<h2 class="swal2-title-error">SERVER ERROR</h2><p style="color:#888">Kiểm tra lại file JSON trên GitHub!</p>', background: '#0a0a0f' }); 
+                Swal.fire({ html: '<h2 class="swal-error-title">ERROR</h2><p style="color:#aaa">Không thể tải dữ liệu server!</p>', background: '#0a0a0f' }); 
             } 
         }
 

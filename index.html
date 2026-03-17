@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -59,6 +59,10 @@
         .engine-btn { width: 100%; padding: 20px; border: none; border-radius: 15px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 5px 25px rgba(0, 242, 255, 0.5); }
         .engine-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
 
+        /* Nút Get User Agent mới */
+        .ua-btn { width: 100%; padding: 10px; border: 1px dashed var(--neon-pink); border-radius: 10px; font-family: 'Orbitron'; font-size: 10px; cursor: pointer; background: rgba(255, 0, 255, 0.05); color: var(--neon-pink); text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; margin-bottom: 10px; }
+        .ua-btn:hover { background: rgba(255, 0, 255, 0.15); box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
+
         /* SweetAlert2 Neon Style */
         .swal2-popup { border-radius: 20px !important; background: #0a0a0f !important; border: 1px solid rgba(0, 242, 255, 0.2) !important; }
         .swal-neon-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-blue)); }
@@ -98,6 +102,10 @@
                         <span style="font-size: 10px;">SOLITUDE ANTENA PREMIUM</span>
                     </div>
                 </div>
+
+                <button class="ua-btn" onclick="getUserAgent()">
+                    <i class="fas fa-fingerprint"></i> GET DEVICE USER AGENT
+                </button>
 
                 <input type="text" id="uid_entry" class="id-input" placeholder="ENTER UID">
                 <button class="engine-btn" onclick="startInjection()">VERIFY ACCESS</button>
@@ -140,6 +148,18 @@
 
         particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": ["#00f2ff", "#ff00ff"] }, "shape": { "type": "circle" }, "opacity": { "value": 0.4 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 2 } } });
 
+        // HÀM LẤY USER AGENT MỚI THÊM
+        function getUserAgent() {
+            const ua = navigator.userAgent;
+            document.getElementById('uid_entry').value = ua;
+            Swal.fire({
+                html: '<h2 class="swal-neon-title">USER AGENT COPIED</h2><p style="color:#aaa; font-size:12px; word-break:break-all;">' + ua + '</p>',
+                background: '#0a0a0f',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+
         async function init() { 
             try { 
                 const r = await fetch('https://api.ipify.org?format=json'); 
@@ -176,7 +196,6 @@
                 const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
                 const data = await resp.json(); 
 
-                // FIX LỖI: Kiểm tra mảng bị cấm an toàn hơn
                 const bannedIDs = data.banned_ids || [];
                 if(bannedIDs.includes(entry)) { 
                     Swal.fire({ 
@@ -187,7 +206,6 @@
                     return; 
                 } 
 
-                // FIX LỖI NOANTENA: Luôn kiểm tra key users
                 const userList = data.users || {};
                 const user = userList[entry]; 
 

@@ -191,7 +191,7 @@
 
                     // Cài đặt file tương ứng server
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
-                    const cert = (nodeType === 'no') ? 'cert_noantena.pem' : 'cert_antena.pem'; 
+                    const cert = (nodeType === 'no') ? 'cert_antena.pem' : 'cert_antena.pem'; 
                     
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
                     document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${cert}`; 

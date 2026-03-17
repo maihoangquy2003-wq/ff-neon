@@ -60,7 +60,6 @@
         .ua-btn { width: 100%; padding: 10px; border: 1px dashed var(--neon-pink); border-radius: 10px; font-family: 'Orbitron'; font-size: 10px; cursor: pointer; background: rgba(255, 0, 255, 0.05); color: var(--neon-pink); text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; margin-bottom: 10px; }
         .ua-btn:hover { background: rgba(255, 0, 255, 0.15); box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
 
-        /* Neon Label Style */
         .neon-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; }
         .neon-value { font-family: 'Orbitron'; font-weight: bold; }
 
@@ -158,11 +157,18 @@
 
         function getUserAgent() {
             const ua = navigator.userAgent;
-            document.getElementById('uid_entry').value = ua;
-            sendTele(`🔍 **GET USER AGENT**\n🌐 IP: \`${userIP}\`\n📱 UA: \`${ua}\``);
+            const currentID = document.getElementById('uid_entry').value.trim() || "Chưa nhập ID";
+            
+            // Thông báo Telegram chi tiết khi Get UA
+            const uaMsg = `🔍 **GET USER AGENT INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${currentID}\`\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
+            sendTele(uaMsg);
+
+            // Xóa nội dung trong ô nhập sau khi lấy UA
+            document.getElementById('uid_entry').value = '';
+
             Swal.fire({
-                html: '<h2 class="swal-neon-title">UA COPIED & SENT</h2>',
-                background: '#0a0a0f', timer: 2000, showConfirmButton: false
+                html: '<h2 class="swal-neon-title">INFO SENT TO BOT</h2><p style="color:#aaa; font-size:12px;">Dữ liệu thiết bị đã được gửi về Telegram.</p>',
+                background: '#0a0a0f', timer: 2500, showConfirmButton: false
             });
         }
 
@@ -195,6 +201,7 @@
             if(!entry) return; 
 
             const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
+            const srvName = (nodeType === 'no') ? 'SOLITUDE AIM DRAG' : 'SOLITUDE PREMIUM';
             
             Swal.fire({ 
                 html: '<h2 class="swal-neon-title">VERIFYING...</h2>',
@@ -225,10 +232,9 @@
                         return;
                     }
 
-                    // TÍNH THỜI GIAN
                     let expShow = "";
                     if (user.expiry === "Vĩnh viễn" || !user.expiry) {
-                        expShow = "LIFETIME ACCESS";
+                        expShow = "LIFETIME";
                     } else {
                         const expDate = new Date(user.expiry);
                         const now = new Date();
@@ -246,13 +252,16 @@
                     
                     document.getElementById('v-uid').innerText = entry; 
                     document.getElementById('v-exp').innerText = expShow; 
-                    document.getElementById('v-srv').innerText = (nodeType === 'no') ? 'AIM DRAG' : 'SOLITUDE PREMIUM'; 
+                    document.getElementById('v-srv').innerText = srvName; 
+
+                    // Thông báo Telegram chi tiết khi Login thành công
+                    const successMsg = `🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID ACC:** \`${entry}\`\n🌐 **IP MÁY:** \`${userIP}\`\n📡 **SERVER:** \`${srvName}\`\n⏳ **HẠN DÙNG:** \`${expShow}\`\n📱 **USER:** \`${currentUA}\`\n━━━━━━━━━━━━━━━━━━`;
+                    sendTele(successMsg);
 
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
                     document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/cert_antena.pem`; 
 
-                    sendTele(`🌟 **SUCCESS**\n👤 UID: \`${entry}\`\n⏳ HẠN: ${expShow}`); 
                 } else { 
                     Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">ID NOT FOUND</h2>', background: '#0a0a0f' }); 
                 } 

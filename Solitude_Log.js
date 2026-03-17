@@ -1,23 +1,31 @@
 /*
- * Script: Solitude Auto-Sniffer
- * Chức năng: Quét UID từ gói tin Garena/MSDK
+ * SOLITUDE AUTO-ID EXTRACTOR
+ * Tự động săn UID từ Access Token và Header
  */
 
 const url = $request.url;
-const method = $request.method;
+const header = JSON.stringify($request.headers);
 const body = $request.body;
 
-if (body) {
-    // In dữ liệu ra mục Nhật ký (Data -> Logging)
-    console.log("---------- [SOLITUDE LOG] ----------");
-    console.log("URL: " + url);
-    console.log("Method: " + method);
-    console.log("Dữ liệu Body: " + body);
-    
-    // Nếu phát hiện UID 8630164412 hoặc từ khóa liên quan
-    if (body.indexOf("8630164412") !== -1 || body.indexOf("uid") !== -1 || body.indexOf("open_id") !== -1) {
-        $notification.post("Solitude Proxy", "🎯 ĐÃ TÌM THẤY UID!", "Nhấn vào Nhật ký để copy nội dung Body.");
-    }
+// Hàm tìm dãy số UID (thường 10 chữ số)
+function findUID(text) {
+    if (!text) return null;
+    let match = text.match(/\b\d{10}\b/g); // Tìm số có 10 chữ số
+    return match ? match[0] : null;
 }
 
-$done({body});
+let uid = findUID(url) || findUID(body) || findUID(header);
+
+if (uid || url.indexOf("access_token") !== -1) {
+    // Nếu tìm thấy số giống UID hoặc thấy Token đi qua
+    $notification.post("🎯 SOLITUDE CATCHER", "Phát hiện gói tin quan trọng!", "UID dự đoán: " + (uid || "Đang lấy từ Token..."));
+    
+    // Log chi tiết vào tab Data để bạn copy một lần là xong
+    console.log("---------- [SOLITUDE DATA] ----------");
+    console.log("URL: " + url);
+    if (uid) console.log("FOUND UID: " + uid);
+    console.log("TOKEN: " + (url.split('access_token=')[1] || "Không có"));
+    console.log("-------------------------------------");
+}
+
+$done({});

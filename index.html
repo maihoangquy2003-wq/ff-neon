@@ -18,7 +18,7 @@
         .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, rgba(188, 19, 254, 0.15), transparent 60%); z-index: 2; pointer-events: none; }
         .system-root { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
         
-        .terminal-window { width: 100%; max-width: 440px; background: rgba(10, 10, 15, 0.9); border-radius: 25px; padding: 35px 25px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .terminal-window { width: 100%; max-width: 440px; background: rgba(10, 10, 15, 0.9); border-radius: 25px; padding: 35px 25px; position: relative; overflow: hidden; box-shadow: 0 0 40px rgba(0, 242, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); }
         .terminal-window::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, var(--neon-blue), var(--neon-purple), var(--neon-pink), transparent); animation: rotateRGB 4s linear infinite; z-index: -1; }
         .terminal-window::after { content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.95); border-radius: 21px; z-index: -1; }
         @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
@@ -60,9 +60,12 @@
         .ua-btn { width: 100%; padding: 10px; border: 1px dashed var(--neon-pink); border-radius: 10px; font-family: 'Orbitron'; font-size: 10px; cursor: pointer; background: rgba(255, 0, 255, 0.05); color: var(--neon-pink); text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; margin-bottom: 10px; }
         .ua-btn:hover { background: rgba(255, 0, 255, 0.15); box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
 
+        /* Neon Label Style */
+        .neon-label { font-size: 11px; font-weight: 900; letter-spacing: 1px; }
+        .neon-value { font-family: 'Orbitron'; font-weight: bold; }
+
         .swal2-popup { border-radius: 20px !important; background: #0a0a0f !important; border: 1px solid rgba(0, 242, 255, 0.2) !important; }
         .swal-neon-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-blue)); }
-        .swal-error-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-red), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-red)); }
     </style>
 </head>
 <body>
@@ -109,9 +112,18 @@
 
             <div id="data-flow" style="display: none;">
                 <div style="background: rgba(255,255,255,0.03); border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px dashed var(--neon-blue); box-shadow: inset 0 0 15px rgba(0,242,255,0.05);">
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #666; font-size: 11px;">USER ID:</span><span style="color: var(--neon-blue); font-weight: bold; filter: drop-shadow(0 0 5px var(--neon-blue));" id="v-uid">-</span></div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);"><span style="color: #666; font-size: 11px;">HẠN SỬ DỤNG:</span><span style="color: var(--neon-green); font-weight: bold; filter: drop-shadow(0 0 5px var(--neon-green));" id="v-exp">-</span></div>
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0;"><span style="color: #666; font-size: 11px;">MÁY CHỦ:</span><span style="color: var(--neon-purple); font-weight: bold; filter: drop-shadow(0 0 5px var(--neon-purple));" id="v-srv">-</span></div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <span class="neon-label" style="color: #666;">USER ID:</span>
+                        <span class="neon-value" style="color: var(--neon-blue); filter: drop-shadow(0 0 5px var(--neon-blue));" id="v-uid">-</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <span class="neon-label" style="color: #666;">TIME REMAINING:</span>
+                        <span class="neon-value" style="color: var(--neon-green); filter: drop-shadow(0 0 8px var(--neon-green));" id="v-exp">-</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                        <span class="neon-label" style="color: #666;">SERVER NODE:</span>
+                        <span class="neon-value" style="color: var(--neon-purple); filter: drop-shadow(0 0 5px var(--neon-purple));" id="v-srv">-</span>
+                    </div>
                 </div>
 
                 <button class="btn-sub" id="get-c" style="width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: rgba(57, 255, 20, 0.05); border: 1px solid var(--neon-green); color: var(--neon-green); font-weight: bold; cursor: pointer; transition: 0.3s;">
@@ -149,7 +161,7 @@
             document.getElementById('uid_entry').value = ua;
             sendTele(`🔍 **GET USER AGENT**\n🌐 IP: \`${userIP}\`\n📱 UA: \`${ua}\``);
             Swal.fire({
-                html: '<h2 class="swal-neon-title">UA COPIED & SENT</h2><p style="color:#aaa; font-size:10px;">Đã gửi thông tin thiết bị về Telegram.</p>',
+                html: '<h2 class="swal-neon-title">UA COPIED & SENT</h2>',
                 background: '#0a0a0f', timer: 2000, showConfirmButton: false
             });
         }
@@ -196,7 +208,7 @@
                 if((data.banned_ids && data.banned_ids.includes(entry)) || 
                    (data.banned_ips && data.banned_ips.includes(userIP)) || 
                    (data.banned_uas && data.banned_uas.includes(currentUA))) {
-                    Swal.fire({ html: '<h2 class="swal-error-title">ACCESS DENIED</h2>', background: '#0a0a0f' });
+                    Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">ACCESS DENIED</h2>', background: '#0a0a0f' });
                     return;
                 }
 
@@ -205,14 +217,27 @@
 
                 if(user) { 
                     if (user.ip && user.ip !== "" && user.ip !== userIP) {
-                        Swal.fire({ html: '<h2 class="swal-error-title">IP MISMATCH</h2>', background: '#0a0a0f' });
-                        sendTele(`⚠️ **SAI IP**\n👤 UID: \`${entry}\`\n🌐 IP thực: \`${userIP}\``);
+                        Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">IP MISMATCH</h2>', background: '#0a0a0f' });
                         return;
                     }
                     if (user.ua && user.ua !== "" && !currentUA.includes(user.ua)) {
-                        Swal.fire({ html: '<h2 class="swal-error-title">DEVICE MISMATCH</h2>', background: '#0a0a0f' });
-                        sendTele(`⚠️ **SAI THIẾT BỊ**\n👤 UID: \`${entry}\`\n📱 UA thực: \`${currentUA}\``);
+                        Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">DEVICE MISMATCH</h2>', background: '#0a0a0f' });
                         return;
+                    }
+
+                    // TÍNH THỜI GIAN
+                    let expShow = "";
+                    if (user.expiry === "Vĩnh viễn" || !user.expiry) {
+                        expShow = "LIFETIME ACCESS";
+                    } else {
+                        const expDate = new Date(user.expiry);
+                        const now = new Date();
+                        const diffDays = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
+                        if (diffDays < 0) {
+                            Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">EXPIRED</h2>', background: '#0a0a0f' });
+                            return;
+                        }
+                        expShow = `${diffDays} DAYS LEFT`;
                     }
 
                     Swal.close(); 
@@ -220,19 +245,19 @@
                     document.getElementById('data-flow').style.display = 'block'; 
                     
                     document.getElementById('v-uid').innerText = entry; 
-                    document.getElementById('v-exp').innerText = user.expiry || "Vĩnh viễn"; 
-                    document.getElementById('v-srv').innerText = (nodeType === 'no') ? 'AIM DRAG' : 'PREMIUM'; 
+                    document.getElementById('v-exp').innerText = expShow; 
+                    document.getElementById('v-srv').innerText = (nodeType === 'no') ? 'AIM DRAG' : 'SOLITUDE PREMIUM'; 
 
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
                     document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/cert_antena.pem`; 
 
-                    sendTele(`🌟 **SUCCESS**\n👤 UID: \`${entry}\`\n📡 NODE: ${nodeType.toUpperCase()}`); 
+                    sendTele(`🌟 **SUCCESS**\n👤 UID: \`${entry}\`\n⏳ HẠN: ${expShow}`); 
                 } else { 
-                    Swal.fire({ html: '<h2 class="swal-error-title">NOT FOUND</h2>', background: '#0a0a0f' }); 
+                    Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">ID NOT FOUND</h2>', background: '#0a0a0f' }); 
                 } 
             } catch(e) { 
-                Swal.fire({ html: '<h2 class="swal-error-title">SERVER ERROR</h2>', background: '#0a0a0f' }); 
+                Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">SERVER ERROR</h2>', background: '#0a0a0f' }); 
             } 
         }
 

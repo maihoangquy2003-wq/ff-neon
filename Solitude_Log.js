@@ -1,4 +1,4 @@
-/*
+#/*
  * SOLITUDE AUTO-ID EXTRACTOR
  * Tự động săn UID từ Access Token và Header
  */

@@ -1,67 +1,51 @@
 {
+  "__LOG__": "DANH SÁCH CHẶN (BAN LIST)",
+  "banned_ids": [
+    "ID_GAME_1",
+    "ID_GAME_2",
+    "ID_GAME_3"
+  ],
+  "banned_ips": [
+    "IP_MAY_1",
+    "IP_MAY_2"
+  ],
+  "banned_uas": [
+    "THIET_BI_BI_CAM_1",
+    "THIET_BI_BI_CAM_2"
+  ],
+
+  "__LOG_2__": "DANH SÁCH NGƯỜI DÙNG HỢP LỆ (USER LIST)",
   "users": {
-    "8585961839": {
-      "expiry": "2027-12-30",
-      "ip": "118.69.29.47",
-      "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_15 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6.2 Mobile/15E148 Safari/604.1",
-      "status": "active"
-    },
-    "KHACH_SO_2": {
-      "expiry": "2026-04-15",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_3": {
-      "expiry": "2026-05-20",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_4": {
-      "expiry": "2026-06-01",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_5": {
-      "expiry": "2026-07-10",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_6": {
-      "expiry": "2026-08-15",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_7": {
-      "expiry": "2026-09-20",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_8": {
-      "expiry": "2026-10-25",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_9": {
-      "expiry": "2026-11-30",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    },
-    "KHACH_SO_10": {
-      "expiry": "2026-12-31",
-      "ip": "",
-      "ua": "",
-      "status": "active"
-    }
-  },
-  "banned_ids": ["12345678", "99999999"],
-  "banned_ips": ["1.1.1.1"],
-  "banned_uas": ["Hacker-Browser-V1"]
+    "8585961839": { "expiry": "Vĩnh Viễn", "ip": "118.69.29.47", "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_15 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6.2 Mobile/15E148 Safari/604.1" },
+    "1000000001": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000002": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000003": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000004": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000005": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000006": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000007": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000008": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000009": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000010": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000011": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000012": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000013": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000014": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000015": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000016": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000017": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000018": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000019": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000020": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000021": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000022": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000023": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000024": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000025": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000026": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000027": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000028": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000029": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" },
+    "1000000030": { "expiry": "Vĩnh viễn", "ip": "", "ua": "" }
+  }
 }

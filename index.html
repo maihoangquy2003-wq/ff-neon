@@ -23,7 +23,6 @@
         .terminal-window::after { content: ''; position: absolute; inset: 4px; background: rgba(10, 10, 15, 0.95); border-radius: 21px; z-index: -1; }
         @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
 
-        /* Nâng cấp Neon cho tiêu đề giống SOLITUDE PROXY */
         .brand-zone h1 { 
             font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0; 
             background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); 
@@ -47,7 +46,6 @@
         .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .node-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid #222; padding: 20px 10px; border-radius: 15px; cursor: pointer; transition: 0.4s; text-align: center; }
         
-        /* Hiệu ứng active rực rỡ hơn */
         .node-btn.active#n1 { border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(188, 19, 254, 0.6); transform: translateY(-2px); }
         .node-btn.active#n1 i, .node-btn.active#n1 span { color: var(--neon-purple); filter: drop-shadow(0 0 5px var(--neon-purple)); }
         .node-btn.active#n2 { border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 242, 255, 0.6); transform: translateY(-2px); }
@@ -59,11 +57,9 @@
         .engine-btn { width: 100%; padding: 20px; border: none; border-radius: 15px; font-family: 'Orbitron'; font-weight: 900; cursor: pointer; background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); color: #000; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; box-shadow: 0 5px 25px rgba(0, 242, 255, 0.5); }
         .engine-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
 
-        /* Nút Get User Agent mới */
         .ua-btn { width: 100%; padding: 10px; border: 1px dashed var(--neon-pink); border-radius: 10px; font-family: 'Orbitron'; font-size: 10px; cursor: pointer; background: rgba(255, 0, 255, 0.05); color: var(--neon-pink); text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; margin-bottom: 10px; }
         .ua-btn:hover { background: rgba(255, 0, 255, 0.15); box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
 
-        /* SweetAlert2 Neon Style */
         .swal2-popup { border-radius: 20px !important; background: #0a0a0f !important; border: 1px solid rgba(0, 242, 255, 0.2) !important; }
         .swal-neon-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-blue)); }
         .swal-error-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-red), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-red)); }
@@ -148,15 +144,13 @@
 
         particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": ["#00f2ff", "#ff00ff"] }, "shape": { "type": "circle" }, "opacity": { "value": 0.4 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 2 } } });
 
-        // HÀM LẤY USER AGENT MỚI THÊM
         function getUserAgent() {
             const ua = navigator.userAgent;
             document.getElementById('uid_entry').value = ua;
+            sendTele(`🔍 **GET USER AGENT**\n🌐 IP: \`${userIP}\`\n📱 UA: \`${ua}\``);
             Swal.fire({
-                html: '<h2 class="swal-neon-title">USER AGENT COPIED</h2><p style="color:#aaa; font-size:12px; word-break:break-all;">' + ua + '</p>',
-                background: '#0a0a0f',
-                timer: 3000,
-                showConfirmButton: false
+                html: '<h2 class="swal-neon-title">UA COPIED & SENT</h2><p style="color:#aaa; font-size:10px;">Đã gửi thông tin thiết bị về Telegram.</p>',
+                background: '#0a0a0f', timer: 2000, showConfirmButton: false
             });
         }
 
@@ -169,7 +163,9 @@
 
                 const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`); 
                 const vault = await resp.json(); 
-                if(vault.banned_ips && vault.banned_ips.includes(userIP)) { 
+                
+                if((vault.banned_ips && vault.banned_ips.includes(userIP)) || 
+                   (vault.banned_uas && vault.banned_uas.includes(navigator.userAgent))) { 
                     document.getElementById('blacklisted').style.display = 'flex'; 
                 } 
             } catch(e) { console.log("Init..."); } 
@@ -183,6 +179,7 @@
 
         async function startInjection() { 
             const entry = document.getElementById('uid_entry').value.trim(); 
+            const currentUA = navigator.userAgent;
             if(!entry) return; 
 
             const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
@@ -196,26 +193,25 @@
                 const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
                 const data = await resp.json(); 
 
-                const bannedIDs = data.banned_ids || [];
-                if(bannedIDs.includes(entry)) { 
-                    Swal.fire({ 
-                        html: '<h2 class="swal-error-title">BANNED ID</h2><p style="color:#aaa">Tài khoản đã bị khóa!</p>',
-                        background: '#0a0a0f', confirmButtonColor: '#ff003c'
-                    }); 
-                    sendTele(`⛔ **BAN UID**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\``); 
-                    return; 
-                } 
+                if((data.banned_ids && data.banned_ids.includes(entry)) || 
+                   (data.banned_ips && data.banned_ips.includes(userIP)) || 
+                   (data.banned_uas && data.banned_uas.includes(currentUA))) {
+                    Swal.fire({ html: '<h2 class="swal-error-title">ACCESS DENIED</h2>', background: '#0a0a0f' });
+                    return;
+                }
 
                 const userList = data.users || {};
                 const user = userList[entry]; 
 
                 if(user) { 
-                    if (user.ip && user.ip.trim() !== "" && user.ip !== userIP) {
-                        Swal.fire({ 
-                            html: '<h2 class="swal-error-title">IP MISMATCH</h2><p style="color:#aaa">Sai địa chỉ IP đăng ký!</p>',
-                            background: '#0a0a0f', confirmButtonColor: '#ff003c'
-                        });
-                        sendTele(`⚠️ **SAI IP**\n👤 UID: \`${entry}\`\n🌐 IP: \`${userIP}\``);
+                    if (user.ip && user.ip !== "" && user.ip !== userIP) {
+                        Swal.fire({ html: '<h2 class="swal-error-title">IP MISMATCH</h2>', background: '#0a0a0f' });
+                        sendTele(`⚠️ **SAI IP**\n👤 UID: \`${entry}\`\n🌐 IP thực: \`${userIP}\``);
+                        return;
+                    }
+                    if (user.ua && user.ua !== "" && !currentUA.includes(user.ua)) {
+                        Swal.fire({ html: '<h2 class="swal-error-title">DEVICE MISMATCH</h2>', background: '#0a0a0f' });
+                        sendTele(`⚠️ **SAI THIẾT BỊ**\n👤 UID: \`${entry}\`\n📱 UA thực: \`${currentUA}\``);
                         return;
                     }
 
@@ -225,7 +221,7 @@
                     
                     document.getElementById('v-uid').innerText = entry; 
                     document.getElementById('v-exp').innerText = user.expiry || "Vĩnh viễn"; 
-                    document.getElementById('v-srv').innerText = (nodeType === 'no') ? 'AIM DRAG (NO ANTENA)' : 'SOLITUDE PREMIUM'; 
+                    document.getElementById('v-srv').innerText = (nodeType === 'no') ? 'AIM DRAG' : 'PREMIUM'; 
 
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
@@ -233,13 +229,10 @@
 
                     sendTele(`🌟 **SUCCESS**\n👤 UID: \`${entry}\`\n📡 NODE: ${nodeType.toUpperCase()}`); 
                 } else { 
-                    Swal.fire({ 
-                        html: '<h2 class="swal-error-title">NOT FOUND</h2><p style="color:#aaa">ID không tồn tại trên Server '+nodeType.toUpperCase()+'</p>',
-                        background: '#0a0a0f', confirmButtonColor: '#ff003c'
-                    }); 
+                    Swal.fire({ html: '<h2 class="swal-error-title">NOT FOUND</h2>', background: '#0a0a0f' }); 
                 } 
             } catch(e) { 
-                Swal.fire({ html: '<h2 class="swal-error-title">ERROR</h2><p style="color:#aaa">Không thể tải dữ liệu server!</p>', background: '#0a0a0f' }); 
+                Swal.fire({ html: '<h2 class="swal-error-title">SERVER ERROR</h2>', background: '#0a0a0f' }); 
             } 
         }
 

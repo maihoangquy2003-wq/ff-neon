@@ -92,64 +92,59 @@
         100% { transform: translate(0); }
     }
     
-<style>
-/* Đặt fo<style>
-    /* Hiệu ứng dải màu Solitude Proxy */
-    .solitude-text {
-        background: linear-gradient(90deg, #00fbff 0%, #ff00f7 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 10px rgba(0, 251, 255, 0.5)) drop-shadow(0 0 20px rgba(255, 0, 247, 0.3));
-        font-family: 'Orbitron', sans-serif;
-        font-weight: bold;
+<style<style>
+    :root {
+        --neon-red: #ff003c;
+        --dark-bg: #0a0a0a;
     }
 
-    /* Hiệu ứng rung nhẹ cho toàn bộ màn hình ban */
-    @keyframes shake-extreme {
-        0% { transform: translate(0); }
-        25% { transform: translate(-1px, 1px); }
-        50% { transform: translate(1px, -1px); }
-        75% { transform: translate(-1px, -1px); }
-        100% { transform: translate(1px, 1px); }
-    }
-
-    #blacklisted {
-        animation: shake-extreme 0.1s infinite;
+    .ban-screen {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 0, 60, 0.2);
+        padding: 40px;
+        border-radius: 15px;
         text-align: center;
-        background: rgba(0, 0, 0, 0.8);
-        padding: 30px;
-        border-radius: 20px;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 1), inset 0 0 20px rgba(255, 0, 60, 0.1);
+        max-width: 400px;
+        margin: auto;
     }
 
-    /* Style cho nút bấm */
-    .btn-solitude {
-        margin-top: 10px; 
-        padding: 12px 25px; 
-        background: transparent; 
-        border: 2px solid #00fbff; 
-        cursor: pointer; 
-        border-radius: 10px; 
-        font-size: 12px; 
-        letter-spacing: 2px;
-        transition: 0.3s;
+    .ban-screen h1 {
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 5px;
+        text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+        animation: glitch 1s infinite;
     }
-    
-    .btn-solitude:hover {
-        box-shadow: 0 0 20px #ff00f7;
-        border-color: #ff00f7;
+
+    .btn-unban {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-unban:hover {
+        background: var(--neon-red) !important;
+        color: #fff !important;
+        box-shadow: 0 0 30px var(--neon-red);
+        transform: scale(1.05);
+    }
+
+    @keyframes glitch {
+        0% { transform: translate(0); }
+        20% { transform: translate(-2px, 2px); }
+        40% { transform: translate(-2px, -2px); }
+        60% { transform: translate(2px, 2px); }
+        80% { transform: translate(2px, -2px); }
+        100% { transform: translate(0); }
     }
 </style>
 
 <div class="ban-screen" id="blacklisted">
-    <i class="fas fa-skull-crossbones solitude-text" style="font-size: 80px; margin-bottom: 20px; -webkit-text-fill-color: initial; background: none; color: #00fbff;"></i>
-    
-    <h1 class="solitude-text" style="font-size: 35px; margin: 0;">ACCESS DENIED</h1>
-    
-    <p class="solitude-text" style="font-size: 10px; margin-bottom: 20px; letter-spacing: 2px;">SECURITY VIOLATION DETECTED</p>
-    
-    <button class="btn-solitude" onclick="requestUnban()">
-        <span class="solitude-text">UNBAN DEVICE (30K)</span>
-    </button>
+    <i class="fas fa-skull-crossbones" style="font-size: 80px; color: var(--neon-red); margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--neon-red));"></i>
+    <h1 style="color: var(--neon-red); margin: 0;">ACCESS DENIED</h1>
+    <p style="color: #666; font-family: 'Orbitron'; font-size: 10px; margin-bottom: 20px; letter-spacing: 1px;">SECURITY VIOLATION DETECTED</p>
+    <button class="btn-unban" onclick="requestUnban()" style="margin-top: 10px; padding: 12px 25px; background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red); font-family: 'Orbitron'; cursor: pointer; border-radius: 10px; font-size: 12px; letter-spacing: 2px; font-weight: bold;">UNBAN DEVICE (30K)</button>
 </div>
 
     <div class="system-root">

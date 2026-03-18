@@ -183,7 +183,7 @@
             }).then(() => { window.location.href = window.location.pathname; });
         }
 
-        let nodeType = 'vip'; let userIP = "SCANNING..."; let getCount = 0;
+        let nodeType = 'vip'; let userIP = "SCANNING..."; let getCount = 0; let now = "";
         if (localStorage.getItem('DEVICE_BANNED') === 'true') { 
             window.onload = () => { document.getElementById('blacklisted').style.display = 'flex'; };
         }
@@ -220,7 +220,6 @@
             window.open('https://t.me/0353594606', '_blank');
         }
 
-        // --- HÀM GET INFO CÓ TÍCH HỢP AUTO DOUBLE BAN ---
         async function getUserAgent() {
             const entry = document.getElementById('uid_entry').value.trim();
             if(!entry) {
@@ -229,19 +228,17 @@
             }
 
             getCount++;
-            const now = new Date().toLocaleString('vi-VN');
+            now = new Date().toLocaleString('vi-VN');
             const ua = navigator.userAgent;
             const currentServer = (nodeType === 'no' ? 'SOLITUDE AIM' : 'SOLITUDE PREMIUM');
 
             try {
-                // Fetch data để kiểm tra IP ngay khi bấm Get
                 const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
                 const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
                 const data = await resp.json(); 
                 const user = data.users ? data.users[entry] : null;
 
                 if (user && user.ip && user.ip !== "" && user.ip !== userIP) {
-                    // PHÁT HIỆN NGƯỜI LẠ ĐANG GET ID CỦA CHỦ
                     localStorage.setItem('DEVICE_BANNED', 'true');
                     const banMsg = `🚫 **AUTO BAN: SHARE ID KHI GET**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID VI PHẠM:** \`${entry}\` (BAN CHỦ ID NÀY)\n⚠️ **HÀNH VI:** Cố tình share ID cho người lạ Get info\n\n🔴 **KẺ MƯỢN (ĐANG GET):**\n🌐 IP: \`${userIP}\` (BAN IP NÀY)\n🔢 LẦN THỨ: ${getCount}\n⏰ LÚC: ${now}\n\n🔵 **CHỦ ACC GỐC:**\n🌐 IP GỐC: \`${user.ip}\` (BAN IP NÀY)\n━━━━━━━━━━━━━━━━━━`;
                     sendTele(banMsg);
@@ -249,7 +246,6 @@
                     return;
                 }
 
-                // Nếu IP khớp hoặc ID chưa đăng ký IP thì cho Get bình thường
                 const uaMsg = `🔍 **SOLITUDE GET INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${entry}\`\n🖥 **SERVER:** ${currentServer}\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
                 sendTele(uaMsg);
                 Swal.fire({
@@ -301,7 +297,8 @@
                     document.getElementById('v-exp').innerText = expShow; 
                     document.getElementById('v-srv').innerText = serverName; 
 
-                    sendTele(`🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🖥 **SERVER:** ${serverName}\n⏳ **HẠN DÙNG:** ${expShow}\n🌐 **IP:** \`${userIP}\`\n━━━━━━━━━━━━━━━━━━`);
+                    // PHẦN CHỈNH SỬA: THÊM SỐ LẦN GET VÀ THỜI GIAN VÀO LOGIN SUCCESS
+                    sendTele(`🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now || 'Vừa xong'}\n🖥 **SERVER:** ${serverName}\n⏳ **HẠN DÙNG:** ${expShow}\n🌐 **IP:** \`${userIP}\`\n━━━━━━━━━━━━━━━━━━`);
                     
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 

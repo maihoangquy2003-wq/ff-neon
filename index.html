@@ -281,12 +281,17 @@
                         const expDate = new Date(user.expiry);
                         const today = new Date();
                         if (today > expDate) {
-                            Swal.fire({ 
-                                icon: 'error',
-                                title: 'ACCESS EXPIRED',
-                                html: `<p style="color:var(--neon-red)">ID ${entry} đã hết hạn vào ngày ${user.expiry}.<br>Vui lòng gia hạn!</p>`,
-                                background: '#0a0a0f' 
-                            });
+                            Swal.fire({
+    html: `
+        <h2 class="swal-neon-title">ACCESS EXPIRED</h2>
+        <p style="color:#aaa; font-size:12px;">
+            ID ${entry} ĐÃ HẾT HẠN VÀO NGÀY ${user.expiry}.<br>LIÊN HỆ ADMIN ĐỂ GIA HẠN.
+        </p>
+    `,
+    background: '#0a0a0f',
+    timer: 2500,
+    showConfirmButton: false
+});
                             return; 
                         }
                     }

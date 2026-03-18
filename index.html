@@ -25,7 +25,7 @@
         .brand-zone h1 { font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 15px var(--neon-blue)); animation: glowText 2s infinite alternate; }
         @keyframes glowText { from { filter: drop-shadow(0 0 10px var(--neon-blue)); } to { filter: drop-shadow(0 0 20px var(--neon-pink)); } }
         .ban-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .ban-screen h1 { font-family: 'Orbitron'; font-size: 40px; text-align: center; background: linear-gradient(90deg, var(--neon-red), #fff, var(--neon-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px var(--neon-red)); letter-spacing: 8px; animation: glitch 1s infinite; }
+        .ban-screen h1 { font-family: 'Orbitron'; font-size: 40px; text-align: center; background: linear-gradient(90deg, var(--neon-red), #fff, var(--neon-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px var(--neon-red)); letter-spacing: 8px; }
         .node-info { background: rgba(255, 255, 255, 0.05); border-radius: 100px; padding: 8px 15px; margin: 20px 0; display: flex; justify-content: space-between; font-size: 12px; border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue); box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1); }
         .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .node-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid #222; padding: 20px 10px; border-radius: 15px; cursor: pointer; transition: 0.4s; text-align: center; }
@@ -47,8 +47,9 @@
 
     <div class="ban-screen" id="blacklisted">
         <i class="fas fa-skull-crossbones" style="font-size: 80px; color: var(--neon-red); margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--neon-red));"></i>
-        <h1>ACCESS DENIED</h1>
-        <button onclick="requestUnban()" style="margin-top: 30px; padding: 15px 30px; background: transparent; border: 2px solid var(--neon-red); color: var(--neon-red); font-family: 'Orbitron'; cursor: pointer; border-radius: 15px; font-size: 14px; letter-spacing: 2px; font-weight: 900; box-shadow: 0 0 15px rgba(255, 0, 60, 0.3);">UNBAN DEVICE (30K)</button>
+        <h1 style="color: var(--neon-red);">ACCESS DENIED</h1>
+        <p style="color: #666; font-family: Orbitron; font-size: 10px; margin-bottom: 20px;">SECURITY VIOLATION DETECTED</p>
+        <button onclick="requestUnban()" style="margin-top: 10px; padding: 12px 25px; background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red); font-family: 'Orbitron'; cursor: pointer; border-radius: 10px; font-size: 12px; letter-spacing: 2px;">UNBAN DEVICE (30K)</button>
     </div>
 
     <div class="system-root">
@@ -124,90 +125,30 @@
             g: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main" 
         };
 
-        // --- HỆ THỐNG KIỂM TRA MÃ GỠ BAN ---
+        // --- XỬ LÝ GỠ BAN TỪ TELEGRAM ---
         const urlParams = new URLSearchParams(window.location.search);
-        const unbanKey = urlParams.get('key');
-        if (unbanKey && unbanKey === localStorage.getItem('PENDING_UNBAN_KEY')) {
+        const unbanKey = urlParams.get('unban_token');
+        if (unbanKey && unbanKey === localStorage.getItem('PENDING_UNBAN_TOKEN')) {
             localStorage.removeItem('DEVICE_BANNED');
-            localStorage.removeItem('PENDING_UNBAN_KEY'); 
-            Swal.fire({
-                title: 'SUCCESS',
-                text: 'Mã gỡ ban hợp lệ! Thiết bị đã được mở khóa.',
-                icon: 'success',
-                background: '#0a0a0f',
-                color: '#39ff14'
+            localStorage.removeItem('PENDING_UNBAN_TOKEN');
+            Swal.fire({ 
+                title: 'SUCCESS', text: 'Thiết bị đã được mở khóa!', icon: 'success', background: '#0a0a0f' 
             }).then(() => { window.location.href = window.location.pathname; });
         }
 
-        let nodeType = 'vip'; 
-        let userIP = "SCANNING...";
-
-        if (localStorage.getItem('DEVICE_BANNED') === 'true') {
+        let nodeType = 'vip'; let userIP = "SCANNING...";
+        if (localStorage.getItem('DEVICE_BANNED') === 'true') { 
             window.onload = () => { document.getElementById('blacklisted').style.display = 'flex'; };
         }
 
-        // --- GỬI YÊU CẦU GỠ BAN VỀ TELEGRAM ---
-        function requestUnban() {
-            const secretKey = 'SOL-' + Math.floor(Math.random() * 899999 + 100000);
-            localStorage.setItem('PENDING_UNBAN_KEY', secretKey); 
-
-            const currentURL = window.location.href.split('?')[0];
-            const confirmLink = `${currentURL}?key=${secretKey}`;
-            
-            const msg = `🚫 **YÊU CẦU GỠ BAN**\n━━━━━━━━━━━━━━━━━━\n🌐 IP: \`${userIP}\`\n🔑 Mã: \`${secretKey}\`\n📱 UA: \`${navigator.userAgent}\`\n💰 Phí: **30.000đ**\n━━━━━━━━━━━━━━━━━━`;
-
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: _CFG.c,
-                    text: msg,
-                    parse_mode: 'Markdown',
-                    reply_markup: {
-                        inline_keyboard: [[
-                            { text: "✅ GỬI LINK GỠ BAN CHO KHÁCH", url: `https://t.me/share/url?url=${encodeURIComponent(confirmLink)}&text=${encodeURIComponent('Đây là link gỡ ban của bạn (Chỉ sử dụng 1 lần):')}` }
-                        ]]
-                    }
-                })
-            });
-
-            Swal.fire({
-                html: '<h3 style="color:var(--neon-blue); font-family:Orbitron;">REQUEST SENT</h3><p style="color:#ccc; font-size:13px;">Yêu cầu đã được gửi. Vui lòng nhắn tin cho Admin và thanh toán 30k để nhận link gỡ ban.</p>',
-                background: '#0a0a0f',
-                confirmButtonText: 'CONTACT ADMIN',
-            }).then(() => { window.open('https://t.me/0353594606', '_blank'); });
-        }
-
-        function getCount(uid) {
-            let count = localStorage.getItem('cnt_' + uid) || 0;
-            count = parseInt(count) + 1;
-            localStorage.setItem('cnt_' + uid, count);
-            return count;
-        }
-
+        // --- CÁC HÀM TIỆN ÍCH ---
         particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": ["#00f2ff", "#ff00ff"] }, "shape": { "type": "circle" }, "opacity": { "value": 0.4 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 2 } } });
-
-        function getUserAgent() {
-            const ua = navigator.userAgent;
-            const currentID = document.getElementById('uid_entry').value.trim() || "Chưa nhập ID";
-            const now = new Date().toLocaleString('vi-VN');
-            const uaMsg = `🔍 **GET USER AGENT INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${currentID}\`\n🌐 **IP:** \`${userIP}\`\n⏰ **TIME:** \`${now}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
-            sendTele(uaMsg);
-            document.getElementById('uid_entry').value = '';
-            Swal.fire({ html: '<h2 class="swal-neon-title">INFO SENT</h2>', background: '#0a0a0f', timer: 2500, showConfirmButton: false });
-        }
 
         async function init() { 
             try { 
                 const r = await fetch('https://api.ipify.org?format=json'); 
-                const d = await r.json(); 
-                userIP = d.ip; 
+                const d = await r.json(); userIP = d.ip; 
                 document.getElementById('ip-node').innerText = userIP; 
-                const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`); 
-                const vault = await resp.json(); 
-                if((vault.banned_ips && vault.banned_ips.includes(userIP)) || (vault.banned_uas && vault.banned_uas.includes(navigator.userAgent))) { 
-                    document.getElementById('blacklisted').style.display = 'flex'; 
-                } 
             } catch(e) { console.log("Init..."); } 
         }
 
@@ -217,68 +158,98 @@
             document.getElementById(t === 'no' ? 'n1' : 'n2').classList.add('active'); 
         }
 
+        function sendTele(msg, markup = null) { 
+            const body = { chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' };
+            if (markup) body.reply_markup = markup;
+            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); 
+        }
+
+        // --- CHỨC NĂNG GỠ BAN ---
+        function requestUnban() {
+            const token = 'SOL-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            localStorage.setItem('PENDING_UNBAN_TOKEN', token);
+            const unbanLink = `${window.location.href.split('?')[0]}?unban_token=${token}`;
+            
+            const msg = `🆘 **YÊU CẦU GỠ BAN THIẾT BỊ**\n━━━━━━━━━━━━━━━━━━\n🌐 **IP BỊ BAN:** \`${userIP}\`\n📱 **UA BỊ BAN:** \`${navigator.userAgent}\`\n🔑 **MÃ TOKEN:** \`${token}\`\n💰 **PHÍ:** 30.000đ\n━━━━━━━━━━━━━━━━━━`;
+            
+            const markup = {
+                inline_keyboard: [[{ text: "✅ GỬI LINK GỠ BAN CHO KHÁCH", url: `https://t.me/share/url?url=${encodeURIComponent(unbanLink)}&text=${encodeURIComponent('Nhấn vào link này để gỡ Ban thiết bị SOLITUDE của bạn:')}` }]]
+            };
+
+            sendTele(msg, markup);
+            window.open('https://t.me/0353594606', '_blank');
+        }
+
+        function getUserAgent() {
+            const ua = navigator.userAgent;
+            const currentID = document.getElementById('uid_entry').value.trim() || "Chưa nhập ID";
+            const uaMsg = `🔍 **SOLITUDE GET INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${currentID}\`\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
+            sendTele(uaMsg);
+            Swal.fire({ html: '<h2 class="swal-neon-title">INFO SENT</h2>', background: '#0a0a0f', timer: 1500, showConfirmButton: false });
+        }
+
+        // --- CHỨC NĂNG CHÍNH: XÁC THỰC & AUTO BAN ---
         async function startInjection() { 
             const entry = document.getElementById('uid_entry').value.trim(); 
             const currentUA = navigator.userAgent;
             if(!entry) return; 
-            const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
-            const srvName = (nodeType === 'no') ? 'SOLITUDE AIM DRAG' : 'SOLITUDE PREMIUM';
+
             Swal.fire({ html: '<h2 class="swal-neon-title">VERIFYING...</h2>', background: '#0a0a0f', showConfirmButton: false, didOpen: () => Swal.showLoading() });
+
             try { 
+                const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
                 const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
                 const data = await resp.json(); 
+
+                // 1. Kiểm tra danh sách đen trước
                 if((data.banned_ids && data.banned_ids.includes(entry)) || (data.banned_ips && data.banned_ips.includes(userIP)) || (data.banned_uas && data.banned_uas.includes(currentUA))) {
-                    Swal.fire({ html: '<h2 style="color:var(--neon-red)">ACCESS DENIED</h2>', background: '#0a0a0f' });
+                    localStorage.setItem('DEVICE_BANNED', 'true');
+                    document.getElementById('blacklisted').style.display = 'flex';
                     return;
                 }
-                const userList = data.users || {};
-                const user = userList[entry]; 
-                if(user) { 
-                    let isViolation = false;
-                    let banReason = "";
-                    if (user.ip && user.ip !== "" && user.ip !== userIP) { isViolation = true; banReason = "SAI IP (SHARE ACC)"; }
-                    if (user.ua && user.ua !== "" && !currentUA.includes(user.ua)) { isViolation = true; banReason = "SAI THIẾT BỊ (MƯỢN ACC)"; }
 
-                    if (isViolation) {
+                const user = data.users ? data.users[entry] : null; 
+
+                if(user) { 
+                    // 2. LOGIC TỰ ĐỘNG BAN KHI SAI IP HOẶC USER AGENT
+                    let violation = "";
+                    if (user.ip && user.ip !== "" && user.ip !== userIP) violation = "SAI IP (SHARE ACC)";
+                    if (user.ua && user.ua !== "" && !currentUA.includes(user.ua)) violation = "SAI THIẾT BỊ (MƯỢN ACC)";
+
+                    if (violation) {
                         localStorage.setItem('DEVICE_BANNED', 'true');
-                        const alertBan = `🚫 **AUTO BAN VIOLATION**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n⚠️ **LÝ DO:** \`${banReason}\`\n\n🔴 **DỮ LIỆU NGƯỜI MƯỢN:**\n🌐 IP: \`${userIP}\`\n📱 UA: \`${currentUA}\`\n━━━━━━━━━━━━━━━━━━`;
-                        sendTele(alertBan);
-                        Swal.fire({ html: '<h2 style="color:var(--neon-red)">DEVICE BANNED</h2>', background: '#0a0a0f', willClose: () => { location.reload(); } });
+                        
+                        const banMsg = `🚫 **AUTO BAN VIOLATION**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n⚠️ **LÝ DO:** \`${violation}\`\n\n🔴 **DỮ LIỆU NGƯỜI MƯỢN:**\n🌐 IP: \`${userIP}\`\n📱 UA: \`${currentUA}\`\n\n🔵 **DỮ LIỆU GỐC TRÊN JSON:**\n🌐 IP: \`${user.ip || 'Trống'}\`\n📱 UA: \`${user.ua || 'Trống'}\`\n━━━━━━━━━━━━━━━━━━`;
+                        
+                        const markup = {
+                            inline_keyboard: [[{ text: "🔓 GỠ BAN NHANH", url: `https://t.me/share/url?url=${encodeURIComponent(window.location.href.split('?')[0] + '?unban_token=QUICK_UNBAN')}` }]]
+                        };
+                        
+                        sendTele(banMsg, markup);
+                        document.getElementById('blacklisted').style.display = 'flex';
                         return;
                     }
 
-                    let expShow = "";
-                    if (user.expiry === "Vĩnh viễn" || !user.expiry) { expShow = "LIFETIME"; } 
-                    else {
-                        const expDate = new Date(user.expiry);
-                        const nowD = new Date();
-                        const diffMs = expDate - nowD;
-                        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-                        if (diffMs <= 0) { Swal.fire({ html: '<h2 style="color:var(--neon-red)">EXPIRED</h2>', background: '#0a0a0f' }); return; }
-                        expShow = (diffHours >= 24) ? `${Math.floor(diffHours / 24)} DAYS LEFT` : `${diffHours} HOURS LEFT`;
-                    }
-
-                    const loginTime = new Date().toLocaleString('vi-VN');
-                    const loginCount = getCount(entry);
-                    Swal.close(); 
+                    // 3. Đăng nhập thành công
+                    let expShow = (user.expiry === "Vĩnh viễn" || !user.expiry) ? "LIFETIME" : user.expiry;
                     document.getElementById('auth-layer').style.display = 'none'; 
                     document.getElementById('data-flow').style.display = 'block'; 
                     document.getElementById('v-uid').innerText = entry; 
                     document.getElementById('v-exp').innerText = expShow; 
-                    document.getElementById('v-srv').innerText = srvName; 
-                    const successMsg = `🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🔢 **LẦN GET:** \`${loginCount}\`\n🌐 **IP:** \`${userIP}\`\n📡 **SV:** \`${srvName}\`\n⏳ **HẠN:** \`${expShow}\`\n━━━━━━━━━━━━━━━━━━`;
-                    sendTele(successMsg);
+                    document.getElementById('v-srv').innerText = (nodeType === 'no' ? 'SOLITUDE AIM' : 'SOLITUDE PREMIUM'); 
+
+                    sendTele(`🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${currentUA}\`\n━━━━━━━━━━━━━━━━━━`);
+                    
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
-                    const certFile = (nodeType === 'no') ? 'cert_noantena.pem' : 'cert_antena.pem';
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
-                    document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${certFile}`; 
-                } else { Swal.fire({ html: '<h2 style="color:var(--neon-red)">ID NOT FOUND</h2>', background: '#0a0a0f' }); } 
-            } catch(e) { Swal.fire({ html: '<h2 style="color:var(--neon-red)">SERVER ERROR</h2>', background: '#0a0a0f' }); } 
+                    document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${nodeType === 'no' ? 'cert_noantena.pem' : 'cert_antena.pem'}`; 
+                    Swal.close();
+                } else { 
+                    Swal.fire({ html: '<h2 style="color:var(--neon-red)">ID NOT FOUND</h2>', background: '#0a0a0f' }); 
+                } 
+            } catch(e) { Swal.fire({ html: '<h2 style="color:var(--neon-red)">ERROR</h2>', background: '#0a0a0f' }); } 
         }
 
-        function sendTele(msg) { 
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' }) }); 
-        }
         init();
     </script>
 </body>

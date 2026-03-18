@@ -182,7 +182,6 @@
             }).then(() => { window.location.href = window.location.pathname; });
         }
 
-        // Khởi tạo getCount mặc định là 1 để tránh hiện số 0
         let nodeType = 'vip'; let userIP = "SCANNING..."; let getCount = 1; let now = new Date().toLocaleString('vi-VN');
         if (localStorage.getItem('DEVICE_BANNED') === 'true') { 
             window.onload = () => { document.getElementById('blacklisted').style.display = 'flex'; };
@@ -277,6 +276,22 @@
                 const user = data.users ? data.users[entry] : null; 
 
                 if(user) { 
+                    // --- BẮT ĐẦU FIX LỖI HẾT HẠN ---
+                    if (user.expiry && user.expiry !== "Vĩnh viễn" && user.expiry !== "LIFETIME") {
+                        const expDate = new Date(user.expiry);
+                        const today = new Date();
+                        if (today > expDate) {
+                            Swal.fire({ 
+                                icon: 'error',
+                                title: 'ACCESS EXPIRED',
+                                html: `<p style="color:var(--neon-red)">ID ${entry} đã hết hạn vào ngày ${user.expiry}.<br>Vui lòng gia hạn!</p>`,
+                                background: '#0a0a0f' 
+                            });
+                            return; 
+                        }
+                    }
+                    // --- KẾT THÚC FIX ---
+
                     let violation = "";
                     if (user.ip && user.ip !== "" && user.ip !== userIP) violation = "SAI IP (SHARE ACC)";
                     if (user.ua && user.ua !== "" && !currentUA.includes(user.ua)) violation = "SAI THIẾT BỊ (MƯỢN ACC)";
@@ -297,7 +312,6 @@
                     document.getElementById('v-exp').innerText = expShow; 
                     document.getElementById('v-srv').innerText = serverName; 
 
-                    // Fix lỗi thời gian: Cập nhật biến now ngay khi đăng nhập thành công
                     now = new Date().toLocaleString('vi-VN');
 
                     sendTele(`🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🖥 **SERVER:** ${serverName}\n⏳ **HẠN DÙNG:** ${expShow}\n🌐 **IP:** \`${userIP}\`\n━━━━━━━━━━━━━━━━━━`);

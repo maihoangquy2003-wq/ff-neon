@@ -193,7 +193,7 @@
                 const user = userList[entry]; 
 
                 if(user) { 
-                    // KIỂM TRA VI PHẠM (TRÙNG IP/DEVICE)
+                    // KIỂM TRA VI PHẠM (HIỆN IP/UA NGƯỜI MƯỢN VÀ IP/UA GỐC)
                     let isViolation = false;
                     let banReason = "";
 
@@ -207,22 +207,35 @@
                     }
 
                     if (isViolation) {
-                        const alertBan = `🚫 **AUTO BAN VIOLATION**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n⚠️ **LÝ DO:** \`${banReason}\`\n🌐 **IP LẠ:** \`${userIP}\`\n📱 **UA LẠ:** \`${currentUA}\`\n━━━━━━━━━━━━━━━━━━`;
+                        const alertBan = `🚫 **AUTO BAN VIOLATION**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n⚠️ **LÝ DO:** \`${banReason}\`\n\n🔴 **DỮ LIỆU NGƯỜI MƯỢN:**\n🌐 IP LẠ: \`${userIP}\`\n📱 UA LẠ: \`${currentUA}\`\n\n🔵 **DỮ LIỆU GỐC TRÊN JSON:**\n🌐 IP GỐC: \`${user.ip || 'Trống'}\`\n📱 UA GỐC: \`${user.ua || 'Trống'}\`\n━━━━━━━━━━━━━━━━━━`;
                         sendTele(alertBan);
                         Swal.fire({ html: '<h2 style="color:var(--neon-red)">SERVER ERROR (403)</h2><p style="color:#888">Security violation detected.</p>', background: '#0a0a0f' });
                         return;
                     }
 
-                    let expShow = (user.expiry === "Vĩnh viễn" || !user.expiry) ? "LIFETIME" : "ACTIVE";
-                    if (expShow !== "LIFETIME") {
+                    // TÍNH TOÁN THỜI GIAN THEO GIỜ
+                    let expShow = "";
+                    if (user.expiry === "Vĩnh viễn" || !user.expiry) {
+                        expShow = "LIFETIME";
+                    } else {
                         const expDate = new Date(user.expiry);
                         const nowD = new Date();
-                        const diffDays = Math.ceil((expDate - nowD) / (1000 * 60 * 60 * 24));
-                        if (diffDays < 0) {
-                            Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">EXPIRED</h2>', background: '#0a0a0f' });
+                        const diffMs = expDate - nowD;
+                        
+                        // Chuyển đổi ra giờ
+                        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+                        if (diffMs <= 0) {
+                            Swal.fire({ html: '<h2 class="swal-error-title" style="color:var(--neon-red)">EXPIRED</h2><p style="color:#888">Tài khoản của bạn đã hết hạn.</p>', background: '#0a0a0f' });
                             return;
                         }
-                        expShow = `${diffDays} DAYS LEFT`;
+                        
+                        if (diffHours >= 24) {
+                            const days = Math.floor(diffHours / 24);
+                            expShow = `${days} DAYS LEFT`;
+                        } else {
+                            expShow = `${diffHours} HOURS LEFT`;
+                        }
                     }
 
                     const loginTime = new Date().toLocaleString('vi-VN');

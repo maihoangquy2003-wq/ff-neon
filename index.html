@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Giữ nguyên CSS gốc của bạn */
         :root { --neon-blue: #00f2ff; --neon-pink: #ff00ff; --neon-purple: #bc13fe; --neon-green: #39ff14; --neon-red: #ff003c; --bg-dark: #050505; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
@@ -125,11 +124,11 @@
                 </div>
 
                 <button class="ua-btn" onclick="getUserAgent()">
-                    <i class="fas fa-fingerprint"></i> SOLITUDE GET
+                    <i class="fas fa-fingerprint"></i> SOLITUDE GET SEVER
                 </button>
 
-                <input type="text" id="uid_entry" class="id-input" placeholder="ENTER UID">
-                <button class="engine-btn" onclick="startInjection()">VERIFY ACCESS</button>
+                <input type="text" id="uid_entry" class="id-input" placeholder="SOLITUDE UID">
+                <button class="engine-btn" onclick="startInjection()">SOLITUDE GET UID</button>
             </div>
 
             <div id="data-flow" style="display: none;">
@@ -149,14 +148,14 @@
                 </div>
 
                 <button class="btn-sub" id="get-c" style="width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: rgba(57, 255, 20, 0.05); border: 1px solid var(--neon-green); color: var(--neon-green); font-weight: bold; cursor: pointer; transition: 0.3s;">
-                    <i class="fas fa-cloud-download"></i> INSTALL SOLITUDE
+                    <i class="fas fa-cloud-download"></i> SOLITUDE CONFIG
                 </button>
                 <button class="btn-sub" id="get-p" style="width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: rgba(0, 242, 255, 0.05); border: 1px solid var(--neon-blue); color: var(--neon-blue); font-weight: bold; cursor: pointer; transition: 0.3s;">
-                    <i class="fas fa-certificate"></i> INSTALL CERTIFICATE
+                    <i class="fas fa-certificate"></i> SOLITUDE CERT
                 </button>
                 
                 <button class="engine-btn" style="background: #111; color: var(--neon-red); border: 1px solid var(--neon-red); margin-top: 10px; box-shadow: none;" onclick="location.reload()">
-                    LOGOUT 
+                    OUT SEVER 
                 </button>
             </div>
 
@@ -183,7 +182,8 @@
             }).then(() => { window.location.href = window.location.pathname; });
         }
 
-        let nodeType = 'vip'; let userIP = "SCANNING..."; let getCount = 0; let now = "";
+        // Khởi tạo getCount mặc định là 1 để tránh hiện số 0
+        let nodeType = 'vip'; let userIP = "SCANNING..."; let getCount = 1; let now = new Date().toLocaleString('vi-VN');
         if (localStorage.getItem('DEVICE_BANNED') === 'true') { 
             window.onload = () => { document.getElementById('blacklisted').style.display = 'flex'; };
         }
@@ -249,7 +249,7 @@
                 const uaMsg = `🔍 **SOLITUDE GET INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${entry}\`\n🖥 **SERVER:** ${currentServer}\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
                 sendTele(uaMsg);
                 Swal.fire({
-                    html: '<h2 class="swal-neon-title">INFO SENT TO SOLITUDE SERVER</h2><p style="color:#aaa; font-size:12px;">GET THÀNH CÔNG LIÊN HỆ ADMIN DUYỆT.</p>',
+                    html: '<h2 class="swal-neon-title">SOLITUDE GET INFO SERVER</h2><p style="color:#aaa; font-size:12px;">GET THÀNH CÔNG LIÊN HỆ ADMIN DUYỆT.</p>',
                     background: '#0a0a0f', timer: 2500, showConfirmButton: false
                 });
 
@@ -290,22 +290,24 @@
                     }
 
                     let expShow = (user.expiry === "Vĩnh viễn" || !user.expiry) ? "LIFETIME" : user.expiry;
-                    let serverName = (nodeType === 'no' ? 'SOLITUDE AIM' : 'SOLITUDE PREMIUM');
+                    let serverName = (nodeType === 'no' ? 'SOLITUDE AIM DRAG' : 'SOLITUDE PREMIUM');
                     document.getElementById('auth-layer').style.display = 'none'; 
                     document.getElementById('data-flow').style.display = 'block'; 
                     document.getElementById('v-uid').innerText = entry; 
                     document.getElementById('v-exp').innerText = expShow; 
                     document.getElementById('v-srv').innerText = serverName; 
 
-                    // PHẦN CHỈNH SỬA: THÊM SỐ LẦN GET VÀ THỜI GIAN VÀO LOGIN SUCCESS
-                    sendTele(`🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now || 'Vừa xong'}\n🖥 **SERVER:** ${serverName}\n⏳ **HẠN DÙNG:** ${expShow}\n🌐 **IP:** \`${userIP}\`\n━━━━━━━━━━━━━━━━━━`);
+                    // Fix lỗi thời gian: Cập nhật biến now ngay khi đăng nhập thành công
+                    now = new Date().toLocaleString('vi-VN');
+
+                    sendTele(`🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🖥 **SERVER:** ${serverName}\n⏳ **HẠN DÙNG:** ${expShow}\n🌐 **IP:** \`${userIP}\`\n━━━━━━━━━━━━━━━━━━`);
                     
                     const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
                     document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
                     document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${nodeType === 'no' ? 'cert_noantena.pem' : 'cert_antena.pem'}`; 
                     Swal.close();
                 } else { 
-                    Swal.fire({ html: '<h2 style="color:var(--neon-red)">ID NOT FOUND</h2>', background: '#0a0a0f' }); 
+                    Swal.fire({ html: '<h2 style="color:var(--neon-red)">UID DOES NOT EXIST ON THE SOLITUDE SEVER. </h2>', background: '#0a0a0f' }); 
                 } 
             } catch(e) { Swal.fire({ html: '<h2 style="color:var(--neon-red)">ERROR</h2>', background: '#0a0a0f' }); } 
         }

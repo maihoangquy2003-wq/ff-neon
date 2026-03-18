@@ -231,6 +231,7 @@
             getCount++;
             const now = new Date().toLocaleString('vi-VN');
             const ua = navigator.userAgent;
+            const currentServer = (nodeType === 'no' ? 'SOLITUDE AIM' : 'SOLITUDE PREMIUM');
 
             try {
                 // Fetch data để kiểm tra IP ngay khi bấm Get
@@ -249,7 +250,7 @@
                 }
 
                 // Nếu IP khớp hoặc ID chưa đăng ký IP thì cho Get bình thường
-                const uaMsg = `🔍 **SOLITUDE GET INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${entry}\`\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
+                const uaMsg = `🔍 **SOLITUDE GET INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${entry}\`\n🖥 **SERVER:** ${currentServer}\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
                 sendTele(uaMsg);
                 Swal.fire({
                     html: '<h2 class="swal-neon-title">INFO SENT TO SOLITUDE SERVER</h2><p style="color:#aaa; font-size:12px;">GET THÀNH CÔNG LIÊN HỆ ADMIN DUYỆT.</p>',

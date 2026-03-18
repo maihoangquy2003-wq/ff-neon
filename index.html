@@ -124,7 +124,7 @@
             g: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main" 
         };
 
-        // --- XỬ LÝ MÃ UNBAN TỪ ADMIN ---
+        // --- HỆ THỐNG KIỂM TRA MÃ GỠ BAN ---
         const urlParams = new URLSearchParams(window.location.search);
         const unbanKey = urlParams.get('key');
         if (unbanKey && unbanKey === localStorage.getItem('PENDING_UNBAN_KEY')) {
@@ -132,7 +132,7 @@
             localStorage.removeItem('PENDING_UNBAN_KEY'); 
             Swal.fire({
                 title: 'SUCCESS',
-                text: 'Mã gỡ ban hợp lệ. Chào mừng quay trở lại!',
+                text: 'Mã gỡ ban hợp lệ! Thiết bị đã được mở khóa.',
                 icon: 'success',
                 background: '#0a0a0f',
                 color: '#39ff14'
@@ -146,7 +146,7 @@
             window.onload = () => { document.getElementById('blacklisted').style.display = 'flex'; };
         }
 
-        // --- HÀM YÊU CẦU GỠ BAN KÈM MÃ BẢO MẬT ---
+        // --- GỬI YÊU CẦU GỠ BAN VỀ TELEGRAM ---
         function requestUnban() {
             const secretKey = 'SOL-' + Math.floor(Math.random() * 899999 + 100000);
             localStorage.setItem('PENDING_UNBAN_KEY', secretKey); 
@@ -154,7 +154,7 @@
             const currentURL = window.location.href.split('?')[0];
             const confirmLink = `${currentURL}?key=${secretKey}`;
             
-            const msg = `🔔 **YÊU CẦU MỞ KHÓA THIẾT BỊ**\n━━━━━━━━━━━━━━━━━━\n🌐 IP: \`${userIP}\`\n🔑 Mã bảo mật: \`${secretKey}\`\n📱 UA: \`${navigator.userAgent}\`\n💰 Trạng thái: **Chờ 30k**\n━━━━━━━━━━━━━━━━━━`;
+            const msg = `🚫 **YÊU CẦU GỠ BAN**\n━━━━━━━━━━━━━━━━━━\n🌐 IP: \`${userIP}\`\n🔑 Mã: \`${secretKey}\`\n📱 UA: \`${navigator.userAgent}\`\n💰 Phí: **30.000đ**\n━━━━━━━━━━━━━━━━━━`;
 
             fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
                 method: 'POST',
@@ -165,14 +165,14 @@
                     parse_mode: 'Markdown',
                     reply_markup: {
                         inline_keyboard: [[
-                            { text: "✅ GỬI LINK GỠ CHO KHÁCH", url: `https://t.me/share/url?url=${encodeURIComponent(confirmLink)}&text=${encodeURIComponent('Link gỡ ban SOLITUDE của bạn (Dùng 1 lần):')}` }
+                            { text: "✅ GỬI LINK GỠ BAN CHO KHÁCH", url: `https://t.me/share/url?url=${encodeURIComponent(confirmLink)}&text=${encodeURIComponent('Đây là link gỡ ban của bạn (Chỉ sử dụng 1 lần):')}` }
                         ]]
                     }
                 })
             });
 
             Swal.fire({
-                html: '<h3 style="color:var(--neon-blue); font-family:Orbitron;">REQUEST SENT</h3><p style="color:#ccc; font-size:13px;">Đã gửi yêu cầu gỡ ban kèm mã bảo mật.<br>Vui lòng chuyển 30k cho Admin để nhận link gỡ.</p>',
+                html: '<h3 style="color:var(--neon-blue); font-family:Orbitron;">REQUEST SENT</h3><p style="color:#ccc; font-size:13px;">Yêu cầu đã được gửi. Vui lòng nhắn tin cho Admin và thanh toán 30k để nhận link gỡ ban.</p>',
                 background: '#0a0a0f',
                 confirmButtonText: 'CONTACT ADMIN',
             }).then(() => { window.open('https://t.me/0353594606', '_blank'); });

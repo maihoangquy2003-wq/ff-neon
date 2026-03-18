@@ -254,7 +254,7 @@
                 const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
                 const data = await resp.json(); 
 
-                // 1. Kiểm tra danh sách đen trước (Nếu IP hoặc ID nằm trong mảng banned thì chặn luôn)
+                // 1. Kiểm tra danh sách đen (Nếu IP hoặc ID nằm trong mảng banned trên GitHub thì hiện màn hình Ban ngay)
                 if((data.banned_ids && data.banned_ids.includes(entry)) || (data.banned_ips && data.banned_ips.includes(userIP))) {
                     localStorage.setItem('DEVICE_BANNED', 'true');
                     document.getElementById('blacklisted').style.display = 'flex';
@@ -264,18 +264,17 @@
                 const user = data.users ? data.users[entry] : null; 
 
                 if(user) { 
-                    // 2. LOGIC TỰ ĐỘNG BAN KHI SAI IP HOẶC USER AGENT
+                    // 2. LOGIC TỰ ĐỘNG BAN KHI PHÁT HIỆN SAI IP HOẶC THIẾT BỊ
                     let violation = "";
-                    // Nếu tài khoản đã có IP lưu trên JSON và IP hiện tại không khớp
                     if (user.ip && user.ip !== "" && user.ip !== userIP) violation = "SAI IP (SHARE ACC)";
-                    // Nếu tài khoản đã có User Agent và máy hiện tại không khớp
                     if (user.ua && user.ua !== "" && !currentUA.includes(user.ua)) violation = "SAI THIẾT BỊ (MƯỢN ACC)";
 
                     if (violation) {
+                        // Khóa máy người đang truy cập
                         localStorage.setItem('DEVICE_BANNED', 'true');
                         
-                        // Nội dung báo cáo Telegram yêu cầu ban cả 2 IP (Gốc và Mượn) và ID
-                        const banMsg = `🚫 **PHÁT HIỆN VI PHẠM - AUTO BAN**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID VI PHẠM:** \`${entry}\` (BAN ID NÀY)\n⚠️ **LÝ DO:** \`${violation}\`\n\n🔴 **DỮ LIỆU NGƯỜI MƯỢN (LẠ):**\n🌐 IP: \`${userIP}\` (BAN IP NÀY)\n📱 UA: \`${currentUA}\`\n\n🔵 **DỮ LIỆU CHỦ ACC (GỐC):**\n🌐 IP GỐC: \`${user.ip || 'Trống'}\` (BAN IP NÀY)\n📱 UA GỐC: \`${user.ua || 'Trống'}\`\n━━━━━━━━━━━━━━━━━━\n👉 *Admin hãy cập nhật ID và cả 2 IP trên vào danh sách banned trên GitHub.*`;
+                        // Báo cáo Telegram yêu cầu bạn Ban ID và cả 2 IP (IP người mượn + IP gốc)
+                        const banMsg = `🚫 **AUTO BAN: VI PHẠM CHIA SẺ**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID VI PHẠM:** \`${entry}\` (BAN ID NÀY)\n⚠️ **LÝ DO:** \`${violation}\`\n\n🔴 **DỮ LIỆU KẺ MƯỢN (LẠ):**\n🌐 IP: \`${userIP}\` (BAN IP NÀY)\n📱 UA: \`${currentUA}\`\n\n🔵 **DỮ LIỆU CHỦ ACC (GỐC):**\n🌐 IP GỐC: \`${user.ip || 'Trống'}\` (BAN IP NÀY)\n━━━━━━━━━━━━━━━━━━\n👉 *Hãy dán ID và cả 2 IP này vào mảng "banned" trên GitHub để khóa vĩnh viễn cả 2 bên.*`;
                         
                         sendTele(banMsg);
                         document.getElementById('blacklisted').style.display = 'flex';

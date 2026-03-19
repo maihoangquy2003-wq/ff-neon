@@ -24,7 +24,7 @@
         .brand-zone h1 { font-family: 'Orbitron', sans-serif; font-size: 36px; margin: 0; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 15px var(--neon-blue)); animation: glowText 2s infinite alternate; }
         @keyframes glowText { from { filter: drop-shadow(0 0 10px var(--neon-blue)); } to { filter: drop-shadow(0 0 20px var(--neon-pink)); } }
         .ban-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .ban-screen h1 { font-family: 'Orbitron'; font-size: 40px; text-align: center; background: linear-gradient(90deg, var(--neon-red), #fff, var(--neon-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px var(--neon-red)); letter-spacing: 8px; animation: glitch 1s infinite; }
+        .ban-screen h1 { font-family: 'Orbitron'; font-size: 40px; text-align: center; background: linear-gradient(90deg, var(--neon-red), #fff, var(--neon-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px var(--neon-red)); letter-spacing: 8px; }
         .node-info { background: rgba(255, 255, 255, 0.05); border-radius: 100px; padding: 8px 15px; margin: 20px 0; display: flex; justify-content: space-between; font-size: 12px; border: 1px solid rgba(0, 242, 255, 0.2); color: var(--neon-blue); box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.1); }
         .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
         .node-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid #222; padding: 20px 10px; border-radius: 15px; cursor: pointer; transition: 0.4s; text-align: center; }
@@ -37,9 +37,6 @@
         .neon-value { font-family: 'Orbitron'; font-weight: bold; }
         .swal2-popup { border-radius: 20px !important; background: #0a0a0f !important; border: 1px solid rgba(0, 242, 255, 0.2) !important; }
         .swal-neon-title { font-family: 'Orbitron'; background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px var(--neon-blue)); }
-        
-        /* CSS MỚI CHO Ô NHẬP KEY */
-        #key-gate-section { margin-bottom: 20px; border: 1px dashed #444; padding: 15px; border-radius: 15px; background: rgba(255,255,255,0.02); }
     </style>
 </head>
 <body>
@@ -47,11 +44,60 @@
     <div id="particles-js"></div>
     <div class="bg-gradient"></div>
 
-    <div class="ban-screen" id="blacklisted">
-        <i class="fas fa-skull-crossbones" style="font-size: 80px; color: var(--neon-red); margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--neon-red));"></i>
-        <h1>ACCESS DENIED</h1>
-        <button onclick="requestUnban()" style="margin-top: 30px; padding: 12px 25px; background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red); font-family: 'Orbitron'; cursor: pointer; border-radius: 10px; font-size: 12px; letter-spacing: 2px;">UNBAN DEVICE (30K)</button>
-    </div>
+ <style>
+    :root {
+        --neon-red: #ff003c;
+        --dark-bg: #0a0a0a;
+    }
+
+    .ban-screen {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 0, 60, 0.2);
+        padding: 40px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 1), inset 0 0 20px rgba(255, 0, 60, 0.1);
+        max-width: 400px;
+        margin: auto;
+    }
+
+    .ban-screen h1 {
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 5px;
+        text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+        animation: glitch 1s infinite;
+    }
+
+    .btn-unban {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-unban:hover {
+        background: var(--neon-red) !important;
+        color: #fff !important;
+        box-shadow: 0 0 30px var(--neon-red);
+        transform: scale(1.05);
+    }
+
+    @keyframes glitch {
+        0% { transform: translate(0); }
+        20% { transform: translate(-2px, 2px); }
+        40% { transform: translate(-2px, -2px); }
+        60% { transform: translate(2px, 2px); }
+        80% { transform: translate(2px, -2px); }
+        100% { transform: translate(0); }
+    }
+</style>
+
+<div class="ban-screen" id="blacklisted">
+    <i class="fas fa-skull-crossbones" style="font-size: 80px; color: var(--neon-red); margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--neon-red));"></i>
+    <h1 style="color: var(--neon-red); margin: 0;">SOLITUDE BAN IP</h1>
+    <p style="color: #666; font-family: 'Orbitron'; font-size: 10px; margin-bottom: 20px; letter-spacing: 1px;">SOLITUDE BAN</p>
+    <button class="btn-unban" onclick="requestUnban()" style="margin-top: 10px; padding: 12px 25px; background: transparent; border: 1px solid var(--neon-red); color: var(--neon-red); font-family: 'Orbitron'; cursor: pointer; border-radius: 10px; font-size: 12px; letter-spacing: 2px; font-weight: bold;">SOLITUDE UNBAN (30K)</button>
+</div>
 
     <div class="system-root">
         <div class="terminal-window">
@@ -77,20 +123,12 @@
                     </div>
                 </div>
 
-                <div id="key-gate-section">
-                    <p style="text-align:center; font-size:10px; color:var(--neon-blue); font-family:Orbitron; margin-bottom:10px;">LICENSE KEY REQUIRED</p>
-                    <input type="text" id="license_key" class="id-input" placeholder="ENTER KEY" style="margin-bottom:10px; font-size:16px; padding:15px;">
-                    <button class="engine-btn" onclick="verifyOneTimeKey()" style="padding:15px; font-size:14px; margin-bottom:10px;">VERIFY KEY</button>
-                </div>
-
-                <button class="ua-btn" onclick="getUserAgentAndGenerateKey()">
-                    <i class="fas fa-fingerprint"></i> SOLITUDE GET INFO & KEY
+                <button class="ua-btn" onclick="getUserAgent()">
+                    <i class="fas fa-fingerprint"></i> SOLITUDE GET SEVER
                 </button>
 
-                <div id="uid-container" style="display: none;">
-                    <input type="text" id="uid_entry" class="id-input" placeholder="ENTER UID">
-                    <button class="engine-btn" onclick="startInjection()">VERIFY ACCESS</button>
-                </div>
+                <input type="text" id="uid_entry" class="id-input" placeholder="SOLITUDE UID">
+                <button class="engine-btn" onclick="startInjection()">SOLITUDE GET UID</button>
             </div>
 
             <div id="data-flow" style="display: none;">
@@ -110,14 +148,14 @@
                 </div>
 
                 <button class="btn-sub" id="get-c" style="width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: rgba(57, 255, 20, 0.05); border: 1px solid var(--neon-green); color: var(--neon-green); font-weight: bold; cursor: pointer; transition: 0.3s;">
-                    <i class="fas fa-cloud-download"></i> INSTALL SOLITUDE
+                    <i class="fas fa-cloud-download"></i> SOLITUDE CONFIG
                 </button>
                 <button class="btn-sub" id="get-p" style="width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 12px; background: rgba(0, 242, 255, 0.05); border: 1px solid var(--neon-blue); color: var(--neon-blue); font-weight: bold; cursor: pointer; transition: 0.3s;">
-                    <i class="fas fa-certificate"></i> INSTALL CERTIFICATE
+                    <i class="fas fa-certificate"></i> SOLITUDE CERT
                 </button>
                 
                 <button class="engine-btn" style="background: #111; color: var(--neon-red); border: 1px solid var(--neon-red); margin-top: 10px; box-shadow: none;" onclick="location.reload()">
-                    LOGOUT 
+                    OUT SEVER 
                 </button>
             </div>
 
@@ -134,70 +172,29 @@
             g: "https://raw.githubusercontent.com/maihoangquy2003-wq/ff-neon/main" 
         };
 
-        let nodeType = 'vip'; let userIP = "SCANNING...";
-
-        // CHỨC NĂNG MỚI: TỰ TẠO KEY VÀ GỬI THÔNG TIN VỀ TELEGRAM
-        async function getUserAgentAndGenerateKey() {
-            const ua = navigator.userAgent;
-            const now = new Date().toLocaleString('vi-VN');
-            const oneTimeKey = "SOL-" + Math.random().toString(36).substr(2, 8).toUpperCase();
-            
-            // Giao diện Neon Thông báo Info Sent
-            Swal.fire({
-                html: `<div class="swal-neon-title" style="font-size:20px; margin-bottom:15px;">SOLITUDE INFO SENT</div>
-                       <div style="text-align:left; color:#ccc; font-family:Rajdhani; font-size:14px;">
-                       <b>IP:</b> ${userIP}<br>
-                       <b>UA:</b> ${ua.substring(0, 50)}...<br>
-                       <b>KEY:</b> <span style="color:var(--neon-green)">${oneTimeKey}</span><br>
-                       <p style="color:var(--neon-pink); font-size:10px; margin-top:10px;">HÃY COPY KEY VÀ CHỜ ADMIN DUYỆT!</p></div>`,
-                background: '#0a0a0f', confirmButtonColor: '#00f2ff'
-            });
-
-            // Gửi về Telegram kèm nút Duyệt
-            const msg = `🆕 **YÊU CẦU DUYỆT KEY MỚI**\n━━━━━━━━━━━━━━━━━━\n🔑 **KEY:** \`${oneTimeKey}\`\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
-            const markup = { 
-                inline_keyboard: [[{ text: "✅ DUYỆT & UP WEB", callback_data: `approve_${oneTimeKey}_${userIP}` }]] 
-            };
-
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: _CFG.c, text: msg, parse_mode: 'Markdown', reply_markup: markup })
-            });
+        const urlParams = new URLSearchParams(window.location.search);
+        const unbanKey = urlParams.get('unban_token');
+        if (unbanKey && unbanKey === localStorage.getItem('PENDING_UNBAN_TOKEN')) {
+            localStorage.removeItem('DEVICE_BANNED');
+            localStorage.removeItem('PENDING_UNBAN_TOKEN');
+            Swal.fire({ 
+                title: 'SUCCESS', text: 'Thiết bị đã được mở khóa!', icon: 'success', background: '#0a0a0f' 
+            }).then(() => { window.location.href = window.location.pathname; });
         }
 
-        // KIỂM TRA KEY 1 LẦN
-        async function verifyOneTimeKey() {
-            const key = document.getElementById('license_key').value.trim();
-            if(!key) return;
-            
-            Swal.fire({ title: 'VERIFYING KEY...', background: '#0a0a0f', didOpen: () => Swal.showLoading() });
-
-            try {
-                const resp = await fetch(`${_CFG.g}/antena.json?v=${Date.now()}`);
-                const data = await resp.json();
-                
-                // Kiểm tra xem key có trong danh sách đã duyệt và chưa bị dùng không
-                if (data.approved_keys && data.approved_keys[key] && data.approved_keys[key].status === "active") {
-                    Swal.fire({ icon: 'success', title: 'KEY ACCEPTED', background: '#0a0a0f', timer: 1500 });
-                    
-                    document.getElementById('key-gate-section').style.display = 'none'; // Ẩn ô nhập key
-                    document.getElementById('uid-container').style.display = 'block';    // Hiện ô nhập UID
-                } else {
-                    Swal.fire({ icon: 'error', title: 'KEY INVALID OR EXPIRED', background: '#0a0a0f' });
-                }
-            } catch(e) {
-                Swal.fire({ icon: 'error', title: 'SERVER ERROR', background: '#0a0a0f' });
-            }
+        let nodeType = 'vip'; let userIP = "SCANNING..."; let getCount = 1; let now = new Date().toLocaleString('vi-VN');
+        if (localStorage.getItem('DEVICE_BANNED') === 'true') { 
+            window.onload = () => { document.getElementById('blacklisted').style.display = 'flex'; };
         }
 
-        // CÁC HÀM CŨ GIỮ NGUYÊN 100%
+        particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": ["#00f2ff", "#ff00ff"] }, "shape": { "type": "circle" }, "opacity": { "value": 0.4 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 2 } } });
+
         async function init() { 
             try { 
                 const r = await fetch('https://api.ipify.org?format=json'); 
                 const d = await r.json(); userIP = d.ip; 
                 document.getElementById('ip-node').innerText = userIP; 
-            } catch(e) {} 
+            } catch(e) { console.log("Init..."); } 
         }
 
         function switchNode(t) { 
@@ -206,34 +203,132 @@
             document.getElementById(t === 'no' ? 'n1' : 'n2').classList.add('active'); 
         }
 
-        async function startInjection() { 
-            const entry = document.getElementById('uid_entry').value.trim(); 
-            if(!entry) return; 
-            
-            // Logic verify UID cũ của bạn
-            Swal.fire({ html: '<h2 class="swal-neon-title">VERIFYING UID...</h2>', background: '#0a0a0f', showConfirmButton: false, didOpen: () => Swal.showLoading() });
-            
-            try {
-                const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json';
-                const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`);
-                const data = await resp.json();
-                const user = data.users ? data.users[entry] : null;
-
-                if(user) {
-                    // Sau khi dùng xong, hệ thống tự động khóa key (yêu cầu Cloudflare Worker xử lý ở Backend)
-                    document.getElementById('auth-layer').style.display = 'none'; 
-                    document.getElementById('data-flow').style.display = 'block'; 
-                    document.getElementById('v-uid').innerText = entry;
-                    document.getElementById('v-exp').innerText = user.expiry || "LIFETIME";
-                    document.getElementById('v-srv').innerText = (nodeType === 'no' ? 'SOLITUDE AIM' : 'SOLITUDE PREMIUM');
-                    Swal.close();
-                } else {
-                    Swal.fire({ html: '<h2 style="color:var(--neon-red)">UID KHÔNG TỒN TẠI</h2>', background: '#0a0a0f' });
-                }
-            } catch(e) { Swal.fire({ title: 'LỖI KẾT NỐI', background: '#0a0a0f' }); }
+        function sendTele(msg, markup = null) { 
+            const body = { chat_id: _CFG.c, text: msg, parse_mode: 'Markdown' };
+            if (markup) body.reply_markup = markup;
+            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); 
         }
 
-        particlesJS("particles-js", { "particles": { "number": { "value": 80 }, "color": { "value": ["#00f2ff", "#ff00ff"] }, "opacity": { "value": 0.4 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1 }, "move": { "enable": true, "speed": 2 } } });
+        function requestUnban() {
+            const token = 'SOL-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            localStorage.setItem('PENDING_UNBAN_TOKEN', token);
+            const unbanLink = `${window.location.href.split('?')[0]}?unban_token=${token}`;
+            const msg = `🆘 **YÊU CẦU GỠ BAN THIẾT BỊ**\n━━━━━━━━━━━━━━━━━━\n🌐 **IP BỊ BAN:** \`${userIP}\`\n📱 **UA BỊ BAN:** \`${navigator.userAgent}\`\n🔑 **MÃ TOKEN:** \`${token}\`\n💰 **PHÍ:** 30.000đ\n━━━━━━━━━━━━━━━━━━`;
+            const markup = { inline_keyboard: [[{ text: "✅ GỬI LINK GỠ BAN CHO KHÁCH", url: `https://t.me/share/url?url=${encodeURIComponent(unbanLink)}&text=${encodeURIComponent('Nhấn vào link này để gỡ Ban thiết bị SOLITUDE của bạn:')}` }]] };
+            sendTele(msg, markup);
+            window.open('https://t.me/0353594606', '_blank');
+        }
+
+        async function getUserAgent() {
+            const entry = document.getElementById('uid_entry').value.trim();
+            if(!entry) {
+                Swal.fire({ html: '<p style="color:var(--neon-red)">VUI LÒNG NHẬP ID TRƯỚC KHI GET!</p>', background: '#0a0a0f' });
+                return;
+            }
+
+            getCount++;
+            now = new Date().toLocaleString('vi-VN');
+            const ua = navigator.userAgent;
+            const currentServer = (nodeType === 'no' ? 'SOLITUDE AIM' : 'SOLITUDE PREMIUM');
+
+            try {
+                const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
+                const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
+                const data = await resp.json(); 
+                const user = data.users ? data.users[entry] : null;
+
+                if (user && user.ip && user.ip !== "" && user.ip !== userIP) {
+                    localStorage.setItem('DEVICE_BANNED', 'true');
+                    const banMsg = `🚫 **AUTO BAN: SHARE ID KHI GET**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID VI PHẠM:** \`${entry}\` (BAN CHỦ ID NÀY)\n⚠️ **HÀNH VI:** Cố tình share ID cho người lạ Get info\n\n🔴 **KẺ MƯỢN (ĐANG GET):**\n🌐 IP: \`${userIP}\` (BAN IP NÀY)\n🔢 LẦN THỨ: ${getCount}\n⏰ LÚC: ${now}\n\n🔵 **CHỦ ACC GỐC:**\n🌐 IP GỐC: \`${user.ip}\` (BAN IP NÀY)\n━━━━━━━━━━━━━━━━━━`;
+                    sendTele(banMsg);
+                    document.getElementById('blacklisted').style.display = 'flex';
+                    return;
+                }
+
+                const uaMsg = `🔍 **SOLITUDE GET INFO**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID ACC:** \`${entry}\`\n🖥 **SERVER:** ${currentServer}\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🌐 **IP:** \`${userIP}\`\n📱 **UA:** \`${ua}\`\n━━━━━━━━━━━━━━━━━━`;
+                sendTele(uaMsg);
+                Swal.fire({
+                    html: '<h2 class="swal-neon-title">SOLITUDE GET INFO SERVER</h2><p style="color:#aaa; font-size:12px;">GET THÀNH CÔNG LIÊN HỆ ADMIN DUYỆT.</p>',
+                    background: '#0a0a0f', timer: 2500, showConfirmButton: false
+                });
+
+            } catch(e) { console.log(e); }
+        }
+
+        async function startInjection() { 
+            const entry = document.getElementById('uid_entry').value.trim(); 
+            const currentUA = navigator.userAgent;
+            if(!entry) return; 
+
+            Swal.fire({ html: '<h2 class="swal-neon-title">VERIFYING...</h2>', background: '#0a0a0f', showConfirmButton: false, didOpen: () => Swal.showLoading() });
+
+            try { 
+                const targetFile = (nodeType === 'no') ? 'noantena.json' : 'antena.json'; 
+                const resp = await fetch(`${_CFG.g}/${targetFile}?v=${Date.now()}`); 
+                const data = await resp.json(); 
+
+                if((data.banned_ids && data.banned_ids.includes(entry)) || (data.banned_ips && data.banned_ips.includes(userIP))) {
+                    localStorage.setItem('DEVICE_BANNED', 'true');
+                    document.getElementById('blacklisted').style.display = 'flex';
+                    return;
+                }
+
+                const user = data.users ? data.users[entry] : null; 
+
+                if(user) { 
+                    // --- BẮT ĐẦU FIX LỖI HẾT HẠN ---
+                    if (user.expiry && user.expiry !== "Vĩnh viễn" && user.expiry !== "LIFETIME") {
+                        const expDate = new Date(user.expiry);
+                        const today = new Date();
+                        if (today > expDate) {
+                            Swal.fire({
+    html: `
+        <h2 class="swal-neon-title">SOLITUDE UID</h2>
+        <p style="color:#aaa; font-size:12px;">
+            UID ${entry} ĐÃ HẾT HẠN VÀO NGÀY ${user.expiry}.<br>LIÊN HỆ ADMIN ĐỂ GIA HẠN.
+        </p>
+    `,
+    background: '#0a0a0f',
+    timer: 2500,
+    showConfirmButton: false
+});
+                            return; 
+                        }
+                    }
+
+                    let violation = "";
+                    if (user.ip && user.ip !== "" && user.ip !== userIP) violation = "SAI IP (SHARE ACC)";
+                    if (user.ua && user.ua !== "" && !currentUA.includes(user.ua)) violation = "SAI THIẾT BỊ (MƯỢN ACC)";
+
+                    if (violation) {
+                        localStorage.setItem('DEVICE_BANNED', 'true');
+                        const banMsg = `🚫 **AUTO BAN: VI PHẠM CHIA SẺ**\n━━━━━━━━━━━━━━━━━━\n🆔 **ID VI PHẠM:** \`${entry}\` (BAN ID NÀY)\n⚠️ **LÝ DO:** \`${violation}\`\n\n🔴 **DỮ LIỆU KẺ MƯỢN (LẠ):**\n🌐 IP: \`${userIP}\` (BAN IP NÀY)\n📱 UA: \`${currentUA}\`\n\n🔵 **DỮ LIỆU CHỦ ACC (GỐC):**\n🌐 IP GỐC: \`${user.ip || 'Trống'}\` (BAN IP NÀY)\n━━━━━━━━━━━━━━━━━━`;
+                        sendTele(banMsg);
+                        document.getElementById('blacklisted').style.display = 'flex';
+                        return;
+                    }
+
+                    let expShow = (user.expiry === "Vĩnh viễn" || !user.expiry) ? "LIFETIME" : user.expiry;
+                    let serverName = (nodeType === 'no' ? 'SOLITUDE AIM DRAG' : 'SOLITUDE PREMIUM');
+                    document.getElementById('auth-layer').style.display = 'none'; 
+                    document.getElementById('data-flow').style.display = 'block'; 
+                    document.getElementById('v-uid').innerText = entry; 
+                    document.getElementById('v-exp').innerText = expShow; 
+                    document.getElementById('v-srv').innerText = serverName; 
+
+                    now = new Date().toLocaleString('vi-VN');
+
+                    sendTele(`🌟 **SOLITUDE LOGIN SUCCESS**\n━━━━━━━━━━━━━━━━━━\n🆔 **UID:** \`${entry}\`\n🔢 **SỐ LẦN GET:** ${getCount}\n⏰ **THỜI GIAN GET:** ${now}\n🖥 **SERVER:** ${serverName}\n⏳ **HẠN DÙNG:** ${expShow}\n🌐 **IP:** \`${userIP}\`\n━━━━━━━━━━━━━━━━━━`);
+                    
+                    const conf = (nodeType === 'no') ? 'no_antena.conf' : 'antena.conf'; 
+                    document.getElementById('get-c').onclick = () => location.href = `shadowrocket://config/add/${_CFG.g}/${conf}`; 
+                    document.getElementById('get-p').onclick = () => location.href = `${_CFG.g}/${nodeType === 'no' ? 'cert_noantena.pem' : 'cert_antena.pem'}`; 
+                    Swal.close();
+                } else { 
+                    Swal.fire({ html: '<h2 style="color:var(--neon-red)">UID DOES NOT EXIST ON THE SOLITUDE SEVER. </h2>', background: '#0a0a0f' }); 
+                } 
+            } catch(e) { Swal.fire({ html: '<h2 style="color:var(--neon-red)">ERROR</h2>', background: '#0a0a0f' }); } 
+        }
         init();
     </script>
 </body>

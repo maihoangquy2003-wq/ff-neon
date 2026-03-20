@@ -36,7 +36,8 @@
             text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 12px var(--neon-blue));
         }
 
-        .srv-bridge { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
+        /* Chỉnh lại thành 2 cột do bỏ server free */
+        .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
         .node-btn { 
             background: rgba(255, 255, 255, 0.02); border: 1px solid #333; 
             padding: 15px 5px; border-radius: 12px; cursor: pointer; 
@@ -47,7 +48,6 @@
         
         .node-btn.active[data-type="no"] { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple); }
         .node-btn.active[data-type="antena"] { border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
-        .node-btn.active[data-type="free"] { border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
 
         .id-input { 
             width: 100%; background: rgba(0,0,0,0.8); border: 2px solid #333; 
@@ -76,6 +76,17 @@
             background: linear-gradient(90deg, #39ff14, #00f2ff);
             color: #000; font-weight: 900; box-shadow: 0 0 25px rgba(57, 255, 20, 0.5); margin-bottom: 10px;
         }
+
+        /* Style cho ô Copy Proxy */
+        .proxy-box {
+            background: rgba(0,0,0,0.6); border: 1px solid var(--neon-blue);
+            padding: 10px; border-radius: 8px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: 'Rajdhani'; font-size: 14px;
+        }
+        .proxy-box span { color: #888; font-size: 11px; text-transform: uppercase; }
+        .proxy-box b { color: var(--neon-blue); }
+        .copy-icon { cursor: pointer; color: var(--neon-blue); padding: 5px; }
 
         .ban-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
         .ban-screen h1 { font-family: 'Orbitron'; color: var(--neon-red); text-shadow: 0 0 20px var(--neon-red); }
@@ -119,14 +130,11 @@
                 <div class="node-btn" onclick="switchSV('antena', this)" data-type="antena">
                     <i class="fas fa-bolt-lightning"></i><span>ANTENA VIP</span>
                 </div>
-                <div class="node-btn" onclick="switchSV('free', this)" data-type="free">
-                    <i class="fas fa-unlock"></i><span>FREE SERVER</span>
-                </div>
             </div>
 
             <div id="login-layer">
-                <button class="ua-btn" onclick="generateKey()">
-                    <i class="fas fa-fingerprint"></i> GET INFO & KEY GENERATOR
+                <button class="ua-btn" onclick="goToGetKey()">
+                    <i class="fas fa-key"></i> NHẤN VÀO ĐÂY ĐỂ LẤY KEY (GET KEY)
                 </button>
 
                 <input type="text" id="key_entry" class="id-input" placeholder="ENTER SYSTEM KEY" style="border-color: var(--neon-purple); font-size: 13px;">
@@ -140,8 +148,16 @@
                     <i class="fas fa-check-circle"></i> ACCESS GRANTED
                 </div>
                 
-                <div id="free-download-zone" style="display:none;">
-                    <button class="engine-btn btn-get-neon" onclick="downloadFile('shadow')"><i class="fas fa-download"></i> TẢI SHADOW CONFIG</button>
+                <div id="download-zone">
+                    <div class="proxy-box">
+                        <span>Host:</span> <b id="host-val">server1.proxycuongcrack.io.vn</b>
+                        <i class="fas fa-copy copy-icon" onclick="copyText('host-val')"></i>
+                    </div>
+                    <div class="proxy-box">
+                        <span>Port:</span> <b id="port-val">6767</b>
+                        <i class="fas fa-copy copy-icon" onclick="copyText('port-val')"></i>
+                    </div>
+
                     <button class="engine-btn btn-get-neon" style="background: linear-gradient(90deg, #bc13fe, #00f2ff);" onclick="downloadFile('cert')"><i class="fas fa-file-shield"></i> TẢI FILE CERT</button>
                 </div>
 
@@ -160,7 +176,7 @@
         const _CFG = {
             t: "8626643586:AAET1UUTKaGzDCit47o3UMAYKHdyGQLKSN0",
             c: "7329868082",
-            free_status: "open" 
+            key_url: "https://proxycuongcrack.io.vn/gen.php"
         };
 
         let currentSV = 'no';
@@ -179,100 +195,64 @@
             currentSV = type;
             document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
-
-            const keyInput = document.getElementById('key_entry');
-            const loginLayer = document.getElementById('login-layer');
-            const getContainer = document.getElementById('get-uid-container');
-            const downloadZone = document.getElementById('free-download-zone');
-            const finalBtn = document.getElementById('final-get-btn');
-
-            if (type === 'free') {
-                if (_CFG.free_status === "closed") {
-                    Swal.fire({ icon: 'error', title: 'SERVER CLOSED', text: 'Server Free đã đóng!', background: '#0a0a0f', color: '#fff' });
-                    return;
-                }
-                // Server Free: Hiện luôn nút tải, ẩn login
-                keyInput.style.display = 'none';
-                loginLayer.style.display = 'none';
-                getContainer.style.display = 'block';
-                downloadZone.style.display = 'block';
-                finalBtn.style.display = 'none'; // Ẩn nút get UID chung
+            
+            // Cập nhật lại Port/Host tùy theo server được chọn (Ví dụ server No Antena bạn sẽ điền sau)
+            if(type === 'antena') {
+                document.getElementById('host-val').innerText = "server1.proxycuongcrack.io.vn";
+                document.getElementById('port-val').innerText = "6767";
             } else {
-                // Server trả phí: Ẩn nút Get cho đến khi verify đúng key
-                keyInput.style.display = 'block';
-                loginLayer.style.display = 'block';
-                getContainer.style.display = 'none';
-                downloadZone.style.display = 'none';
+                document.getElementById('host-val').innerText = "server2.proxycuongcrack.io.vn"; // Thay sau
+                document.getElementById('port-val').innerText = "8888"; // Thay sau
             }
         }
 
-        function generateKey() {
-            const uid = document.getElementById('uid_entry').value || "N/A";
-            const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000);
-            const time = new Date().toLocaleString();
-            
-            // Bot Tele duyệt riêng biệt
-            const serverName = currentSV === 'antena' ? "🔥 ANTENA VIP" : "🛡️ NO ANTENA";
+        function goToGetKey() {
+            window.open(_CFG.key_url, '_blank');
+        }
 
-            const msg = `⚡ **YÊU CẦU DUYỆT ID [${currentSV.toUpperCase()}]**\n` +
-                        `━━━━━━━━━━━━━━━━━━\n` +
-                        `🌐 SERVER: \`${serverName}\`\n` +
-                        `🆔 UID: \`${uid}\`\n` +
-                        `🌐 IP: \`${userIP}\`\n` +
-                        `🔑 KEY MẪU: \`${autoKey}\`\n` +
-                        `⏰ TIME: \`${time}\`\n` +
-                        `━━━━━━━━━━━━━━━━━━\n` +
-                        `[LỆNH DUYỆT: /ADD_${currentSV.toUpperCase()} ${uid} 1]`;
-
-            sendTeleWithButtons(msg, [
-                [{ text: `✅ DUYỆT ${currentSV.toUpperCase()}`, callback_data: `approve_${currentSV}_${uid}` }],
-                [{ text: "❌ BAN IP", callback_data: `ban_${userIP}` }]
-            ]);
-            
-            Swal.fire({ title: 'ĐÃ GỬI!', text: 'Yêu cầu duyệt ID đã gửi về Telegram Admin!', icon: 'success', background: '#0a0a0f', color: '#fff' });
+        function copyText(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text);
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Đã sao chép!', showConfirmButton: false, timer: 1500 });
         }
 
         async function verifyAccess() {
             const uid = document.getElementById('uid_entry').value.trim();
             const key = document.getElementById('key_entry').value.trim();
-            if (!uid || !key) return;
+            if (!uid || !key) {
+                Swal.fire({ icon: 'warning', text: 'Vui lòng nhập UID và Key!', background: '#0a0a0f', color: '#fff' });
+                return;
+            }
 
-            // Kiểm tra Database qua Hosting (Kết nối với bot.php)
+            // Gửi dữ liệu qua bot.php (Phần xử lý Key 1 lần và tự động tạo key bạn viết ở file bot.php)
             try {
-                const response = await fetch(`bot.php?action=check&uid=${uid}&key=${key}&sv=${currentSV}`);
+                const response = await fetch(`bot.php?action=check&uid=${uid}&key=${key}&sv=${currentSV}&ip=${userIP}`);
                 const res = await response.json();
 
                 if (res.status === "success") {
                     document.getElementById('login-layer').style.display = 'none';
                     document.getElementById('get-uid-container').style.display = 'block';
-                    document.getElementById('final-get-btn').style.display = 'block';
                     
-                    const logMsg = `✅ **TRUY CẬP THÀNH CÔNG**\n` +
-                                 `━━━━━━━━━━━━━━━━━━\n` +
-                                 `🆔 UID: \`${uid}\`\n` +
-                                 `🌐 IP: \`${userIP}\`\n` +
-                                 `📂 SERVER: \`${currentSV.toUpperCase()}\`\n` +
-                                 `⏳ HẠN: \`${res.expiry}\`\n` +
-                                 `━━━━━━━━━━━━━━━━━━`;
-                    sendTele(logMsg);
+                    sendTele(`✅ **DUYỆT THÀNH CÔNG**\nUID: \`${uid}\`\nKEY: \`${key}\`\nIP: \`${userIP}\`\nSV: \`${currentSV.toUpperCase()}\``);
                 } else {
-                    Swal.fire({ icon: 'error', title: 'ACCESS DENIED', text: res.message, background: '#0a0a0f', color: '#fff' });
-                    if(res.type === "expired") autoBan(uid, "KEY/UID HẾT HẠN");
+                    Swal.fire({ icon: 'error', title: 'THẤT BẠI', text: res.message, background: '#0a0a0f', color: '#fff' });
+                    // Nếu dùng lại key cũ, hệ thống tự khóa IP
+                    if(res.type === "reuse") autoBan(uid, "SỬ DỤNG LẠI KEY CŨ");
                 }
             } catch (e) {
-                // Demo nếu chưa có file bot.php xử lý
-                Swal.fire({ icon: 'info', text: 'Đang kết nối Database...' });
+                // Demo local nếu không có backend
+                document.getElementById('login-layer').style.display = 'none';
+                document.getElementById('get-uid-container').style.display = 'block';
             }
         }
 
         function downloadFile(type) {
-            Swal.fire({ title: 'DOWNLOADING...', text: `Đang tải file ${type.toUpperCase()} cho Server Free`, icon: 'success', timer: 1500, showConfirmButton: false });
-            // Link tải file của bạn ở đây
+            Swal.fire({ title: 'DOWNLOADING...', text: `Đang tải file ${type.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false });
         }
 
         function autoBan(uid, reason) {
             localStorage.setItem('DEVICE_BANNED', 'true');
-            sendTele(`🚫 **AUTO BAN**\nUID: \`${uid}\`\nIP: \`${userIP}\`\nLÝ DO: \`${reason}\``);
+            sendTele(`🚫 **AUTO BAN IP**\nUID: \`${uid}\`\nIP: \`${userIP}\`\nLÝ DO: \`${reason}\``);
             showBanUI(reason);
         }
 
@@ -289,21 +269,8 @@
             });
         }
 
-        function sendTeleWithButtons(text, buttons) {
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    chat_id: _CFG.c, 
-                    text: text, 
-                    parse_mode: 'Markdown',
-                    reply_markup: { inline_keyboard: buttons }
-                })
-            });
-        }
-
         function getFinalUID() {
-            Swal.fire({ title: 'SUCCESS', text: 'Đã lấy cấu hình thành công!', icon: 'success', background: '#0a0a0f', color: '#fff' });
+            Swal.fire({ title: 'SUCCESS', text: 'Cấu hình đã được áp dụng!', icon: 'success', background: '#0a0a0f', color: '#fff' });
         }
 
         particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#00f2ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });

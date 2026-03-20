@@ -144,8 +144,6 @@
                     <button class="engine-btn btn-get-neon" onclick="downloadFile('shadow')"><i class="fas fa-download"></i> TẢI SHADOW CONFIG</button>
                     <button class="engine-btn btn-get-neon" style="background: linear-gradient(90deg, #bc13fe, #00f2ff);" onclick="downloadFile('cert')"><i class="fas fa-file-shield"></i> TẢI FILE CERT</button>
                 </div>
-
-                <button class="engine-btn btn-get-neon" id="final-get-btn" onclick="getFinalUID()" style="display:none;">GET UID & CONFIG</button>
                 
                 <button onclick="location.reload()" style="width:100%; background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px; font-family:'Orbitron';">LOGOUT SESSION</button>
             </div>
@@ -182,19 +180,15 @@
 
             const loginLayer = document.getElementById('login-layer');
             const getContainer = document.getElementById('get-uid-container');
-            const downloadZone = document.getElementById('free-download-zone');
 
             if (type === 'free') {
                 if (_CFG.free_status === "closed") {
                     Swal.fire({ icon: 'error', title: 'SERVER CLOSED', text: 'Server Free đã đóng!', background: '#0a0a0f', color: '#fff' });
                     return;
                 }
-                // Server Free: Hiện luôn nút tải, ẩn login
                 loginLayer.style.display = 'none';
                 getContainer.style.display = 'block';
-                downloadZone.style.display = 'block';
             } else {
-                // Server trả phí: Hiện form login
                 loginLayer.style.display = 'block';
                 getContainer.style.display = 'none';
             }
@@ -236,8 +230,6 @@
                 if (res.status === "success") {
                     document.getElementById('login-layer').style.display = 'none';
                     document.getElementById('get-uid-container').style.display = 'block';
-                    // Đảm bảo hiện nút tải file khi đúng key
-                    document.getElementById('free-download-zone').style.display = 'block';
                     
                     const logMsg = `✅ **TRUY CẬP THÀNH CÔNG**\n` +
                                  `━━━━━━━━━━━━━━━━━━\n` +
@@ -290,10 +282,6 @@
                     reply_markup: { inline_keyboard: buttons }
                 })
             });
-        }
-
-        function getFinalUID() {
-            // Hàm này đã bị ẩn nút nhưng vẫn giữ lại để không lỗi code
         }
 
         particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#00f2ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });

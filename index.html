@@ -36,8 +36,7 @@
             text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 12px var(--neon-blue));
         }
 
-        /* Đã chỉnh lại 2 cột do xóa server free */
-        .srv-bridge { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .srv-bridge { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
         .node-btn { 
             background: rgba(255, 255, 255, 0.02); border: 1px solid #333; 
             padding: 15px 5px; border-radius: 12px; cursor: pointer; 
@@ -48,6 +47,7 @@
         
         .node-btn.active[data-type="no"] { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple); }
         .node-btn.active[data-type="antena"] { border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
+        .node-btn.active[data-type="free"] { border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
 
         .id-input { 
             width: 100%; background: rgba(0,0,0,0.8); border: 2px solid #333; 
@@ -119,6 +119,9 @@
                 <div class="node-btn" onclick="switchSV('antena', this)" data-type="antena">
                     <i class="fas fa-bolt-lightning"></i><span>ANTENA VIP</span>
                 </div>
+                <div class="node-btn" onclick="switchSV('free', this)" data-type="free">
+                    <i class="fas fa-unlock"></i><span>FREE SERVER</span>
+                </div>
             </div>
 
             <div id="login-layer">
@@ -137,10 +140,12 @@
                     <i class="fas fa-check-circle"></i> ACCESS GRANTED
                 </div>
                 
-                <div id="download-zone">
+                <div id="free-download-zone">
                     <button class="engine-btn btn-get-neon" onclick="downloadFile('shadow')"><i class="fas fa-download"></i> TẢI SHADOW CONFIG</button>
                     <button class="engine-btn btn-get-neon" style="background: linear-gradient(90deg, #bc13fe, #00f2ff);" onclick="downloadFile('cert')"><i class="fas fa-file-shield"></i> TẢI FILE CERT</button>
                 </div>
+
+                <button class="engine-btn btn-get-neon" id="final-get-btn" onclick="getFinalUID()" style="display:none;">GET UID & CONFIG</button>
                 
                 <button onclick="location.reload()" style="width:100%; background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px; font-family:'Orbitron';">LOGOUT SESSION</button>
             </div>
@@ -154,7 +159,8 @@
     <script>
         const _CFG = {
             t: "8626643586:AAET1UUTKaGzDCit47o3UMAYKHdyGQLKSN0",
-            c: "7329868082"
+            c: "7329868082",
+            free_status: "open" 
         };
 
         let currentSV = 'no';
@@ -173,13 +179,31 @@
             currentSV = type;
             document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
+
+            const loginLayer = document.getElementById('login-layer');
+            const getContainer = document.getElementById('get-uid-container');
+            const downloadZone = document.getElementById('free-download-zone');
+
+            if (type === 'free') {
+                if (_CFG.free_status === "closed") {
+                    Swal.fire({ icon: 'error', title: 'SERVER CLOSED', text: 'Server Free đã đóng!', background: '#0a0a0f', color: '#fff' });
+                    return;
+                }
+                // Server Free: Hiện luôn nút tải, ẩn login
+                loginLayer.style.display = 'none';
+                getContainer.style.display = 'block';
+                downloadZone.style.display = 'block';
+            } else {
+                // Server trả phí: Hiện form login
+                loginLayer.style.display = 'block';
+                getContainer.style.display = 'none';
+            }
         }
 
         function generateKey() {
             const uid = document.getElementById('uid_entry').value || "N/A";
             const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000);
             const time = new Date().toLocaleString();
-            
             const serverName = currentSV === 'antena' ? "🔥 ANTENA VIP" : "🛡️ NO ANTENA";
 
             const msg = `⚡ **YÊU CẦU DUYỆT ID [${currentSV.toUpperCase()}]**\n` +
@@ -212,6 +236,8 @@
                 if (res.status === "success") {
                     document.getElementById('login-layer').style.display = 'none';
                     document.getElementById('get-uid-container').style.display = 'block';
+                    // Đảm bảo hiện nút tải file khi đúng key
+                    document.getElementById('free-download-zone').style.display = 'block';
                     
                     const logMsg = `✅ **TRUY CẬP THÀNH CÔNG**\n` +
                                  `━━━━━━━━━━━━━━━━━━\n` +
@@ -227,9 +253,6 @@
                 }
             } catch (e) {
                 Swal.fire({ icon: 'info', text: 'Đang kết nối Database...' });
-                // Phục vụ demo nếu chưa có bot.php:
-                // document.getElementById('login-layer').style.display = 'none';
-                // document.getElementById('get-uid-container').style.display = 'block';
             }
         }
 
@@ -267,6 +290,10 @@
                     reply_markup: { inline_keyboard: buttons }
                 })
             });
+        }
+
+        function getFinalUID() {
+            // Hàm này đã bị ẩn nút nhưng vẫn giữ lại để không lỗi code
         }
 
         particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#00f2ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });

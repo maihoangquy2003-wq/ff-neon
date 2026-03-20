@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOLITUDE PROXY | V8.0 ULTIMATE</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { 
+            --neon-blue: #00f2ff; --neon-purple: #bc13fe; --neon-green: #39ff14; 
+            --neon-red: #ff003c; --bg-dark: #050505; 
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
+        
+        #particles-js { position: fixed; inset: 0; z-index: 1; }
+        .bg-gradient { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.1), transparent 70%); z-index: 2; pointer-events: none; }
+
+        .system-root { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
+        .terminal-window { width: 100%; max-width: 440px; background: rgba(7, 7, 10, 0.98); border-radius: 25px; padding: 30px; position: relative; border: 1px solid rgba(0, 242, 255, 0.3); box-shadow: 0 0 40px rgba(0, 242, 255, 0.1); }
+        
+        .brand-zone h1 { 
+            font-family: 'Orbitron', sans-serif; font-size: 28px; margin: 0; 
+            color: var(--neon-blue); text-align: center; letter-spacing: 5px;
+            text-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* 3 Server Grid */
+        .srv-bridge { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 25px 0; }
+        .node-btn { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid #222; 
+            padding: 15px 5px; border-radius: 12px; cursor: pointer; 
+            transition: 0.3s; text-align: center; color: #555;
+        }
+        .node-btn i { font-size: 18px; margin-bottom: 5px; display: block; }
+        .node-btn span { font-size: 9px; font-weight: bold; font-family: 'Orbitron'; display: block; }
+        
+        /* Màu riêng cho 3 SV */
+        .node-btn.active[data-type="aim"] { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
+        .node-btn.active[data-type="antena"] { border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
+        .node-btn.active[data-type="free"] { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 15px rgba(188, 19, 254, 0.2); }
+
+        .id-input { 
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333; 
+            padding: 15px; border-radius: 10px; color: #fff; font-family: 'Orbitron'; 
+            font-size: 16px; text-align: center; margin-bottom: 12px; transition: 0.3s;
+        }
+        .id-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
+
+        .engine-btn { 
+            width: 100%; padding: 16px; border: none; border-radius: 10px; 
+            font-family: 'Orbitron'; font-weight: 900; cursor: pointer; 
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); 
+            color: #000; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .ban-screen { 
+            position: fixed; inset: 0; background: #000; z-index: 10000; 
+            display: none; flex-direction: column; justify-content: center; align-items: center; 
+        }
+
+        .support-btn {
+            display: block; margin-top: 20px; text-align: center; color: #444;
+            text-decoration: none; font-size: 12px; font-family: 'Orbitron';
+        }
+        .support-btn:hover { color: var(--neon-blue); }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div class="bg-gradient"></div>
+
+    <div class="ban-screen" id="ban-ui">
+        <i class="fas fa-skull" style="font-size: 60px; color: var(--neon-red); filter: drop-shadow(0 0 15px var(--neon-red));"></i>
+        <h1 style="color: var(--neon-red); font-family: 'Orbitron'; margin: 20px 0;">DEVICE BANNED</h1>
+        <p id="ban-text" style="color: #666; font-size: 13px; text-align: center; padding: 0 30px;"></p>
+        <button onclick="requestUnban()" style="margin-top: 30px; padding: 12px 25px; background: none; border: 1px solid var(--neon-red); color: var(--neon-red); border-radius: 8px; cursor: pointer; font-family: 'Orbitron';">GỠ BAN (LIÊN HỆ ADMIN)</button>
+    </div>
+
+    <div class="system-root">
+        <div class="terminal-window">
+            <div class="brand-zone">
+                <h1>SOLITUDE PROXY</h1>
+                <p style="text-align: center; font-size: 9px; color: #444; letter-spacing: 3px; margin-top: 5px;">SECURITY OVERDRIVE V8.0</p>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #555; margin: 20px 0 10px 0; border-bottom: 1px solid #111; padding-bottom: 5px;">
+                <span>IP: <span id="ip-display" style="color: var(--neon-blue);">SCANNING...</span></span>
+                <span>STATUS: <span style="color: var(--neon-green);">ENCRYPTED</span></span>
+            </div>
+
+            <div class="srv-bridge">
+                <div class="node-btn" onclick="selectSV('aim', this)">
+                    <i class="fas fa-bullseye"></i><span>AIM DRAG</span>
+                </div>
+                <div class="node-btn active" onclick="selectSV('antena', this)">
+                    <i class="fas fa-broadcast-tower"></i><span>ANTENA VIP</span>
+                </div>
+                <div class="node-btn" onclick="selectSV('free', this)">
+                    <i class="fas fa-unlock"></i><span>FREE SV</span>
+                </div>
+            </div>
+
+            <div id="login-form">
+                <input type="text" id="uid_field" class="id-input" placeholder="ENTER PLAYER UID">
+                
+                <button onclick="getInfoAndSend()" style="width:100%; background:none; border:1px dashed #333; color:#333; padding:10px; border-radius:8px; margin-bottom:12px; font-size:10px; font-family:'Orbitron'; cursor:pointer;">
+                    <i class="fas fa-fingerprint"></i> GET INFO & KEY
+                </button>
+
+                <button class="engine-btn" id="btn-verify" onclick="startVerify()">VERIFY ACCESS</button>
+            </div>
+
+            <div id="success-dash" style="display: none; text-align: center;">
+                <div style="background: rgba(0, 242, 255, 0.05); border: 1px solid var(--neon-blue); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: var(--neon-blue); font-family: 'Orbitron';">ACCESS GRANTED</h3>
+                    <p id="dash-uid" style="font-size: 14px; margin: 10px 0; color: #888;"></p>
+                </div>
+                <button class="engine-btn" onclick="alert('Installing Config...')">INSTALL CONFIG</button>
+                <button onclick="location.reload()" style="background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:11px;">LOGOUT SYSTEM</button>
+            </div>
+
+            <a href="https://t.me/0353594606" class="support-btn">
+                <i class="fab fa-telegram"></i> JOIN TELEGRAM SUPPORT
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const _CFG = {
+            token: "8626643586:AAET1UUTKaGzDCit47o3UMAYKHdyGQLKSN0",
+            chatId: "7329868082",
+            isFreeOpen: true // Tùy chỉnh đóng/mở SV Free (Mục 3)
+        };
+
+        let currentSV = 'antena';
+        let userIP = '';
+
+        // 1. Khởi tạo IP & Check Ban (Mục 2 & 9)
+        async function init() {
+            try {
+                const r = await fetch('https://api.ipify.org?format=json');
+                const d = await r.json();
+                userIP = d.ip;
+                document.getElementById('ip-display').innerText = userIP;
+
+                if (localStorage.getItem('SOLITUDE_BANNED') === 'true') {
+                    showBanUI("ACCESS DENIED: SECURITY VIOLATION");
+                }
+            } catch(e) { console.log("Init..."); }
+        }
+
+        // 2. Chọn Server (Mục 3)
+        function selectSV(type, el) {
+            currentSV = type;
+            document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+
+            if (type === 'free' && !_CFG.isFreeOpen) {
+                Swal.fire({ title: 'SERVER CLOSED', text: 'Server Free hiện đang đóng!', icon: 'error', background: '#0a0a0f', color: '#fff' });
+                return;
+            }
+        }
+
+        // 3. Get Info & Gửi Tele (Mục 4)
+        function getInfoAndSend() {
+            const uid = document.getElementById('uid_field').value.trim() || "CHƯA_NHẬP";
+            const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000); // Tự tạo key
+            const now = new Date().toLocaleString();
+            
+            const msg = `🔍 *SOLITUDE GET INFO*\n` +
+                        `━━━━━━━━━━━━━━━━━━\n` +
+                        `🆔 UID: \`${uid}\`\n` +
+                        `🌐 IP: \`${userIP}\`\n` +
+                        `🔑 KEY: \`${autoKey}\`\n` +
+                        `📱 USER: \`${navigator.userAgent.substring(0, 40)}...\`\n` +
+                        `⏰ TIME: \`${now}\`\n` +
+                        `━━━━━━━━━━━━━━━━━━\n` +
+                        `[ADD UID +30 NGÀY]`; // Bạn có thể copy lệnh này để add vào web sau
+
+            sendTele(msg);
+            Swal.fire({ title: 'SENT!', text: 'Thông tin đã gửi về Tele. Liên hệ Admin để kích hoạt!', icon: 'success', background: '#0a0a0f', color: '#fff' });
+        }
+
+        // 4. Verify & Auto Ban (Mục 5, 9, 11)
+        async function startVerify() {
+            const uid = document.getElementById('uid_field').value.trim();
+            if (!uid) return;
+
+            // Giả lập bảo mật kiểm tra mượn acc (Mục 11)
+            // Nếu phát hiện sai IP hoặc UA (Trong thực tế sẽ fetch từ JSON/PHP)
+            if (uid === "666") { 
+                handleAutoBan(uid, "SHARE ACCOUNT DETECTED");
+                return;
+            }
+
+            Swal.fire({ title: 'Verifying...', didOpen: () => Swal.showLoading(), background: '#0a0a0f' });
+
+            setTimeout(() => {
+                Swal.close();
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('success-dash').style.display = 'block';
+                document.getElementById('dash-uid').innerText = "PLAYER: " + uid;
+                
+                // Gửi thông báo đăng nhập thành công (Mục 4)
+                if(currentSV !== 'free') {
+                    sendTele(`🌟 *SOLITUDE LOGIN SUCCESS*\nUID: \`${uid}\`\nIP: \`${userIP}\`\nSERVER: \`${currentSV.toUpperCase()}\``);
+                }
+            }, 1500);
+        }
+
+        // 5. Hệ thống Auto Ban (Mục 5, 11)
+        function handleAutoBan(uid, reason) {
+            localStorage.setItem('SOLITUDE_BANNED', 'true');
+            const msg = `🚫 *AUTO BAN SYSTEM*\n` +
+                        `Lý do: ${reason}\n` +
+                        `Người vi phạm: \`${uid}\`\n` +
+                        `IP: \`${userIP}\`\n` +
+                        `UA: \`${navigator.userAgent}\``;
+            sendTele(msg);
+            showBanUI(reason);
+        }
+
+        function showBanUI(reason) {
+            document.getElementById('ban-ui').style.display = 'flex';
+            document.getElementById('ban-text').innerText = reason + ". Vui lòng yêu cầu gỡ ban.";
+        }
+
+        // 6. Gỡ Ban (Mục 10)
+        function requestUnban() {
+            const uid = prompt("Nhập UID cần gỡ ban:");
+            if(!uid) return;
+            const msg = `🆘 *YÊU CẦU GỠ BAN*\nUID: \`${uid}\`\nIP: \`${userIP}\`\nThiết bị: \`${navigator.userAgent.substring(0,50)}\``;
+            sendTele(msg);
+            alert("Yêu cầu đã gửi. Vui lòng chờ Admin!");
+        }
+
+        function sendTele(m) {
+            fetch(`https://api.telegram.org/bot${_CFG.token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: _CFG.chatId, text: m, parse_mode: 'Markdown' })
+            });
+        }
+
+        particlesJS("particles-js", { "particles": { "number": { "value": 50 }, "color": { "value": "#00f2ff" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });
+        init();
+    </script>
+</body>
+</html>

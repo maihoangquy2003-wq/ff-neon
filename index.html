@@ -137,14 +137,14 @@
                 <input type="text" id="key_entry" class="id-input" placeholder="ENTER SYSTEM KEY" style="border-color: var(--neon-purple); font-size: 13px;">
                 <input type="text" id="uid_entry" class="id-input" placeholder="ENTER UID PLAYER">
                 
-                <button class="engine-btn" onclick="verifyAccess()">VERIFY SYSTEM</button>
+                <button class="engine-btn" id="verify-btn" onclick="verifyAccess()">VERIFY SYSTEM</button>
             </div>
 
             <div id="get-uid-container">
                 <div style="text-align: center; margin-bottom: 15px; color: var(--neon-green); font-family: 'Orbitron'; font-size: 12px; text-shadow: 0 0 5px var(--neon-green);">
                     <i class="fas fa-check-circle"></i> ACCESS GRANTED
                 </div>
-                <button class="engine-btn btn-get-neon" onclick="getFinalUID()">GET UID & CONFIG</button>
+                <button class="engine-btn btn-get-neon" id="final-get-btn" onclick="getFinalUID()">GET UID & CONFIG</button>
                 <button onclick="location.reload()" style="width:100%; background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px; font-family:'Orbitron';">LOGOUT SESSION</button>
             </div>
 
@@ -158,14 +158,13 @@
         const _CFG = {
             t: "8626643586:AAET1UUTKaGzDCit47o3UMAYKHdyGQLKSN0",
             c: "7329868082",
-            correct_key: "SOLITUDE-PRO", // Key demo
-            free_status: "open" // "open" hoặc "closed" (Cổng chờ PHP Tele)
+            correct_key: "SOLITUDE-PRO", 
+            free_status: "open" 
         };
 
         let currentSV = 'no';
         let userIP = '';
 
-        // 1. Get IP tự động (Yêu cầu 2)
         async function getIP() {
             try {
                 const r = await fetch('https://api.ipify.org?format=json');
@@ -175,30 +174,39 @@
             } catch(e) { document.getElementById('ip-node').innerText = "ERROR"; }
         }
 
-        // 2. Chuyển Server & Xử lý Server Free (Yêu cầu 3)
         function switchSV(type, el) {
             currentSV = type;
             document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
 
             const keyInput = document.getElementById('key_entry');
+            const verifyBtn = document.getElementById('verify-btn');
+            const getContainer = document.getElementById('get-uid-container');
+            const loginLayer = document.getElementById('login-layer');
+
             if (type === 'free') {
                 if (_CFG.free_status === "closed") {
                     Swal.fire({ icon: 'error', title: 'SERVER CLOSED', text: 'Server Free đã đóng!', background: '#0a0a0f', color: '#fff' });
                     return;
                 }
-                keyInput.style.display = 'none'; // Free hiện nút luôn, không cần key
+                // Server Free: Hiện luôn nút Get UID
+                keyInput.style.display = 'none';
+                loginLayer.style.display = 'none';
+                getContainer.style.display = 'block';
             } else {
+                // Server trả phí: Ẩn nút Get UID, hiện ô nhập key
                 keyInput.style.display = 'block';
+                loginLayer.style.display = 'block';
+                getContainer.style.display = 'none';
             }
         }
 
-        // 3. Get Info & Gửi Tele (Yêu cầu 4)
         function generateKey() {
             const uid = document.getElementById('uid_entry').value || "N/A";
             const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000);
             const time = new Date().toLocaleString();
             
+            // Layout gửi Tele (Yêu cầu 4)
             const msg = `🔍 **SOLITUDE INFO REQUEST**\n` +
                         `━━━━━━━━━━━━━━━━━━\n` +
                         `🆔 UID: \`${uid}\`\n` +
@@ -206,38 +214,46 @@
                         `🔑 KEY: \`${autoKey}\`\n` +
                         `⏰ TIME: \`${time}\`\n` +
                         `━━━━━━━━━━━━━━━━━━\n` +
-                        `[THIẾT LẬP LỆNH: /ADD ${uid} 30]`; // Lệnh chờ PHP
+                        `[THIẾT LẬP LỆNH: /ADD ${uid} 1]`; // Mặc định 1 ngày
 
-            sendTele(msg);
+            sendTeleWithButtons(msg, [
+                [{ text: "✅ DUYỆT UID", callback_data: `approve_${uid}` }, { text: "❌ BAN IP", callback_data: `ban_${userIP}` }],
+                [{ text: "🔓 MỞ SERVER FREE", callback_data: "free_on" }, { text: "🔒 ĐÓNG SERVER FREE", callback_data: "free_off" }]
+            ]);
+            
             Swal.fire({ title: 'SENT!', text: 'Yêu cầu đã gửi về Telegram. Vui lòng chờ Admin duyệt!', icon: 'success', background: '#0a0a0f', color: '#fff' });
         }
 
-        // 4. Kiểm tra gắt & Auto Ban (Yêu cầu 5, 9, 11)
         async function verifyAccess() {
             const uid = document.getElementById('uid_entry').value.trim();
             const key = document.getElementById('key_entry').value.trim();
-            if (!uid) return;
-
-            // Logic kiểm tra IP/UID gắt (Giao thức 11)
-            // Lưu ý: Phần này sẽ được PHP check Database chính xác 100%
-            if (currentSV !== 'free' && key !== _CFG.correct_key) {
-                // Giả lập sai IP hoặc mượn UID -> Auto Ban
-                autoBan(uid, "SHARING DETECTED"); 
+            if (!uid || !key) {
+                Swal.fire({ icon: 'warning', title: 'THIẾU THÔNG TIN', text: 'Vui lòng nhập UID và Key!', background: '#0a0a0f', color: '#fff' });
                 return;
             }
 
-            // Nếu ok (hoặc là Server Free)
+            if (key !== _CFG.correct_key) {
+                autoBan(uid, "SAI KEY/MƯỢN UID TRÁI PHÉP"); 
+                return;
+            }
+
+            // Verify thành công mới mở nút Get cho server trả phí
             document.getElementById('login-layer').style.display = 'none';
             document.getElementById('get-uid-container').style.display = 'block';
             
-            if(currentSV !== 'free') {
-                sendTele(`✅ **SUCCESS LOGIN**\nUID: \`${uid}\`\nIP: \`${userIP}\`\nKEY: \`${key}\``);
-            }
+            const successMsg = `🌟 **THÊM UID THÀNH CÔNG**\n` +
+                             `━━━━━━━━━━━━━━━━━━\n` +
+                             `🆔 UID: \`${uid}\`\n` +
+                             `🌐 IP: \`${userIP}\`\n` +
+                             `🔑 KEY: \`${key}\`\n` +
+                             `⏳ HẠN SỬ DỤNG: 1 NGÀY\n` +
+                             `━━━━━━━━━━━━━━━━━━`;
+            sendTele(successMsg);
         }
 
         function autoBan(uid, reason) {
             localStorage.setItem('DEVICE_BANNED', 'true');
-            const alertMsg = `🚫 **AUTO BAN**\nUID: \`${uid}\`\nIP: \`${userIP}\`\nReason: \`${reason}\``;
+            const alertMsg = `🚫 **AUTO BAN VIOLATION**\n━━━━━━━━━━━━━━━━━━\n🆔 UID: \`${uid}\`\n🌐 IP: \`${userIP}\`\n⚠️ LÝ DO: \`${reason}\`\n━━━━━━━━━━━━━━━━━━`;
             sendTele(alertMsg);
             showBanUI(reason);
         }
@@ -259,6 +275,23 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: _CFG.c, text: text, parse_mode: 'Markdown' })
             });
+        }
+
+        function sendTeleWithButtons(text, buttons) {
+            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    chat_id: _CFG.c, 
+                    text: text, 
+                    parse_mode: 'Markdown',
+                    reply_markup: { inline_keyboard: buttons }
+                })
+            });
+        }
+
+        function getFinalUID() {
+            Swal.fire({ title: 'SUCCESS', text: 'Đang tải cấu hình Solitude...', icon: 'success', timer: 2000, showConfirmButton: false, background: '#0a0a0f', color: '#fff' });
         }
 
         particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#00f2ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });

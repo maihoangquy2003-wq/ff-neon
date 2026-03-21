@@ -163,6 +163,12 @@
             free_status: "open" 
         };
 
+        // DANH SÁCH KEY RIÊNG BIỆT (Có thể thay đổi tại đây)
+        const _KEYS = {
+            antena: ["ANTENA-123", "ANTENA-FREE", "VIP-ANTENA-99"],
+            no: ["NO-ANTENA-001", "NO-123", "SHIELD-KEY-88"]
+        };
+
         let currentSV = 'no';
         let userIP = '';
 
@@ -172,13 +178,10 @@
                 const d = await r.json(); userIP = d.ip;
                 document.getElementById('ip-node').innerText = userIP;
                 if(localStorage.getItem('DEVICE_BANNED')) showBanUI("SECURITY VIOLATION");
-                
-                // KIỂM TRA LÚC MỚI VÀO TRANG (NẾU ĐANG CHỌN SV TRẢ PHÍ THÌ HIỆN NÚT)
                 checkGetInfoBtn();
             } catch(e) { document.getElementById('ip-node').innerText = "ERROR"; }
         }
 
-        // HÀM KIỂM TRA ĐỂ HIỆN/ẨN NÚT GET INFO
         function checkGetInfoBtn() {
             const btn = document.getElementById('get_info_btn');
             if (currentSV === 'no' || currentSV === 'antena') {
@@ -199,7 +202,6 @@
             const downloadZone = document.getElementById('free-download-zone');
             const finalBtn = document.getElementById('final-get-btn');
 
-            // Cập nhật hiển thị nút Get Info
             checkGetInfoBtn();
 
             if (type === 'free') {
@@ -242,37 +244,47 @@
                 [{ text: "❌ BAN IP", callback_data: `ban_${userIP}` }]
             ]);
             
-            Swal.fire({ title: 'ĐÃ GỬI!', text: 'Yêu cầu duyệt ID đã gửi về Telegram Admin!', icon: 'success', background: '#0a0a0f', color: '#fff' });
+            Swal.fire({ title: 'ĐÃ GỬI!', text: `Yêu cầu cho server ${currentSV.toUpperCase()} đã gửi!`, icon: 'success', background: '#0a0a0f', color: '#fff' });
         }
 
         async function verifyAccess() {
             const uid = "PLAYER_AUTO"; 
             const key = document.getElementById('key_entry').value.trim();
-            if (!key) return;
+            if (!key) {
+                Swal.fire({ icon: 'warning', text: 'Vui lòng nhập Key!', background: '#0a0a0f', color: '#fff' });
+                return;
+            }
 
-            try {
-                const response = await fetch(`bot.php?action=check&uid=${uid}&key=${key}&sv=${currentSV}`);
-                const res = await response.json();
+            // KIỂM TRA KEY THEO SERVER HIỆN TẠI
+            const isValidKey = _KEYS[currentSV].includes(key);
 
-                if (res.status === "success") {
-                    document.getElementById('login-layer').style.display = 'none';
-                    document.getElementById('get-uid-container').style.display = 'block';
-                    document.getElementById('final-get-btn').style.display = 'block';
-                    
-                    const logMsg = `✅ **TRUY CẬP THÀNH CÔNG**\n` +
-                                 `━━━━━━━━━━━━━━━━━━\n` +
-                                 `🆔 UID: \`${uid}\`\n` +
-                                 `🌐 IP: \`${userIP}\`\n` +
-                                 `📂 SERVER: \`${currentSV.toUpperCase()}\`\n` +
-                                 `⏳ HẠN: \`${res.expiry}\`\n` +
-                                 `━━━━━━━━━━━━━━━━━━`;
-                    sendTele(logMsg);
+            if (isValidKey) {
+                // Nếu đúng key trong danh sách tương ứng
+                document.getElementById('login-layer').style.display = 'none';
+                document.getElementById('get-uid-container').style.display = 'block';
+                document.getElementById('final-get-btn').style.display = 'block';
+                
+                const logMsg = `✅ **TRUY CẬP THÀNH CÔNG**\n` +
+                             `━━━━━━━━━━━━━━━━━━\n` +
+                             `🆔 UID: \`${uid}\`\n` +
+                             `🌐 IP: \`${userIP}\`\n` +
+                             `📂 SERVER: \`${currentSV.toUpperCase()}\`\n` +
+                             `━━━━━━━━━━━━━━━━━━`;
+                sendTele(logMsg);
+                Swal.fire({ icon: 'success', title: 'ACCESS GRANTED', background: '#0a0a0f', color: '#fff' });
+            } else {
+                // Kiểm tra xem có phải key của server khác không
+                const otherSV = currentSV === 'antena' ? 'no' : 'antena';
+                if (_KEYS[otherSV].includes(key)) {
+                    Swal.fire({ 
+                        icon: 'error', 
+                        title: 'WRONG SERVER KEY', 
+                        text: `Key này chỉ dành cho server ${otherSV.toUpperCase()}!`, 
+                        background: '#0a0a0f', color: '#fff' 
+                    });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'ACCESS DENIED', text: res.message, background: '#0a0a0f', color: '#fff' });
-                    if(res.type === "expired") autoBan(uid, "KEY/UID HẾT HẠN");
+                    Swal.fire({ icon: 'error', title: 'INVALID KEY', text: 'Key không tồn tại trên hệ thống!', background: '#0a0a0f', color: '#fff' });
                 }
-            } catch (e) {
-                Swal.fire({ icon: 'info', text: 'Đang kết nối Database...' });
             }
         }
 

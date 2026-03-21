@@ -3,333 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOLITUDE PROXY | NEON ULTIMATE V8.0</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <title>SOLITUDE PROXY | V8.0 NEON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         :root { 
-            --neon-blue: #00f2ff; --neon-pink: #ff00ff; --neon-purple: #bc13fe; 
-            --neon-green: #39ff14; --neon-red: #ff003c; --bg-dark: #050505; 
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        .bg-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.1), transparent 70%); z-index: 2; pointer-events: none; }
-        
-        .system-root { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 15px; }
-        
-        .terminal-window { 
-            width: 100%; max-width: 440px; background: rgba(10, 10, 15, 0.95); 
-            border-radius: 25px; padding: 30px 20px; position: relative; 
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.3), inset 0 0 15px rgba(0, 242, 255, 0.1); 
+            --neon: #00f2ff; 
+            --pink: #ff00ff; 
+            --dark-bg: #050508;
+            --glass: rgba(10, 10, 15, 0.98);
         }
 
-        .brand-zone h1 { 
-            font-family: 'Orbitron', sans-serif; font-size: 30px; margin: 0; 
-            background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-purple)); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            text-align: center; letter-spacing: 5px; filter: drop-shadow(0 0 12px var(--neon-blue));
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+
+        body { 
+            margin: 0; 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Rajdhani', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            overflow: hidden; 
         }
 
-        .srv-bridge { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .node-btn { 
-            background: rgba(255, 255, 255, 0.02); border: 1px solid #333; 
-            padding: 15px 5px; border-radius: 12px; cursor: pointer; 
-            transition: 0.3s; text-align: center; color: #555;
-        }
-        .node-btn i { font-size: 20px; margin-bottom: 5px; display: block; }
-        .node-btn span { font-size: 9px; font-weight: bold; font-family: 'Orbitron'; }
-        
-        .node-btn.active[data-type="no"] { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple); }
-        .node-btn.active[data-type="antena"] { border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
-        .node-btn.active[data-type="free"] { border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
-
-        .id-input { 
-            width: 100%; background: rgba(0,0,0,0.8); border: 2px solid #333; 
-            padding: 18px; border-radius: 12px; color: #fff; font-family: 'Orbitron'; 
-            font-size: 18px; text-align: center; margin-bottom: 12px; transition: 0.3s;
-        }
-        .id-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
-
-        .engine-btn { 
-            width: 100%; padding: 18px; border: none; border-radius: 12px; 
-            font-family: 'Orbitron'; font-weight: 900; cursor: pointer; 
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple)); 
-            color: #000; text-transform: uppercase; letter-spacing: 2px;
-            box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4);
+        /* Hiệu ứng hạt Neon nền */
+        body::before {
+            content: ""; position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05), transparent 70%);
+            z-index: -1;
         }
 
-        .ua-btn { 
-            width: 100%; padding: 12px; background: rgba(255, 0, 255, 0.05);
-            border: 1px dashed var(--neon-pink); border-radius: 10px; 
-            font-family: 'Orbitron'; font-size: 10px; cursor: pointer; 
-            color: var(--neon-pink); margin-bottom: 15px; box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
-            display: none; /* MẶC ĐỊNH ẨN NÚT GET INFO */
+        .terminal { 
+            width: 92%; 
+            max-width: 420px; 
+            background: var(--glass); 
+            border: 1.5px solid #1a1a2e; 
+            border-radius: 30px; 
+            padding: 35px 25px; 
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,1), 0 0 20px rgba(0, 242, 255, 0.1);
+            position: relative;
         }
 
-        #get-uid-container { display: none; margin-top: 15px; } 
-        .btn-get-neon {
-            background: linear-gradient(90deg, #39ff14, #00f2ff);
-            color: #000; font-weight: 900; box-shadow: 0 0 25px rgba(57, 255, 20, 0.5); margin-bottom: 10px;
+        /* MOD CHỮ SOLITUDE SIÊU ĐẬM */
+        .logo { 
+            font-family: 'Orbitron'; 
+            font-weight: 900; 
+            font-size: 38px; 
+            letter-spacing: 5px; 
+            margin: 0;
+            background: linear-gradient(180deg, #FFFFFF 15%, var(--neon) 50%, var(--pink) 90%);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.6));
         }
 
-        .ban-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .ban-screen h1 { font-family: 'Orbitron'; color: var(--neon-red); text-shadow: 0 0 20px var(--neon-red); }
-
-        .support-btn {
-            display: block; width: 100%; text-align: center; margin-top: 20px; 
-            color: #444; text-decoration: none; font-size: 11px; font-family: 'Orbitron';
-            padding: 10px; border: 1px solid #222; border-radius: 10px; transition: 0.3s;
+        .version { 
+            font-family: 'Orbitron'; 
+            font-size: 10px; 
+            color: #444; 
+            letter-spacing: 4px; 
+            margin-bottom: 20px; 
+            text-transform: uppercase;
         }
-        .support-btn:hover { color: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
+
+        /* Thanh IP Neon */
+        .info-bar {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #111;
+            border-radius: 50px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Orbitron';
+            font-size: 8px;
+            margin-bottom: 25px;
+            color: var(--neon);
+            box-shadow: inset 0 0 10px rgba(0, 242, 255, 0.05);
+        }
+
+        .srv-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+
+        .node { 
+            background: #08080f; 
+            border: 1.5px solid #151525; 
+            padding: 18px 5px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            text-align: center;
+        }
+
+        .node.active { 
+            border-color: var(--neon); 
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); 
+            background: rgba(0, 242, 255, 0.02);
+        }
+
+        .node span { 
+            font-size: 7px; 
+            font-weight: 900; 
+            color: #222; 
+            font-family: 'Orbitron'; 
+            display: block;
+            margin-top: 5px;
+        }
+
+        .node.active span { color: #fff; }
+        .node i { font-size: 18px; color: #222; }
+        .node.active i { color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+
+        .input-box { 
+            width: 100%; 
+            padding: 18px; 
+            background: #000; 
+            border: 1.5px solid #1a1a2e; 
+            border-radius: 15px; 
+            color: #fff; 
+            margin-bottom: 12px; 
+            font-family: 'Orbitron'; 
+            text-align: center; 
+            outline: none; 
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .input-box:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0, 242, 255, 0.1); }
+
+        .btn-main { 
+            width: 100%; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 15px; 
+            background: linear-gradient(90deg, var(--neon), var(--pink)); 
+            color: #000; 
+            font-weight: 900; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            margin-bottom: 12px; 
+            font-family: 'Orbitron'; 
+            box-shadow: 0 10px 30px rgba(255, 0, 255, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-main:active { transform: scale(0.98); }
+
+        .func-grid { display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+
+        .btn-func { 
+            padding: 15px 5px; 
+            border-radius: 15px; 
+            border: 1.5px solid var(--neon); 
+            background: rgba(0, 242, 255, 0.05); 
+            color: #fff; 
+            font-size: 9px; 
+            font-family: 'Orbitron'; 
+            cursor: pointer; 
+            text-decoration: none; 
+            text-align: center; 
+            font-weight: 900;
+            transition: 0.3s;
+        }
+
+        .btn-func:hover { background: var(--neon); color: #000; }
+
+        #ban-ui { 
+            position: fixed; inset: 0; background: #000; z-index: 9999; 
+            display: none; flex-direction: column; justify-content: center; 
+            align-items: center; text-align: center; 
+        }
+
+        .free-status-text { font-family: 'Orbitron'; font-size: 10px; margin-bottom: 15px; font-weight: 900; }
+
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-    <div id="particles-js"></div>
-    <div class="bg-gradient"></div>
-
-    <div class="ban-screen" id="ban-ui">
-        <i class="fas fa-user-slash" style="font-size: 80px; color: var(--neon-red); margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--neon-red));"></i>
-        <h1>ACCESS DENIED</h1>
-        <p id="ban-info" style="color: #888; margin: 15px 0;"></p>
-        <button onclick="requestUnban()" style="padding: 15px 30px; background: none; border: 2px solid var(--neon-red); color: var(--neon-red); font-family: 'Orbitron'; cursor: pointer; border-radius: 12px; box-shadow: 0 0 15px var(--neon-red);">GỠ BAN (30K)</button>
+    <div id="ban-ui">
+        <i class="fas fa-user-slash" style="font-size: 50px; color: #ff003c; margin-bottom: 20px; filter: drop-shadow(0 0 15px #ff003c);"></i>
+        <h1 style="color: #ff003c; font-family: 'Orbitron'; letter-spacing: 5px;">ACCESS DENIED</h1>
+        <p style="color: #444; font-size: 12px; margin-bottom: 30px;">HỆ THỐNG ĐÃ KHÓA IP CỦA BẠN.</p>
+        <button onclick="location.href='https://t.me/lukajust'" class="btn-main" style="width: 250px;">LIÊN HỆ MỞ KHÓA</button>
     </div>
 
-    <div class="system-root">
-        <div class="terminal-window">
-            <div class="brand-zone">
-                <h1>SOLITUDE PROXY</h1>
-                <p style="text-align: center; font-size: 10px; color: #444; letter-spacing: 3px; margin: 5px 0;">NEON OVERDRIVE V8.0</p>
+    <div class="terminal">
+        <h1 class="logo">SOLITUDE</h1>
+        <div class="version">NEON OVERDRIVE V8.0</div>
+
+        <div class="info-bar">
+            <span>IP: <span id="my-ip" style="color: #fff;">SCANNING...</span></span>
+            <span>STATUS: <span style="color: #39ff14;">SECURED ●</span></span>
+        </div>
+        
+        <div class="srv-grid">
+            <div class="node active" onclick="switchSV('no', this)">
+                <i class="fas fa-shield-halved"></i>
+                <span>NO ANTENA</span>
             </div>
-
-            <div style="display: flex; justify-content: space-between; font-size: 11px; color: #555; margin: 15px 0; border-bottom: 1px solid #111; padding-bottom: 10px;">
-                <span>IP: <span id="ip-node" style="color: var(--neon-blue);">SCANNING...</span></span>
-                <span>SYSTEM: <span style="color: var(--neon-green);">ONLINE</span></span>
+            <div class="node" onclick="switchSV('antena', this)">
+                <i class="fas fa-bolt"></i>
+                <span>ANTENA VIP</span>
             </div>
-
-            <div class="srv-bridge">
-                <div class="node-btn active" onclick="switchSV('no', this)" data-type="no">
-                    <i class="fas fa-shield-halved"></i><span>NO ANTENA</span>
-                </div>
-                <div class="node-btn" onclick="switchSV('antena', this)" data-type="antena">
-                    <i class="fas fa-bolt-lightning"></i><span>ANTENA VIP</span>
-                </div>
-                <div class="node-btn" onclick="switchSV('free', this)" data-type="free">
-                    <i class="fas fa-unlock"></i><span>FREE SERVER</span>
-                </div>
+            <div class="node" onclick="switchSV('free', this)">
+                <i class="fas fa-unlock"></i>
+                <span>FREE SERVER</span>
             </div>
+        </div>
 
-            <div id="login-layer">
-                <button class="ua-btn" id="get_info_btn" onclick="generateKey()">
-                    <i class="fas fa-fingerprint"></i> GET INFO & KEY GENERATOR
-                </button>
+        <div id="auth-layer">
+            <button class="btn-main" style="background:none; border: 1.5px dashed var(--pink); color: var(--pink); box-shadow: none;" onclick="getInfo()">
+                <i class="fas fa-fingerprint"></i> GET INFO & KEY
+            </button>
+            <input type="text" id="uid_in" class="input-box" placeholder="ENTER PLAYER UID">
+            <input type="text" id="key_in" class="input-box" placeholder="ENTER SYSTEM KEY" style="border-color: var(--pink);">
+            <button class="btn-main" onclick="verify()">VERIFY SYSTEM</button>
+        </div>
 
-                <input type="text" id="key_entry" class="id-input" placeholder="ENTER SYSTEM KEY" style="border-color: var(--neon-purple); font-size: 13px;">
-                
-                <button class="engine-btn" id="verify-btn" onclick="verifyAccess()">VERIFY SYSTEM</button>
-            </div>
+        <div id="func-layer" class="func-grid">
+            <a href="https://proxycuongcrack.io.vn/gen.php" target="_blank" class="btn-func">KÍCH HOẠT KEY</a>
+            <a href="https://t.me/lukajust" target="_blank" class="btn-func">LẤY KEY KÍCH</a>
+            <a id="link_cfg" href="#" class="btn-func">TẢI FILE CFG</a>
+            <a id="link_cert" href="#" class="btn-func">TẢI FILE CERT</a>
+        </div>
 
-            <div id="get-uid-container">
-                <div style="text-align: center; margin-bottom: 15px; color: var(--neon-green); font-family: 'Orbitron'; font-size: 12px; text-shadow: 0 0 5px var(--neon-green);">
-                    <i class="fas fa-check-circle"></i> ACCESS GRANTED
-                </div>
-                
-                <div id="free-download-zone" style="display:none;">
-                    <button class="engine-btn btn-get-neon" onclick="downloadFile('shadow')"><i class="fas fa-download"></i> TẢI SHADOW CONFIG</button>
-                    <button class="engine-btn btn-get-neon" style="background: linear-gradient(90deg, #bc13fe, #00f2ff);" onclick="downloadFile('cert')"><i class="fas fa-file-shield"></i> TẢI FILE CERT</button>
-                </div>
-
-                <button class="engine-btn btn-get-neon" id="final-get-btn" onclick="getFinalUID()">GET UID & CONFIG</button>
-                
-                <button onclick="location.reload()" style="width:100%; background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px; font-family:'Orbitron';">LOGOUT SESSION</button>
-            </div>
-
-            <a href="https://t.me/0353594606" class="support-btn">
-                <i class="fab fa-telegram"></i> JOIN SUPPORT GROUP
-            </a>
+        <div id="free-layer" style="display:none; text-align: center;">
+            <p id="free-status" class="free-status-text"></p>
+            <button id="btn-free" class="btn-main" onclick="location.href='https://snote.vip/notes/LY66K7'" style="display:none;">
+                <i class="fas fa-globe"></i> PROXY SEVER FREE
+            </button>
         </div>
     </div>
 
     <script>
-        const _CFG = {
-            t: "8626643586:AAET1UUTKaGzDCit47o3UMAYKHdyGQLKSN0",
-            c: "7329868082",
-            free_status: "open" 
-        };
+        // HIỆN IP MÁY
+        fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(d => document.getElementById('my-ip').innerText = d.ip)
+            .catch(() => document.getElementById('my-ip').innerText = "127.0.0.1");
 
-        // DANH SÁCH KEY RIÊNG BIỆT (Có thể thay đổi tại đây)
-        const _KEYS = {
-            antena: ["ANTENA-123", "ANTENA-FREE", "VIP-ANTENA-99"],
-            no: ["NO-ANTENA-001", "NO-123", "SHIELD-KEY-88"]
+        // CHỐNG F12
+        document.onkeydown = function(e) { 
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) return false; 
         };
 
         let currentSV = 'no';
-        let userIP = '';
 
-        async function getIP() {
-            try {
-                const r = await fetch('https://api.ipify.org?format=json');
-                const d = await r.json(); userIP = d.ip;
-                document.getElementById('ip-node').innerText = userIP;
-                if(localStorage.getItem('DEVICE_BANNED')) showBanUI("SECURITY VIOLATION");
-                checkGetInfoBtn();
-            } catch(e) { document.getElementById('ip-node').innerText = "ERROR"; }
-        }
-
-        function checkGetInfoBtn() {
-            const btn = document.getElementById('get_info_btn');
-            if (currentSV === 'no' || currentSV === 'antena') {
-                btn.style.display = 'block';
-            } else {
-                btn.style.display = 'none';
-            }
-        }
-
-        function switchSV(type, el) {
-            currentSV = type;
-            document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
+        async function switchSV(sv, el) {
+            currentSV = sv;
+            document.querySelectorAll('.node').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
+            document.getElementById('auth-layer').style.display = (sv === 'free') ? 'none' : 'block';
+            document.getElementById('func-layer').style.display = 'none';
+            document.getElementById('free-layer').style.display = (sv === 'free') ? 'block' : 'none';
 
-            const keyInput = document.getElementById('key_entry');
-            const loginLayer = document.getElementById('login-layer');
-            const getContainer = document.getElementById('get-uid-container');
-            const downloadZone = document.getElementById('free-download-zone');
-            const finalBtn = document.getElementById('final-get-btn');
-
-            checkGetInfoBtn();
-
-            if (type === 'free') {
-                if (_CFG.free_status === "closed") {
-                    Swal.fire({ icon: 'error', title: 'SERVER CLOSED', text: 'Server Free đã đóng!', background: '#0a0a0f', color: '#fff' });
-                    return;
-                }
-                keyInput.style.display = 'none';
-                loginLayer.style.display = 'none';
-                getContainer.style.display = 'block';
-                downloadZone.style.display = 'block';
-                finalBtn.style.display = 'none';
-            } else {
-                keyInput.style.display = 'block';
-                loginLayer.style.display = 'block';
-                getContainer.style.display = 'none';
-                downloadZone.style.display = 'none';
-            }
-        }
-
-        function generateKey() {
-            const uid = "PLAYER_AUTO"; 
-            const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000);
-            const time = new Date().toLocaleString();
-            
-            const serverName = currentSV === 'antena' ? "🔥 ANTENA VIP" : "🛡️ NO ANTENA";
-
-            const msg = `⚡ **YÊU CẦU DUYỆT ID [${currentSV.toUpperCase()}]**\n` +
-                        `━━━━━━━━━━━━━━━━━━\n` +
-                        `🌐 SERVER: \`${serverName}\`\n` +
-                        `🆔 UID: \`${uid}\`\n` +
-                        `🌐 IP: \`${userIP}\`\n` +
-                        `🔑 KEY MẪU: \`${autoKey}\`\n` +
-                        `⏰ TIME: \`${time}\`\n` +
-                        `━━━━━━━━━━━━━━━━━━\n` +
-                        `[LỆNH DUYỆT: /ADD_${currentSV.toUpperCase()} ${uid} 1]`;
-
-            sendTeleWithButtons(msg, [
-                [{ text: `✅ DUYỆT ${currentSV.toUpperCase()}`, callback_data: `approve_${currentSV}_${uid}` }],
-                [{ text: "❌ BAN IP", callback_data: `ban_${userIP}` }]
-            ]);
-            
-            Swal.fire({ title: 'ĐÃ GỬI!', text: `Yêu cầu cho server ${currentSV.toUpperCase()} đã gửi!`, icon: 'success', background: '#0a0a0f', color: '#fff' });
-        }
-
-        async function verifyAccess() {
-            const uid = "PLAYER_AUTO"; 
-            const key = document.getElementById('key_entry').value.trim();
-            if (!key) {
-                Swal.fire({ icon: 'warning', text: 'Vui lòng nhập Key!', background: '#0a0a0f', color: '#fff' });
-                return;
-            }
-
-            // KIỂM TRA KEY THEO SERVER HIỆN TẠI
-            const isValidKey = _KEYS[currentSV].includes(key);
-
-            if (isValidKey) {
-                // Nếu đúng key trong danh sách tương ứng
-                document.getElementById('login-layer').style.display = 'none';
-                document.getElementById('get-uid-container').style.display = 'block';
-                document.getElementById('final-get-btn').style.display = 'block';
-                
-                const logMsg = `✅ **TRUY CẬP THÀNH CÔNG**\n` +
-                             `━━━━━━━━━━━━━━━━━━\n` +
-                             `🆔 UID: \`${uid}\`\n` +
-                             `🌐 IP: \`${userIP}\`\n` +
-                             `📂 SERVER: \`${currentSV.toUpperCase()}\`\n` +
-                             `━━━━━━━━━━━━━━━━━━`;
-                sendTele(logMsg);
-                Swal.fire({ icon: 'success', title: 'ACCESS GRANTED', background: '#0a0a0f', color: '#fff' });
-            } else {
-                // Kiểm tra xem có phải key của server khác không
-                const otherSV = currentSV === 'antena' ? 'no' : 'antena';
-                if (_KEYS[otherSV].includes(key)) {
-                    Swal.fire({ 
-                        icon: 'error', 
-                        title: 'WRONG SERVER KEY', 
-                        text: `Key này chỉ dành cho server ${otherSV.toUpperCase()}!`, 
-                        background: '#0a0a0f', color: '#fff' 
-                    });
+            if (sv === 'free') {
+                const r = await fetch('api.php', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'action=check_free'});
+                const d = await r.json();
+                const statusTxt = document.getElementById('free-status');
+                if (d.status === 'on') {
+                    statusTxt.innerText = "SERVER ONLINE";
+                    statusTxt.style.color = "#39ff14";
+                    document.getElementById('btn-free').style.display = 'block';
                 } else {
-                    Swal.fire({ icon: 'error', title: 'INVALID KEY', text: 'Key không tồn tại trên hệ thống!', background: '#0a0a0f', color: '#fff' });
+                    statusTxt.innerText = "SERVER FREE ĐÃ ĐÓNG";
+                    statusTxt.style.color = "#ff003c";
+                    document.getElementById('btn-free').style.display = 'none';
                 }
             }
         }
 
-        function downloadFile(type) {
-            Swal.fire({ title: 'DOWNLOADING...', text: `Đang tải file ${type.toUpperCase()} cho Server Free`, icon: 'success', timer: 1500, showConfirmButton: false });
+        async function getInfo() {
+            const uid = document.getElementById('uid_in').value;
+            if (!uid) return Swal.fire({text: 'Vui lòng nhập UID!', icon: 'warning', background: '#0a0a0f', color: '#fff'});
+            const r = await fetch('api.php', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:`action=get_info&uid=${uid}&sv=${currentSV}`});
+            const d = await r.json();
+            if (d.status === 'banned') return showBan();
+            if (d.status === 'success') Swal.fire({title: 'KEY: ' + d.key, text: 'Gửi key này cho Admin và chờ duyệt ON!', icon: 'success', background: '#0a0a0f', color: '#fff'});
         }
 
-        function autoBan(uid, reason) {
-            localStorage.setItem('DEVICE_BANNED', 'true');
-            sendTele(`🚫 **AUTO BAN**\nUID: \`${uid}\`\nIP: \`${userIP}\`\nLÝ DO: \`${reason}\``);
-            showBanUI(reason);
+        async function verify() {
+            const uid = document.getElementById('uid_in').value;
+            const key = document.getElementById('key_in').value;
+            const r = await fetch('api.php', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:`action=verify&uid=${uid}&key=${key}&sv=${currentSV}`});
+            const d = await r.json();
+
+            if (d.status === 'banned') return showBan();
+            if (d.status === 'success') {
+                document.getElementById('auth-layer').style.display = 'none';
+                document.getElementById('func-layer').style.display = 'grid';
+                const cfg = (currentSV === 'no') ? 'NO_ANTENA.CONF' : 'ANTENA.CONF';
+                const cert = (currentSV === 'no') ? 'NO_ANTEAN.cert' : 'ANTEAN.cert';
+                
+                document.getElementById('link_cfg').href = `shadowrocket://add/https://${window.location.host}/${cfg}`;
+                document.getElementById('link_cert').onclick = () => { location.href = cert; };
+                Swal.fire({title: 'XÁC MINH XONG!', icon: 'success', background: '#0a0a0f', color: '#fff'});
+            } else { 
+                Swal.fire({text: d.msg, icon: 'error', background: '#0a0a0f', color: '#fff'}); 
+            }
         }
 
-        function showBanUI(reason) {
-            document.getElementById('ban-ui').style.display = 'flex';
-            document.getElementById('ban-info').innerText = `Lý do: ${reason}\nThiết bị của bạn đã bị khóa hệ thống.`;
-        }
-
-        function sendTele(text) {
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: _CFG.c, text: text, parse_mode: 'Markdown' })
-            });
-        }
-
-        function sendTeleWithButtons(text, buttons) {
-            fetch(`https://api.telegram.org/bot${_CFG.t}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    chat_id: _CFG.c, 
-                    text: text, 
-                    parse_mode: 'Markdown',
-                    reply_markup: { inline_keyboard: buttons }
-                })
-            });
-        }
-
-        function getFinalUID() {
-            Swal.fire({ title: 'SUCCESS', text: 'Đã lấy cấu hình thành công!', icon: 'success', background: '#0a0a0f', color: '#fff' });
-        }
-
-        particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#00f2ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });
-        getIP();
+        function showBan() { document.getElementById('ban-ui').style.display = 'flex'; }
     </script>
 </body>
 </html>

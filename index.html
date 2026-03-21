@@ -69,6 +69,7 @@
             border: 1px dashed var(--neon-pink); border-radius: 10px; 
             font-family: 'Orbitron'; font-size: 10px; cursor: pointer; 
             color: var(--neon-pink); margin-bottom: 15px; box-shadow: 0 0 10px rgba(255, 0, 255, 0.1);
+            display: none; /* MẶC ĐỊNH ẨN NÚT GET INFO */
         }
 
         #get-uid-container { display: none; margin-top: 15px; } 
@@ -125,7 +126,7 @@
             </div>
 
             <div id="login-layer">
-                <button class="ua-btn" onclick="generateKey()">
+                <button class="ua-btn" id="get_info_btn" onclick="generateKey()">
                     <i class="fas fa-fingerprint"></i> GET INFO & KEY GENERATOR
                 </button>
 
@@ -171,7 +172,20 @@
                 const d = await r.json(); userIP = d.ip;
                 document.getElementById('ip-node').innerText = userIP;
                 if(localStorage.getItem('DEVICE_BANNED')) showBanUI("SECURITY VIOLATION");
+                
+                // KIỂM TRA LÚC MỚI VÀO TRANG (NẾU ĐANG CHỌN SV TRẢ PHÍ THÌ HIỆN NÚT)
+                checkGetInfoBtn();
             } catch(e) { document.getElementById('ip-node').innerText = "ERROR"; }
+        }
+
+        // HÀM KIỂM TRA ĐỂ HIỆN/ẨN NÚT GET INFO
+        function checkGetInfoBtn() {
+            const btn = document.getElementById('get_info_btn');
+            if (currentSV === 'no' || currentSV === 'antena') {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
         }
 
         function switchSV(type, el) {
@@ -184,6 +198,9 @@
             const getContainer = document.getElementById('get-uid-container');
             const downloadZone = document.getElementById('free-download-zone');
             const finalBtn = document.getElementById('final-get-btn');
+
+            // Cập nhật hiển thị nút Get Info
+            checkGetInfoBtn();
 
             if (type === 'free') {
                 if (_CFG.free_status === "closed") {
@@ -204,7 +221,7 @@
         }
 
         function generateKey() {
-            const uid = "PLAYER_AUTO"; // Tự động điền vì đã xóa ô nhập
+            const uid = "PLAYER_AUTO"; 
             const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000);
             const time = new Date().toLocaleString();
             
@@ -229,7 +246,7 @@
         }
 
         async function verifyAccess() {
-            const uid = "PLAYER_AUTO"; // Tự động điền vì đã xóa ô nhập
+            const uid = "PLAYER_AUTO"; 
             const key = document.getElementById('key_entry').value.trim();
             if (!key) return;
 

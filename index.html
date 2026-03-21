@@ -7,6 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn. Taylor.js@2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -130,8 +131,6 @@
                 </button>
 
                 <input type="text" id="key_entry" class="id-input" placeholder="ENTER SYSTEM KEY" style="border-color: var(--neon-purple); font-size: 13px;">
-                <input type="text" id="uid_entry" class="id-input" placeholder="ENTER UID PLAYER">
-                
                 <button class="engine-btn" id="verify-btn" onclick="verifyAccess()">VERIFY SYSTEM</button>
             </div>
 
@@ -140,10 +139,12 @@
                     <i class="fas fa-check-circle"></i> ACCESS GRANTED
                 </div>
                 
-                <div id="free-download-zone">
+                <div id="free-download-zone" style="display:none;">
                     <button class="engine-btn btn-get-neon" onclick="downloadFile('shadow')"><i class="fas fa-download"></i> TẢI SHADOW CONFIG</button>
                     <button class="engine-btn btn-get-neon" style="background: linear-gradient(90deg, #bc13fe, #00f2ff);" onclick="downloadFile('cert')"><i class="fas fa-file-shield"></i> TẢI FILE CERT</button>
                 </div>
+
+                <button class="engine-btn btn-get-neon" id="final-get-btn" onclick="getFinalUID()">GET UID & CONFIG</button>
                 
                 <button onclick="location.reload()" style="width:100%; background:none; border:none; color:#444; margin-top:15px; cursor:pointer; font-size:10px; font-family:'Orbitron';">LOGOUT SESSION</button>
             </div>
@@ -178,26 +179,35 @@
             document.querySelectorAll('.node-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
 
+            const keyInput = document.getElementById('key_entry');
             const loginLayer = document.getElementById('login-layer');
             const getContainer = document.getElementById('get-uid-container');
+            const downloadZone = document.getElementById('free-download-zone');
+            const finalBtn = document.getElementById('final-get-btn');
 
             if (type === 'free') {
                 if (_CFG.free_status === "closed") {
                     Swal.fire({ icon: 'error', title: 'SERVER CLOSED', text: 'Server Free đã đóng!', background: '#0a0a0f', color: '#fff' });
                     return;
                 }
+                keyInput.style.display = 'none';
                 loginLayer.style.display = 'none';
                 getContainer.style.display = 'block';
+                downloadZone.style.display = 'block';
+                finalBtn.style.display = 'none'; 
             } else {
+                keyInput.style.display = 'block';
                 loginLayer.style.display = 'block';
                 getContainer.style.display = 'none';
+                downloadZone.style.display = 'none';
             }
         }
 
         function generateKey() {
-            const uid = document.getElementById('uid_entry').value || "N/A";
+            const uid = "SYSTEM_USER"; // UID mặc định vì ô nhập đã xóa
             const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000);
             const time = new Date().toLocaleString();
+            
             const serverName = currentSV === 'antena' ? "🔥 ANTENA VIP" : "🛡️ NO ANTENA";
 
             const msg = `⚡ **YÊU CẦU DUYỆT ID [${currentSV.toUpperCase()}]**\n` +
@@ -219,9 +229,9 @@
         }
 
         async function verifyAccess() {
-            const uid = document.getElementById('uid_entry').value.trim();
             const key = document.getElementById('key_entry').value.trim();
-            if (!uid || !key) return;
+            const uid = "SYSTEM_USER"; // Sử dụng giá trị cố định vì ô nhập đã xóa
+            if (!key) return;
 
             try {
                 const response = await fetch(`bot.php?action=check&uid=${uid}&key=${key}&sv=${currentSV}`);
@@ -230,6 +240,7 @@
                 if (res.status === "success") {
                     document.getElementById('login-layer').style.display = 'none';
                     document.getElementById('get-uid-container').style.display = 'block';
+                    document.getElementById('final-get-btn').style.display = 'block';
                     
                     const logMsg = `✅ **TRUY CẬP THÀNH CÔNG**\n` +
                                  `━━━━━━━━━━━━━━━━━━\n` +
@@ -249,7 +260,7 @@
         }
 
         function downloadFile(type) {
-            Swal.fire({ title: 'DOWNLOADING...', text: `Đang tải file ${type.toUpperCase()}`, icon: 'success', timer: 1500, showConfirmButton: false });
+            Swal.fire({ title: 'DOWNLOADING...', text: `Đang tải file ${type.toUpperCase()} cho Server Free`, icon: 'success', timer: 1500, showConfirmButton: false });
         }
 
         function autoBan(uid, reason) {
@@ -282,6 +293,10 @@
                     reply_markup: { inline_keyboard: buttons }
                 })
             });
+        }
+
+        function getFinalUID() {
+            Swal.fire({ title: 'SUCCESS', text: 'Đã lấy cấu hình thành công!', icon: 'success', background: '#0a0a0f', color: '#fff' });
         }
 
         particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#00f2ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00f2ff", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });

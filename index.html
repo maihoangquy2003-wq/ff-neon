@@ -7,7 +7,6 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn. Taylor.js@2.0.0/particles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -131,6 +130,8 @@
                 </button>
 
                 <input type="text" id="key_entry" class="id-input" placeholder="ENTER SYSTEM KEY" style="border-color: var(--neon-purple); font-size: 13px;">
+                <input type="text" id="uid_entry" class="id-input" placeholder="ENTER UID PLAYER">
+                
                 <button class="engine-btn" id="verify-btn" onclick="verifyAccess()">VERIFY SYSTEM</button>
             </div>
 
@@ -190,12 +191,14 @@
                     Swal.fire({ icon: 'error', title: 'SERVER CLOSED', text: 'Server Free đã đóng!', background: '#0a0a0f', color: '#fff' });
                     return;
                 }
+                // Server Free: Hiện luôn nút tải, ẩn login
                 keyInput.style.display = 'none';
                 loginLayer.style.display = 'none';
                 getContainer.style.display = 'block';
                 downloadZone.style.display = 'block';
-                finalBtn.style.display = 'none'; 
+                finalBtn.style.display = 'none'; // Ẩn nút get UID chung
             } else {
+                // Server trả phí: Ẩn nút Get cho đến khi verify đúng key
                 keyInput.style.display = 'block';
                 loginLayer.style.display = 'block';
                 getContainer.style.display = 'none';
@@ -204,10 +207,11 @@
         }
 
         function generateKey() {
-            const uid = "SYSTEM_USER"; // UID mặc định vì ô nhập đã xóa
+            const uid = document.getElementById('uid_entry').value || "N/A";
             const autoKey = "SLT-" + Math.floor(1000 + Math.random() * 9000);
             const time = new Date().toLocaleString();
             
+            // Bot Tele duyệt riêng biệt
             const serverName = currentSV === 'antena' ? "🔥 ANTENA VIP" : "🛡️ NO ANTENA";
 
             const msg = `⚡ **YÊU CẦU DUYỆT ID [${currentSV.toUpperCase()}]**\n` +
@@ -229,10 +233,11 @@
         }
 
         async function verifyAccess() {
+            const uid = document.getElementById('uid_entry').value.trim();
             const key = document.getElementById('key_entry').value.trim();
-            const uid = "SYSTEM_USER"; // Sử dụng giá trị cố định vì ô nhập đã xóa
-            if (!key) return;
+            if (!uid || !key) return;
 
+            // Kiểm tra Database qua Hosting (Kết nối với bot.php)
             try {
                 const response = await fetch(`bot.php?action=check&uid=${uid}&key=${key}&sv=${currentSV}`);
                 const res = await response.json();
@@ -255,12 +260,14 @@
                     if(res.type === "expired") autoBan(uid, "KEY/UID HẾT HẠN");
                 }
             } catch (e) {
+                // Demo nếu chưa có file bot.php xử lý
                 Swal.fire({ icon: 'info', text: 'Đang kết nối Database...' });
             }
         }
 
         function downloadFile(type) {
             Swal.fire({ title: 'DOWNLOADING...', text: `Đang tải file ${type.toUpperCase()} cho Server Free`, icon: 'success', timer: 1500, showConfirmButton: false });
+            // Link tải file của bạn ở đây
         }
 
         function autoBan(uid, reason) {

@@ -1,0 +1,36 @@
+[
+  {
+    "enabled": true,
+    "name": "SOLITUDE PROXY VIP - BY QUY",
+    "url": ["*/ABHotUpdates/*", "*/ver/*", "*/MajorLogin"],
+    "script": "
+      var body = $response.body;
+      var url = $request.url;
+
+      // 1. BYPASS BAN (Vượt lỗi văng game khi mod)
+      if (url.indexOf('ABHotUpdates') !== -1 || url.indexOf('ver') !== -1) {
+          body = body.replace(/\"Status\":\d+/g, '\"Status\":0');
+          body = body.replace(/\"IsUpdate\":true/g, '\"IsUpdate\":false');
+      }
+
+      // 2. MOD AIM & HITBOX (Làm tâm dính hơn)
+      if (url.indexOf('MajorLogin') !== -1) {
+          try {
+              let data = JSON.parse(body);
+              // Tăng chỉ số Hitbox (Vùng trúng đạn)
+              if(data.character_configs) {
+                  data.character_configs.forEach(c => {
+                      c.head_scale = 4.5;  // Đầu to gấp 2.5 lần (dễ headshot)
+                      c.body_scale = 2;  // Thân to hơn
+                  });
+              }
+              // Giảm độ giật súng (No Recoil)
+              data.weapon_logic = { \"recoil\": 0, \"spread\": 0 }; 
+              body = JSON.stringify(data);
+          } catch(e) {}
+      }
+
+      $done({body: body});
+    "
+  }
+]

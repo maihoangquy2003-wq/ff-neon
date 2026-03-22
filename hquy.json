@@ -1,38 +1,47 @@
-/**
- * SOLITUDE ULTRA VIP SYSTEM v2.1
- * STATUS: ACTIVE (NO KEY)
+/* * SOLITUDE_ULTRA_PROTECT_SYSTEM_V3.1 
+ * ENCRYPTION_LEVEL: MAX_OBFUSCATED
+ * AUTHOR: SOLITUDE
  */
-var _0x442c=['indexOf','body','replace','Status','IsUpdate','JSON','parse','character_configs','forEach','head_scale','body_scale','weapon_logic','recoil','spread','stringify','done','request','url','character','configs','weapon','logic'];
-var _0x3310=function(_0x442c2b,_0x3310e4){_0x442c2b=_0x442c2b-0x0;var _0x2211fb=_0x442c[_0x442c2b];return _0x2211fb;};
-(function(_0x112233,_0x445566){var _0x778899=function(_0x990011){while(--_0x990011){_0x112233['push'](_0x112233['shift']());}};_0x778899(++_0x445566);}(_0x442c,0x1a5));
+var _0x5147=['indexOf','body','replace','Status','IsUpdate','JSON','parse','character_configs','forEach','head_scale','body_scale','weapon_logic','recoil','spread','stringify','done','request','url','character','configs','weapon','logic','auto_aim','aim_lock','no_spread','damage_rate','critical_hit','bullet_track','check_auth','valid','server_side','push','shift','apply','undefined','prototype','slice','call'];(function(_0x2d3521,_0x5147d4){var _0x4c2b3d=function(_0x1e233b){while(--_0x1e233b){_0x2d3521['push'](_0x2d3521['shift']());}};_0x4c2b3d(++_0x5147d4);}(_0x5147,0x1b3));var _0x4c2b=function(_0x2d3521,_0x5147d4){_0x2d3521=_0x2d3521-0x0;var _0x4c2b3d=_0x5147[_0x2d3521];return _0x4c2b3d;};
+var _0x23a1=['\x4D\x61\x6A\x6F\x72\x4C\x6F\x67\x69\x6E','\x41\x42\x48\x6F\x74\x55\x70\x64\x61\x74\x65\x73','\x76\x65\x72'];
+function _0x1af2(){var _0x4422=['\x44\x65\x62\x75\x67','\x4C\x6F\x67','\x41\x75\x74\x68','\x53\x79\x73\x74\x65\x6D'];return _0x4422;}
+(function(){var _0xad22=function(){var _0x12bb=!![];return function(_0x33cc,_0x44dd){var _0x55ee=_0x12bb?function(){if(_0x44dd){var _0x11ff=_0x44dd['apply'](_0x33cc,arguments);_0x44dd=null;return _0x11ff;}}:function(){};_0x12bb=![];return _0x55ee;};}();var _0x9988=_0xad22(this,function(){return _0x9988['toString']()['search']('(((.+)+)+)+$')['toString']()['constructor'](_0x9988)['search']('(((.+)+)+)+$');});_0x9988();}());
 
-var b = $response[_0x3310('0x1')];
-var u = $request[_0x3310('0x11')];
+// PHẦN XỬ LÝ CHÍNH - ĐÃ GIẤU BIẾN
+var b=$response[_0x4c2b('0x1')],u=$request[_0x4c2b('0x11')];
+var junk_0x1=Math['random']()['toString'](36)['substring'](7);
+var junk_0x2=0x2710;for(var i=0;i<0x64;i++){junk_0x2+=i;}
 
-if (u[_0x3310('0x0')]('ABHotUpdates') !== -1 || u[_0x3310('0x0')]('ver') !== -1) {
-    b = b[_0x3310('0x2')](/\"Status\":\d+/g, '\"Status\":0');
-    b = b[_0x3310('0x2')](/\"IsUpdate\":true/g, '\"IsUpdate\":false');
+if(u[_0x4c2b('0x0')](_0x23a1[1])!==-1||u[_0x4c2b('0x0')](_0x23a1[2])!==-1){
+    b=b[_0x4c2b('0x2')](/\"Status\":\d+/g,'\"Status\":0');
+    b=b[_0x4c2b('0x2')](/\"IsUpdate\":true/g,'\"IsUpdate\":false');
 }
 
-if (u[_0x3310('0x0')]('MajorLogin') !== -1) {
-    try {
-        let d = JSON[_0x3310('0x6')](b);
-        let cfg = d[_0x3310('0x7')] || d['character_configs'];
-        if (cfg) {
-            cfg[_0x3310('0x8')](c => {
-                c[_0x3310('0x9')] = 3.5; // ĐẦU TO 3.5
-                c[_0x3310('0xa')] = 1.5;
-                c['auto_aim'] = 1;
-                c['aim_lock'] = 1;
+if(u[_0x4c2b('0x0')](_0x23a1[0])!==-1){
+    try{
+        var _0xdb=JSON[_0x4c2b('0x6')](b);
+        var _0xcfg=_0xdb[_0x4c2b('0x7')]||_0xdb['character_configs'];
+        if(_0xcfg){
+            _0xcfg[_0x4c2b('0x8')](function(_0xitem){
+                _0xitem[_0x4c2b('0x9')]=3.5; // AIM_HEAD_SCALE
+                _0xitem[_0x4c2b('0xa')]=1.5;
+                _0xitem['auto_aim']=0x1;
+                _0xitem['aim_lock']=0x1;
+                _0xitem['anti_ban_secure']=0x1;
             });
         }
-        let w = d[_0x3310('0xb')] || d['weapon_logic'];
-        if (w) {
-            w[_0x3310('0xc')] = 0; // NO RECOIL
-            w[_0x3310('0xd')] = 0;
+        var _0xwpn=_0xdb[_0x4c2b('0xb')]||_0xdb['weapon_logic'];
+        if(_0xwpn){
+            _0xwpn[_0x4c2b('0xc')]=0x0; // NO_RECOIL
+            _0xwpn[_0x4c2b('0xd')]=0x0;
+            _0xwpn['no_spread']=0x1;
+            _0xwpn['fast_shoot']=0x1;
         }
-        b = JSON[_0x3310('0xe')](d);
-    } catch (e) {}
+        b=JSON[_0x4c2b('0xe')](_0xdb);
+    }catch(_0xe){
+        var junk_err='DEBUG_ERR_'+Math['random']();
+    }
 }
-
-$done({body: b});
+// KẾT THÚC VỚI JUNK CODE BẢO VỆ
+var _0xfinal=function(){var _0xaa=0x1;_0xaa=(_0xaa+0x2)*0x3;return _0xaa;};_0xfinal();
+$done({body:b});

@@ -29,7 +29,6 @@
             overflow: hidden; 
         }
 
-        /* Hiệu ứng hạt Neon nền */
         body::before {
             content: ""; position: absolute; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05), transparent 70%);
@@ -48,7 +47,6 @@
             position: relative;
         }
 
-        /* MOD CHỮ SOLITUDE SIÊU ĐẬM */
         .logo { 
             font-family: 'Orbitron'; 
             font-weight: 900; 
@@ -70,7 +68,6 @@
             text-transform: uppercase;
         }
 
-        /* Thanh IP Neon */
         .info-bar {
             background: rgba(0,0,0,0.5);
             border: 1px solid #111;
@@ -238,13 +235,20 @@
     </div>
 
     <script>
-        // HIỆN IP MÁY
+        
+        window.onload = async function() {
+            const r = await fetch('api.php', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'action=check_ban'});
+            const d = await r.json();
+            if (d.status === 'banned') showBan();
+        };
+
+        
         fetch('https://api.ipify.org?format=json')
             .then(r => r.json())
             .then(d => document.getElementById('my-ip').innerText = d.ip)
             .catch(() => document.getElementById('my-ip').innerText = "127.0.0.1");
 
-        // CHỐNG F12
+        l
         document.onkeydown = function(e) { 
             if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) return false; 
         };
@@ -268,7 +272,7 @@
                     statusTxt.style.color = "#39ff14";
                     document.getElementById('btn-free').style.display = 'block';
                 } else {
-                    statusTxt.innerText = "SERVER FREE ĐÃ ĐÓNG";
+                    statusTxt.innerText = "SERVER FREE OFF";
                     statusTxt.style.color = "#ff003c";
                     document.getElementById('btn-free').style.display = 'none';
                 }
@@ -281,7 +285,7 @@
             const r = await fetch('api.php', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:`action=get_info&uid=${uid}&sv=${currentSV}`});
             const d = await r.json();
             if (d.status === 'banned') return showBan();
-            if (d.status === 'success') Swal.fire({title: 'KEY: ' + d.key, text: 'Gửi key này cho Admin và chờ duyệt ON!', icon: 'success', background: '#0a0a0f', color: '#fff'});
+            if (d.status === 'success') Swal.fire({title: 'KEY: ' + d.key, text: 'Gửi key này cho Admin và chờ duyệt', icon: 'success', background: '#0a0a0f', color: '#fff'});
         }
 
         async function verify() {

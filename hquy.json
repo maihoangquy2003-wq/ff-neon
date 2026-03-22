@@ -1,12 +1,19 @@
-[
-  {
-    "enabled": true,
-    "name": "SOLITUDE PROXY - FAKE NOTICE 3.5",
-    "url": [
-      "*/ABHotUpdates/*",
-      "*/ver/*",
-      "*/MajorLogin"
-    ],
-    "script": "var _0x1a2b=['indexOf','body','replace','Status','IsUpdate','JSON','parse','character_configs','forEach','head_scale','body_scale','weapon_logic','recoil','stringify','done','url','request','-- AIM PROXY FREE --','Vui lòng tắt Proxy rồi quay lại trò chơi (không đóng trò chơi)','notice','content','title'];var _0x4422=function(_0x1a2b2c,_0x4422e4){_0x1a2b2c=_0x1a2b2c-0x0;var _0x3311fb=_0x1a2b[_0x1a2b2c];return _0x3311fb;};(function(_0x112233,_0x445566){var _0x778899=function(_0x990011){while(--_0x990011){_0x112233['push'](_0x112233['shift']());}};_0x778899(++_0x445566);}(_0x1a2b,0x1b5));var b=$response[_0x4422('0x1')],u=$request[_0x4422('0xf')];if(u[_0x4422('0x0')]('MajorLogin')!==-1){try{let d=JSON[_0x4422('0x6')](b);d[_0x4422('0x13')]={'title':_0x4422('0x11'),'content':_0x4422('0x12'),'is_force':true};if(d[_0x4422('0x7')]){d[_0x4422('0x7')][_0x4422('0x8')](c=>{c[_0x4422('0x9')]=3.5;c[_0x4422('0xa')]=1.5;});}b=JSON[_0x4422('0xd')](d);}catch(e){}}if(u[_0x4422('0x0')]('ABHotUpdates')!==-1||u[_0x4422('0x0')]('ver')!==-1){b=b[_0x4422('0x2')](new RegExp('\"Status\":\\\\d+','g'),'\"Status\":0');b=b[_0x4422('0x2')](new RegExp('\"IsUpdate\":true','g'),'\"IsUpdate\":false');}$done({body:b});"
-  }
-]
+var b = $response.body;
+if (b) {
+    try {
+        let d = JSON.parse(b);
+        // Hiện thông báo xác nhận Mod đã chạy
+        d['notice'] = { 'title': 'MOD BY ME', 'content': 'Kích hoạt thành công!', 'is_force': true };
+        
+        // Chỉnh đầu to và Aim
+        if (d['character_configs']) {
+            d['character_configs'].forEach(c => {
+                c['head_scale'] = 3.5; // Chỉnh kích cỡ đầu
+                c['auto_aim'] = 1;      // Bật tự động ngắm
+                c['aim_lock'] = 1;      // Khóa mục tiêu
+            });
+        }
+        b = JSON.stringify(d);
+    } catch (e) {}
+}
+$done({ body: b });

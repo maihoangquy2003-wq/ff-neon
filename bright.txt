@@ -1,10 +1,8 @@
-[c][00FFFF]『  [b]SOLITUDE PROXY[/b]  』
-[c][FF00FF]⚡ [i]NEON OVERDRIVE V8.5[/i] ⚡
-[c][00FFFF]◢◤━━━━━━━━━━━━━━━━━━━━◥◣
-[c][00FF00]▰▰▰▰▰▰▰▰▰ [FFFFFF]100% [00FF00]▰▰▰▰▰▰▰▰▰
-[c][00FFFF]▬▬▬ [FFFFFF]IDENTITY VERIFIED [00FFFF]▬▬▬
-[c][FFFFFF]Owner: [00FFFF]MAi Hoàng Quý [FF00FF]★
-[c][FFFFFF]Status: [00FF00]ACTIVE SERVER
-[c][00FFFF]◥◣━━━━━━━━━━━━━━━━━━━━◢◤
-[c][FF00FF]⚠ [FFFF00]VUI LÒNG TẮT PROXY [FF00FF]⚠
-[c][00FFFF]━━━━━━━━━━━━━━━━━━━━━━
+[b][00FFFF]『  [b]SOLITUDE PROXY[/b]  』
+[FF00FF]◢◤ [00FFFF]N E O N [FF00FF]O V E R D R I V E [00FFFF]◥◣
+[FFFFFF]━━━━━━━━━━━━[FF00FF]★[FFFFFF]━━━━━━━━━━━━
+[00FF00]◉ [FFFFFF]STATUS: [00FF00]ACTIVE Sever No Antena [FF00FF]V9.0
+[00FFFF]⚡ [FFFFFF]IDENTITY: [00FFFF]MAi Hoàng Quý
+[FFFFFF]━━━━━━━━━━━━[FF00FF]★[FFFFFF]━━━━━━━━━━━━
+[FF00FF]⚠ [FFFF00]VUI LÒNG TẮT PROXY  [FF00FF]⚠
+[FFFFFF]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬

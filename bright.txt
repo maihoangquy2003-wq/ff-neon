@@ -1,7 +1,10 @@
-[c] [ff8c00]━━━━━━━━━━━━━━━━━━━━━━
-[c] [00ffd8]-- Solitude aim proxy --
-[c] [ff8c00]━━━━━━━━━━━━━━━━━━━━━━
-[c] [00ff00]By: MAi Hoàng Quý
-[c] [ff8c00]━━━━━━━━━━━━━━━━━━━━━━
-[c] [ffd700]Vui lòng tắt Proxy 
-[c] [ff8c00]━━━━━━━━━━━━━━━━━━━━━━
+[b][00FFFF]SOLITUDE PROXY
+[c][ff00ff]NEON OVERDRIVE V8.0
+[c][ffffff]━━━━━━━━━━━━━━━━━━━━━━
+[c][00ff00]✅ ACCESS GRANTED
+[c][ffffff]━━━━━━━━━━━━━━━━━━━━━━
+[c][00FFFF]User: [ffffff]MAi Hoàng Quý
+[c][ff00ff]System: [00ff00]ONLINE
+[c][ffffff]━━━━━━━━━━━━━━━━━━━━━━
+[c][ffff00]⚠ VUI LÒNG TẮT PROXY ⚠
+[c][ff8c00]━━━━━━━━━━━━━━━━━━━━━━

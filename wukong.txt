@@ -13,14 +13,14 @@
     { "id": 110, "name": "M60", "type": "weapon", "damage": 48, "accuracy": 52, "range": 60, "aimAssist": 0.75 }
   ],
   "aimConfig": {
-    "globalAimAssist": 0.85,
-    "headshotMultiplier": 2.5,
+    "globalAimAssist": 1.85,
+    "headshotMultiplier": 5.5,
     "bodyMultiplier": 1.0,
     "aimSmoothing": 0.7,
-    "autoAimAngle": 12.0,
-    "autoAimDistance": 150.0,
-    "recoilReduction": 0.6,
-    "bulletMagnet": 0.5
+    "autoAimAngle": 30.0,
+    "autoAimDistance": 200.0,
+    "recoilReduction": 0.9,
+    "bulletMagnet": 0.9,
   },
   "weaponAimOverride": {
     "101": { "aimAssist": 0.88, "recoilPattern": "low" },
